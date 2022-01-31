@@ -1,10 +1,11 @@
 import { Snowflake } from "discord.js";
-import { CharState, State } from "./interfaces";
+import { CharState, State, Game as GameData} from "./interfaces";
 
-export class Game {
+export class Game implements GameData {
     state: State;
     players: Snowflake[];
     createdPlayer: Snowflake;
+    playerIndex: number;
 
     words: string[];
     word: string;
@@ -13,6 +14,7 @@ export class Game {
         this.state = State.Setup;
         this.createdPlayer = player;
         this.players = [this.createdPlayer];
+        this.playerIndex = 0;
 
         this.words = [
             "まいとし"
@@ -20,18 +22,11 @@ export class Game {
         this.word = this.words[Math.floor(Math.random()*this.words.length)];
     }
 
-    getState() {
+    getState(): State {
         return this.state;
     }
 
-    start() {
-        if (this.state === State.Running) {
-            return false;
-        }
-        this.state = State.Running;
-    }
-
-    join(player: Snowflake) {
+    join(player: Snowflake): boolean {
 
         // Player already in players
         if (this.players.indexOf(player) > -1) {
@@ -39,6 +34,19 @@ export class Game {
         }
 
         this.players.push(player);
+        return true;
+    }
+
+    start(player: Snowflake): boolean {
+        if (player !== this.createdPlayer) {
+            return false;
+        }
+        this.state = State.Running;
+        return true;
+    }
+    
+    nextGuessExpectedFrom(): Snowflake {
+        return this.players[this.playerIndex];
     }
 
     makeGuess(player: Snowflake, guess: string,): boolean | CharState[] {
@@ -60,6 +68,7 @@ export class Game {
             }
         }
 
+        this.playerIndex = (this.playerIndex + 1) % this.players.length;
         return chars;
     }
 }
