@@ -1,27 +1,52 @@
-export enum CharState {
-    Wrong,
-    Moved,
-    Correct,    
-}
+import { Snowflake } from "discord.js";
+import { CharState, State } from "./interfaces";
 
 export class Game {
+    state: State;
+    players: Snowflake[];
+    createdPlayer: Snowflake;
+
     words: string[];
     word: string;
 
-    constructor() {
+    constructor(player: Snowflake) {
+        this.state = State.Setup;
+        this.createdPlayer = player;
+        this.players = [this.createdPlayer];
+
         this.words = [
             "まいとし"
-        ]
-
+        ];
         this.word = this.words[Math.floor(Math.random()*this.words.length)];
     }
 
-    async make_guess(guess: string,) {
+    getState() {
+        return this.state;
+    }
+
+    start() {
+        if (this.state === State.Running) {
+            return false;
+        }
+        this.state = State.Running;
+    }
+
+    join(player: Snowflake) {
+
+        // Player already in players
+        if (this.players.indexOf(player) > -1) {
+            return false;
+        }
+
+        this.players.push(player);
+    }
+
+    makeGuess(player: Snowflake, guess: string,): boolean | CharState[] {
         if (guess === this.word) {
-            return await true;
+            return true;
         }
         if (guess.length !== this.word.length) {
-            return await false;
+            return false;
         }
 
         const chars: CharState[] = [];
@@ -35,6 +60,6 @@ export class Game {
             }
         }
 
-        return await chars;
+        return chars;
     }
 }
