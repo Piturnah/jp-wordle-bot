@@ -12,7 +12,8 @@ export enum State {
 }
 
 export interface Game {
-	state(): State;
+	getState(): State;
+	nextGuessExpectedFrom(): Snowflake;
 	join(player: Snowflake): boolean;
 	start(player: Snowflake): boolean;
 	nextGuessExpectedFrom(): Snowflake;

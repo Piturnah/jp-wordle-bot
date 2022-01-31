@@ -4,7 +4,8 @@
         "moduleResolution": "node",
         "strict": true,
         "baseUrl": ".",
-        "outDir": "dist"
+        "outDir": "dist",
+        "removeComments": true
     },
     "include": [
         "src/**/*.ts"
