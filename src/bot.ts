@@ -8,11 +8,10 @@ import { COMMANDS } from "./commands";
 class Bot {
 	client: Client;
 
-	activeGames: Map<Snowflake, Game>;
+	activeGames = new Map<Snowflake, Game>();
 
 	constructor(client: Client) {
 		this.client = client;
-		this.activeGames = new Map();
 	}
 
 	start(token: string | undefined) {
