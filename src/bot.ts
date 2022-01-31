@@ -1,5 +1,7 @@
 require("dotenv").config();
 
+const { Game } = require("./game");
+
 const { Client, Intents } = require("discord.js");
 
 // https://discord.com/developers/docs/topics/gateway#gateway-intents
