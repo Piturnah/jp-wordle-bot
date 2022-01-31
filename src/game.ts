@@ -53,7 +53,7 @@ export class Game implements GameData {
         if (guess === this.word) {
             return true;
         }
-        if (guess.length !== this.word.length) {
+        if (player !== this.players[this.playerIndex] || guess.length !== this.word.length) {
             return false;
         }
 
