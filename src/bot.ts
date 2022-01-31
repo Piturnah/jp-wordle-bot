@@ -1,16 +1,18 @@
 require("dotenv").config();
 
-import { Client, Intents, Message, Snowflake } from "discord.js";
+import { Client, Intents, Message, Snowflake, TextChannel } from "discord.js";
 import { Game, CharState, State } from "./interfaces";
+import { Game as GameImpl } from "./game";
 import { COMMANDS } from "./commands";
 
 class Bot {
 	client: Client;
 
-	activeGames = new Map<Snowflake, Game>();
+	activeGames: Map<Snowflake, Game>;
 
 	constructor(client: Client) {
 		this.client = client;
+		this.activeGames = new Map();
 	}
 
 	start(token: string | undefined) {
@@ -28,10 +30,10 @@ class Bot {
 	}
 
 	messageCreate(message: Message) {
-		let userId = message.author.id;
-		let activeGame = this.activeGames.get(message.channelId);
+		const userId = message.author.id;
+		const activeGame = this.activeGames.get(message.channelId);
 		if (undefined !== activeGame) {
-			switch (activeGame.state()) {
+			switch (activeGame.getState()) {
 				case State.Setup:
 					if (
 						message.content.startsWith(
@@ -57,14 +59,30 @@ class Bot {
 					);
 					break;
 			}
+		} else if (message.content.startsWith(COMMANDS.WAKE_UP)) {
+			this.activeGames.set(
+				message.channelId,
+				new GameImpl(userId)
+			);
+		}
+	}
+
+	handleResponse(guessResult: boolean | CharState[]) {
+		if (typeof guessResult == "boolean") {
+			if (guessResult as boolean) {
+				// TODO: Win message.
+			}
 		} else {
 		}
 	}
 
-	handleResponse(guessResult: boolean | CharState[]) {}
-
-	prompt() {
-		// TODO
+	prompt(userId: Snowflake, channelId: Snowflake) {
+		const channel = this.client.channels.cache.get(channelId);
+		if (undefined !== channel) {
+			const textChannel = channel as TextChannel;
+			textChannel.send(`@${userId}: It is your
+						 turn.`);
+		}
 	}
 }
 
