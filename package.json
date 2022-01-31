@@ -1,0 +1,23 @@
+{
+  "name": "jp-wordle",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "tsc && node ./dist/bot.js",
+    "dev": "nodemon -e ts --exec \"npm run start\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^17.0.13",
+    "nodemon": "^2.0.15",
+    "typescript": "^4.5.5"
+  },
+  "dependencies": {
+    "discord.js": "^13.6.0",
+    "dotenv": "^15.0.0"
+  }
+}
