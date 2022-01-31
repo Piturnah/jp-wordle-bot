@@ -6,9 +6,9 @@ import { Game as GameImpl } from "./game";
 import { COMMANDS } from "./commands";
 
 class Bot {
-	client: Client;
+	private client: Client;
 
-	activeGames = new Map<Snowflake, Game>();
+	private activeGames = new Map<Snowflake, Game>();
 
 	constructor(client: Client) {
 		this.client = client;
@@ -19,7 +19,8 @@ class Bot {
 		client.on("messageCreate", this.messageCreate);
 		client.login(token);
 	}
-	ready() {
+
+	private ready() {
 		if (null !== client.user)
 			console.log(
 				`${
@@ -28,7 +29,7 @@ class Bot {
 			);
 	}
 
-	messageCreate(message: Message) {
+	private messageCreate(message: Message) {
 		const userId = message.author.id;
 		const activeGame = this.activeGames.get(message.channelId);
 		if (undefined !== activeGame) {
@@ -46,6 +47,10 @@ class Bot {
 						)
 					) {
 						if (activeGame.start(userId)) {
+							this.prompt(
+								activeGame.nextGuessExpectedFrom(),
+								message.channelId
+							);
 						}
 					}
 					break;
@@ -66,7 +71,7 @@ class Bot {
 		}
 	}
 
-	handleResponse(guessResult: boolean | CharState[]) {
+	private handleResponse(guessResult: boolean | CharState[]) {
 		if (typeof guessResult == "boolean") {
 			if (guessResult as boolean) {
 				// TODO: Win message.
@@ -75,7 +80,7 @@ class Bot {
 		}
 	}
 
-	prompt(userId: Snowflake, channelId: Snowflake) {
+	private prompt(userId: Snowflake, channelId: Snowflake) {
 		const channel = this.client.channels.cache.get(channelId);
 		if (undefined !== channel) {
 			const textChannel = channel as TextChannel;
