@@ -8,23 +8,23 @@ export class Basic implements Renderer {
         guessResult: CharState[],
         parameters?: RenderParameters,
     ): Buffer {
-        const effectiveParameters = parameters || new RenderParameters();
+        const params = parameters || new RenderParameters();
         const images: UltimateTextToImage[] = [];
         [...word].forEach((character, index) => {
             const backgroundColor = resolve(
                 guessResult[index],
-                effectiveParameters.colors,
+                params.colors,
             );
             images.push(
                 new UltimateTextToImage(character, {
                     valign: "bottom",
                     align: "center",
-                    marginBottom: effectiveParameters.dimensions.marginBottom,
-                    width: effectiveParameters.dimensions.imageSize,
-                    height: effectiveParameters.dimensions.imageSize,
+                    marginBottom: params.dimensions.marginBottom,
+                    width: params.dimensions.imageSize,
+                    height: params.dimensions.imageSize,
                     backgroundColor: backgroundColor,
-                    fontSize: effectiveParameters.dimensions.fontSize,
-                    borderSize: effectiveParameters.dimensions.borderSize,
+                    fontSize: params.dimensions.fontSize,
+                    borderSize: params.dimensions.borderSize,
                     borderColor: "#000000",
                 }),
             );
