@@ -34,6 +34,37 @@ export interface Colors {
     wrongPosition: string;
 }
 
+export interface RenderDimensions {
+    imageSize: number;
+    marginBottom: number;
+    fontSize: number;
+    borderSize: number;
+}
+
+export class Small implements RenderDimensions {
+    imageSize: number = 50;
+    marginBottom: number = 12;
+    fontSize: number = 40;
+    borderSize: number = 1;
+}
+export class Default implements RenderDimensions {
+    imageSize: number = 200;
+    marginBottom: number = 36;
+    fontSize: number = 180;
+    borderSize: number = 2;
+}
+
+export class DefaultColors implements Colors {
+    wrong: string = "#FFFFFF"; // White
+    right: string = "#65E43C"; // Atlantis
+    wrongPosition: string = "#E6CD2E"; // Sunflower
+}
+
+export class RenderParameters {
+    colors: Colors = new DefaultColors();
+    dimensions: RenderDimensions = new Default();
+}
+
 export function resolve(charResult: CharState, colors: Colors): string {
     switch (charResult) {
         case CharState.Correct:
@@ -46,12 +77,10 @@ export function resolve(charResult: CharState, colors: Colors): string {
     }
 }
 
-export class DefaultColors implements Colors {
-    wrong: string = "#FFFFFF"; // White
-    right: string = "#65E43C"; // Atlantis
-    wrongPosition: string = "#E6CD2E"; // Sunflower
-}
-
 export interface Renderer {
-    render(word: string, guessResult: CharState[], colors?: Colors): Buffer;
+    render(
+        word: string,
+        guessResult: CharState[],
+        parameters?: RenderParameters,
+    ): Buffer;
 }
