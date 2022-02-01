@@ -86,8 +86,7 @@ class Bot {
 		const channel = this.client.channels.cache.get(channelId);
 		if (undefined !== channel) {
 			const textChannel = channel as TextChannel;
-			textChannel.send(`@${userId}: It is your
-						 turn.`);
+			textChannel.send(`<@${userId}>: It is your turn.`);
 		}
 	}
 }
