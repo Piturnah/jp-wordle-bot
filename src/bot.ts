@@ -5,7 +5,7 @@ import { SpecialTurnResponse, Game, CharState, State } from "./interfaces";
 import { Game as GameImpl } from "./game";
 import { COMMANDS } from "./commands";
 
-const charStateFeedback: Map<CharState, string> = new Map([[CharState.Correct, "!"], [CharState.Moved, "?"], [CharState.Wrong, ""]])
+const charStateFeedback: Map<CharState, string> = new Map([[CharState.Correct, "！"], [CharState.Moved, "？"], [CharState.Wrong, ""]])
 
 class Bot {
 	private client: Client;
