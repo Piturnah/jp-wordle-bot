@@ -15,8 +15,10 @@ class Bot {
 	}
 
 	start(token: string | undefined) {
-		client.once("ready", this.ready);
-		client.on("messageCreate", this.messageCreate);
+		client.once("ready", () => this.ready());
+		client.on("messageCreate", (message: Message) =>
+			this.messageCreate(message)
+		);
 		client.login(token);
 	}
 
