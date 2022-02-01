@@ -1,5 +1,10 @@
 import { Snowflake } from "discord.js";
-import { SpecialTurnResponse, CharState, State, Game as GameData} from "./interfaces";
+import {
+    SpecialTurnResponse,
+    CharState,
+    State,
+    Game as GameData,
+} from "./interfaces";
 
 export class Game implements GameData {
     state: State;
@@ -16,10 +21,8 @@ export class Game implements GameData {
         this.players = [this.createdPlayer];
         this.playerIndex = 0;
 
-        this.words = [
-            "まいとし"
-        ];
-        this.word = this.words[Math.floor(Math.random()*this.words.length)];
+        this.words = ["まいとし"];
+        this.word = this.words[Math.floor(Math.random() * this.words.length)];
     }
 
     getState(): State {
@@ -27,7 +30,6 @@ export class Game implements GameData {
     }
 
     join(player: Snowflake): boolean {
-
         // Player already in players
         if (this.players.indexOf(player) > -1) {
             return false;
@@ -44,12 +46,15 @@ export class Game implements GameData {
         this.state = State.Running;
         return true;
     }
-    
+
     nextGuessExpectedFrom(): Snowflake {
         return this.players[this.playerIndex];
     }
 
-    makeGuess(player: Snowflake, guess: string,): SpecialTurnResponse | CharState[] {
+    makeGuess(
+        player: Snowflake,
+        guess: string,
+    ): SpecialTurnResponse | CharState[] {
         if (player !== this.players[this.playerIndex]) {
             return SpecialTurnResponse.WrongPlayer;
         }

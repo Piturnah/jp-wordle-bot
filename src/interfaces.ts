@@ -1,57 +1,57 @@
 import { Snowflake } from "discord.js";
 
 export enum SpecialTurnResponse {
-	WrongPlayer,
-	WonGame,
-	BadGuess,
+    WrongPlayer,
+    WonGame,
+    BadGuess,
 }
 
 export enum CharState {
-	Wrong,
-	Moved,
-	Correct,
+    Wrong,
+    Moved,
+    Correct,
 }
 
 export enum State {
-	Setup,
-	Running,
+    Setup,
+    Running,
 }
 
 export interface Game {
-	getState(): State;
-	join(player: Snowflake): boolean;
-	start(player: Snowflake): boolean;
-	nextGuessExpectedFrom(): Snowflake;
-	makeGuess(
-		player: Snowflake,
-		guess: string
-	): SpecialTurnResponse | CharState[];
+    getState(): State;
+    join(player: Snowflake): boolean;
+    start(player: Snowflake): boolean;
+    nextGuessExpectedFrom(): Snowflake;
+    makeGuess(
+        player: Snowflake,
+        guess: string,
+    ): SpecialTurnResponse | CharState[];
 }
 
 export interface Colors {
-	wrong: string;
-	right: string;
-	wrongPosition: string;
+    wrong: string;
+    right: string;
+    wrongPosition: string;
 }
 
 export function resolve(charResult: CharState, colors: Colors): string {
-	switch (charResult) {
-		case CharState.Correct:
-			return colors.right;
-		case CharState.Moved:
-			return colors.wrongPosition;
-		case CharState.Wrong:
-		default:
-			return colors.wrong;
-	}
+    switch (charResult) {
+        case CharState.Correct:
+            return colors.right;
+        case CharState.Moved:
+            return colors.wrongPosition;
+        case CharState.Wrong:
+        default:
+            return colors.wrong;
+    }
 }
 
 export class DefaultColors implements Colors {
-	wrong: string = "#FFFFFF"; // White
-	right: string = "#65E43C"; // Atlantis
-	wrongPosition: string = "#E6CD2E"; // Sunflower
+    wrong: string = "#FFFFFF"; // White
+    right: string = "#65E43C"; // Atlantis
+    wrongPosition: string = "#E6CD2E"; // Sunflower
 }
 
 export interface Renderer {
-	render(word: string, guessResult: CharState[], colors?: Colors): Buffer;
+    render(word: string, guessResult: CharState[], colors?: Colors): Buffer;
 }
