@@ -77,7 +77,15 @@ class Bot {
                     break;
             }
         } else if (message.content.startsWith(COMMANDS.WAKE_UP)) {
-            this.activeGames.set(message.channelId, new GameImpl(userId));
+            this.activeGames.set(
+                message.channelId,
+                new GameImpl(
+                    userId,
+                    message.channelId,
+                    (userId: Snowflake, channelId: Snowflake) =>
+                        this.timeout(userId, channelId),
+                ),
+            );
             this.sendMessage(
                 message.channelId,
                 `Temporary feedback to show the game has been created`,
@@ -92,7 +100,6 @@ class Bot {
         channelId: Snowflake,
     ) {
         if (typeof guessResult === "number") {
-            // this feels messy
             switch (guessResult) {
                 case SpecialTurnResponse.WonGame:
                     this.sendMessage(
@@ -101,11 +108,6 @@ class Bot {
                     );
                     break;
                 case SpecialTurnResponse.WrongPlayer:
-                    // NOTE: Should we even be sending any feedback at all in this case?
-                    this.sendMessage(
-                        channelId,
-                        `Was not expecting a guess from <@${userId}>`,
-                    );
                     break;
                 case SpecialTurnResponse.BadGuess:
                     this.sendMessage(
@@ -129,11 +131,33 @@ class Bot {
             const textChannel = channel as TextChannel;
             MessagePayload.resolveFile(
                 this.renderer.render(word, guessResult),
-            ).then((file) => textChannel.send({ files: [file] }));
+            ).then((file) =>
+                textChannel
+                    .send({ files: [file] })
+                    .then(() =>
+                        this.prompt(
+                            this.activeGames
+                                .get(channelId)!
+                                .nextGuessExpectedFrom(),
+                            channelId,
+                        ),
+                    ),
+            );
             return true;
         }
         console.warn(`No channel cached with ID ${channelId}!`);
         return false;
+    }
+
+    private timeout(userId: Snowflake, channelId: Snowflake) {
+        this.sendMessage(
+            channelId,
+            `<@${userId}> took too long to guess! Passing the baton...`,
+        );
+
+        const activeGame = this.activeGames.get(channelId);
+        if (undefined !== activeGame)
+            this.prompt(activeGame.nextGuessExpectedFrom(), channelId);
     }
 
     private prompt(userId: Snowflake, channelId: Snowflake) {
