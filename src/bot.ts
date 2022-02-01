@@ -88,7 +88,7 @@ class Bot {
             );
             this.sendMessage(
                 message.channelId,
-                `Temporary feedback to show the game has been created`,
+                `<@${message.author.id}> is starting a new game! Type !join to join, and type !start to start!`,
             );
         }
     }
