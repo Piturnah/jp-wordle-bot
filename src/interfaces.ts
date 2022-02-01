@@ -47,9 +47,9 @@ export function resolve(charResult: CharState, colors: Colors): string {
 }
 
 export class DefaultColors implements Colors {
-	wrong: string = "#Ffffff"; // White
-	right: string = "#65e43c"; // Atlantis
-	wrongPosition: string = "#e6cd2e"; // Sunflower
+	wrong: string = "#FFFFFF"; // White
+	right: string = "#65E43C"; // Atlantis
+	wrongPosition: string = "#E6CD2E"; // Sunflower
 }
 
 export interface Renderer {

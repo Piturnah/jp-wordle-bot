@@ -1,16 +1,29 @@
 require("dotenv").config();
 
-import { Client, Intents, Message, Snowflake, TextChannel } from "discord.js";
+import {
+	Client,
+	Intents,
+	Message,
+	Snowflake,
+	TextChannel,
+	MessagePayload,
+} from "discord.js";
 import { SpecialTurnResponse, Game, CharState, State } from "./interfaces";
+import { Basic as Renderer } from "./renderer";
 import { Game as GameImpl } from "./game";
 import { COMMANDS } from "./commands";
 
-const charStateFeedback: Map<CharState, string> = new Map([[CharState.Correct, "！"], [CharState.Moved, "？"], [CharState.Wrong, ""]])
+const charStateFeedback: Map<CharState, string> = new Map([
+	[CharState.Correct, "！"],
+	[CharState.Moved, "？"],
+	[CharState.Wrong, ""],
+]);
 
 class Bot {
 	private client: Client;
 
 	private activeGames = new Map<Snowflake, Game>();
+	private renderer = new Renderer();
 
 	constructor(client: Client) {
 		this.client = client;
@@ -45,7 +58,10 @@ class Bot {
 						)
 					) {
 						if (activeGame.join(userId))
-							this.sendMessage(message.channelId, `Player <@${userId}> joined the lobby!`)
+							this.sendMessage(
+								message.channelId,
+								`Player <@${userId}> joined the lobby!`
+							);
 					} else if (
 						message.content.startsWith(
 							COMMANDS.START
@@ -64,7 +80,7 @@ class Bot {
 						message.content,
 						activeGame.makeGuess(
 							userId,
-							message.content,
+							message.content
 						),
 						userId,
 						message.channelId
@@ -76,35 +92,70 @@ class Bot {
 				message.channelId,
 				new GameImpl(userId)
 			);
-			this.sendMessage(message.channelId, `Temporary feedback to show the game has been created`);
+			this.sendMessage(
+				message.channelId,
+				`Temporary feedback to show the game has been created`
+			);
 		}
 	}
 
-	private handleResponse(guess: string, guessResult: SpecialTurnResponse | CharState[], userId: Snowflake, channelId: Snowflake) {
-		if (typeof guessResult === "number") {	// this feels messy
+	private handleResponse(
+		guess: string,
+		guessResult: SpecialTurnResponse | CharState[],
+		userId: Snowflake,
+		channelId: Snowflake
+	) {
+		if (typeof guessResult === "number") {
+			// this feels messy
 			switch (guessResult) {
 				case SpecialTurnResponse.WonGame:
-					this.sendMessage(channelId, `<@${userId}> guessed the word correctly! The word was ${guess}.`)
+					this.sendMessage(
+						channelId,
+						`<@${userId}> guessed the word correctly! The word was ${guess}.`
+					);
 					break;
 				case SpecialTurnResponse.WrongPlayer:
 					// NOTE: Should we even be sending any feedback at all in this case?
-					this.sendMessage(channelId, `Was not expecting a guess from <@${userId}>`)
+					this.sendMessage(
+						channelId,
+						`Was not expecting a guess from <@${userId}>`
+					);
 					break;
 				case SpecialTurnResponse.BadGuess:
-					this.sendMessage(channelId, `Received a bad guess from <@${userId}>. Guess must be 4 chars long.`);
+					this.sendMessage(
+						channelId,
+						`Received a bad guess from <@${userId}>. Guess must be 4 chars long.`
+					);
 					break;
 			}
 		} else {
-			const feedback = [];
-			for (let i = 0; i < guess.length; i++) {
-				feedback.push(`${guess.charAt(i)}${charStateFeedback.get(guessResult[i])}`)
-			}
-			this.sendMessage(channelId, feedback.join(""));
+			this.feedback(
+				channelId,
+				guess,
+				guessResult as CharState[]
+			);
 		}
 	}
 
+	private feedback(
+		channelId: Snowflake,
+		word: string,
+		guessResult: CharState[]
+	) {
+		const channel = this.client.channels.cache.get(channelId);
+		if (undefined !== channel) {
+			const textChannel = channel as TextChannel;
+			MessagePayload.resolveFile(
+				this.renderer.render(word, guessResult)
+			).then((file) => textChannel.send({ files: [file] }));
+			return true;
+		}
+		console.warn(`No channel cached with ID ${channelId}!`);
+		return false;
+	}
+
 	private prompt(userId: Snowflake, channelId: Snowflake) {
-		this.sendMessage(channelId, `<@${userId}>: It is your turn.`)
+		this.sendMessage(channelId, `<@${userId}>: It is your turn.`);
 	}
 
 	private sendMessage(channelId: Snowflake, message: string): boolean {
@@ -114,7 +165,7 @@ class Bot {
 			textChannel.send(message);
 			return true;
 		}
-		console.warn(`No channel cached with ID ${channelId}!`)
+		console.warn(`No channel cached with ID ${channelId}!`);
 		return false;
 	}
 }

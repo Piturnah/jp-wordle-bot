@@ -23,16 +23,20 @@ export class Basic implements Renderer {
 			);
 			images.push(
 				new UltimateTextToImage(character, {
+					valign: "bottom",
+					align: "center",
+					marginBottom: 12,
 					width: 50,
 					height: 50,
 					backgroundColor: backgroundColor,
-					fontSize: 30,
+					fontSize: 40,
+					borderSize: 1,
+					borderColor: "#000000",
 				})
 			);
 		});
 		return new HorizontalImage(images, {
 			valign: "middle",
-			backgroundColor: "#AAAAAA",
 			margin: 0,
 		})
 			.render()
