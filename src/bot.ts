@@ -1,9 +1,11 @@
 require("dotenv").config();
 
 import { Client, Intents, Message, Snowflake, TextChannel } from "discord.js";
-import { Game, CharState, State } from "./interfaces";
+import { SpecialTurnResponse, Game, CharState, State } from "./interfaces";
 import { Game as GameImpl } from "./game";
 import { COMMANDS } from "./commands";
+
+const charStateFeedback: Map<CharState, string> = new Map([[CharState.Correct, "!"], [CharState.Moved, "?"], [CharState.Wrong, ""]])
 
 class Bot {
 	private client: Client;
@@ -34,7 +36,7 @@ class Bot {
 	private messageCreate(message: Message) {
 		const userId = message.author.id;
 		const activeGame = this.activeGames.get(message.channelId);
-		if (undefined !== activeGame) {
+		if (undefined !== activeGame && userId !== client.user?.id) {
 			switch (activeGame.getState()) {
 				case State.Setup:
 					if (
@@ -42,7 +44,8 @@ class Bot {
 							COMMANDS.JOIN
 						)
 					) {
-						activeGame.join(userId);
+						if (activeGame.join(userId))
+							this.sendMessage(message.channelId, `Player <@${userId}> joined the lobby!`)
 					} else if (
 						message.content.startsWith(
 							COMMANDS.START
@@ -58,11 +61,12 @@ class Bot {
 					break;
 				case State.Running:
 					this.handleResponse(
+						message.content,
 						activeGame.makeGuess(
 							userId,
 							message.content,
 						),
-						message.author.id,
+						userId,
 						message.channelId
 					);
 					break;
@@ -76,14 +80,26 @@ class Bot {
 		}
 	}
 
-	private handleResponse(guessResult: boolean | CharState[], userId: Snowflake, channelId: Snowflake) {
-		if (typeof guessResult == "boolean") {
-			if (guessResult as boolean) {
-				// TODO: Win message.
-			} else {
-				this.sendMessage(channelId, `Received a bad guess from <@${userId}>. Guess must be 4 chars long.`)
+	private handleResponse(guess: string, guessResult: SpecialTurnResponse | CharState[], userId: Snowflake, channelId: Snowflake) {
+		if (typeof guessResult === "number") {	// this feels messy
+			switch (guessResult) {
+				case SpecialTurnResponse.WonGame:
+					this.sendMessage(channelId, `<@${userId}> guessed the word correctly! The word was ${guess}.`)
+					break;
+				case SpecialTurnResponse.WrongPlayer:
+					// NOTE: Should we even be sending any feedback at all in this case?
+					this.sendMessage(channelId, `Was not expecting a guess from <@${userId}>`)
+					break;
+				case SpecialTurnResponse.BadGuess:
+					this.sendMessage(channelId, `Received a bad guess from <@${userId}>. Guess must be 4 chars long.`);
+					break;
 			}
 		} else {
+			const feedback = [];
+			for (let i = 0; i < guess.length; i++) {
+				feedback.push(`${guess.charAt(i)}${charStateFeedback.get(guessResult[i])}`)
+			}
+			this.sendMessage(channelId, feedback.join(""));
 		}
 	}
 

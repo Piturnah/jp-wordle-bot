@@ -1,5 +1,5 @@
 import { Snowflake } from "discord.js";
-import { CharState, State, Game as GameData} from "./interfaces";
+import { SpecialTurnResponse, CharState, State, Game as GameData} from "./interfaces";
 
 export class Game implements GameData {
     state: State;
@@ -49,18 +49,21 @@ export class Game implements GameData {
         return this.players[this.playerIndex];
     }
 
-    makeGuess(player: Snowflake, guess: string,): boolean | CharState[] {
-        if (guess === this.word) {
-            return true;
+    makeGuess(player: Snowflake, guess: string,): SpecialTurnResponse | CharState[] {
+        if (player !== this.players[this.playerIndex]) {
+            return SpecialTurnResponse.WrongPlayer;
         }
-        if (player !== this.players[this.playerIndex] || guess.length !== this.word.length) {
-            return false;
+        if (guess.length !== this.word.length) {
+            return SpecialTurnResponse.BadGuess;
+        }
+        if (guess === this.word) {
+            return SpecialTurnResponse.WonGame;
         }
 
         const chars: CharState[] = [];
         for (let i = 0; i < guess.length; i++) {
             if (this.word.charAt(i) === guess.charAt(i)) {
-                chars[i] = CharState.Wrong;
+                chars[i] = CharState.Correct;
             } else if (this.word.indexOf(guess.charAt(i)) > -1) {
                 chars[i] = CharState.Moved;
             } else {

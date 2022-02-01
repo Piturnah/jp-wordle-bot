@@ -1,5 +1,11 @@
 import { Snowflake } from "discord.js";
 
+export enum SpecialTurnResponse {
+	WrongPlayer,
+	WonGame,
+	BadGuess,
+}
+
 export enum CharState {
 	Wrong,
 	Moved,
@@ -16,5 +22,5 @@ export interface Game {
 	join(player: Snowflake): boolean;
 	start(player: Snowflake): boolean;
 	nextGuessExpectedFrom(): Snowflake;
-	makeGuess(player: Snowflake, guess: string): boolean | CharState[];
+	makeGuess(player: Snowflake, guess: string): SpecialTurnResponse | CharState[];
 }
