@@ -5,7 +5,8 @@
         "strict": true,
         "baseUrl": ".",
         "outDir": "dist",
-        "removeComments": true
+        "removeComments": true,
+	"downlevelIteration": true,
     },
     "include": [
         "src/**/*.ts"
