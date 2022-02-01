@@ -60,8 +60,10 @@ class Bot {
 					this.handleResponse(
 						activeGame.makeGuess(
 							userId,
-							message.content
-						)
+							message.content,
+						),
+						message.author.id,
+						message.channelId
 					);
 					break;
 			}
@@ -70,24 +72,34 @@ class Bot {
 				message.channelId,
 				new GameImpl(userId)
 			);
+			this.sendMessage(message.channelId, `Temporary feedback to show the game has been created`);
 		}
 	}
 
-	private handleResponse(guessResult: boolean | CharState[]) {
+	private handleResponse(guessResult: boolean | CharState[], userId: Snowflake, channelId: Snowflake) {
 		if (typeof guessResult == "boolean") {
 			if (guessResult as boolean) {
 				// TODO: Win message.
+			} else {
+				this.sendMessage(channelId, `Received a bad guess from <@${userId}>. Guess must be 4 chars long.`)
 			}
 		} else {
 		}
 	}
 
 	private prompt(userId: Snowflake, channelId: Snowflake) {
+		this.sendMessage(channelId, `<@${userId}>: It is your turn.`)
+	}
+
+	private sendMessage(channelId: Snowflake, message: string): boolean {
 		const channel = this.client.channels.cache.get(channelId);
 		if (undefined !== channel) {
 			const textChannel = channel as TextChannel;
-			textChannel.send(`<@${userId}>: It is your turn.`);
+			textChannel.send(message);
+			return true;
 		}
+		console.warn(`No channel cached with ID ${channelId}!`)
+		return false;
 	}
 }
 
