@@ -11,6 +11,7 @@ import {
 import { SpecialTurnResponse, Game, CharState, State } from "./interfaces";
 import { Basic as Renderer } from "./renderer";
 import { Game as GameImpl } from "./game";
+import { WordLists } from "./word_lists";
 import { COMMANDS } from "./commands";
 
 const charStateFeedback: Map<CharState, string> = new Map([
@@ -102,10 +103,14 @@ class Bot {
         if (typeof guessResult === "number") {
             switch (guessResult) {
                 case SpecialTurnResponse.WonGame:
+                    const wordInfo = WordLists.fourKana.get(guess);
                     this.sendMessage(
                         channelId,
-                        `<@${userId}> guessed the word correctly! The word was ${guess}.`,
+                        `<@${userId}> guessed the word correctly! The word was ${guess} ${
+                            wordInfo!.kanji !== "" ? `(${wordInfo!.kanji})` : ""
+                        }.\nMeaning: ${wordInfo!.eng}`,
                     );
+                    this.activeGames.delete(channelId); // NOTE: I am not sure if this is garbage collected. There is no way to directly destroy class instance in JS it seems.
                     break;
                 case SpecialTurnResponse.WrongPlayer:
                     break;
@@ -113,6 +118,12 @@ class Bot {
                     this.sendMessage(
                         channelId,
                         `Received a bad guess from <@${userId}>. Guess must be 4 chars long.`,
+                    );
+                    break;
+                case SpecialTurnResponse.NotAWord:
+                    this.sendMessage(
+                        channelId,
+                        `Received word 「${guess}」 not in the database of words.`,
                     );
                     break;
             }

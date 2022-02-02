@@ -8,7 +8,7 @@ import {
     Game as GameData,
 } from "./interfaces";
 
-const timeoutTime = 15000;
+const timeoutTime = 25000;
 
 export class Game implements GameData {
     state: State;
@@ -19,6 +19,7 @@ export class Game implements GameData {
     currentTimeout: undefined | ReturnType<typeof setTimeout>;
     timeoutCallback: (player: Snowflake, channelId: Snowflake) => void;
 
+    wordKeys: string[];
     word: string;
 
     constructor(
@@ -34,10 +35,9 @@ export class Game implements GameData {
         this.currentTimeout = undefined;
         this.timeoutCallback = timeoutCallback;
 
+        this.wordKeys = Array.from(WordLists.fourKana.keys());
         this.word =
-            WordLists.fourKana[
-                Math.floor(Math.random() * WordLists.fourKana.length)
-            ];
+            this.wordKeys[Math.floor(Math.random() * this.wordKeys.length)];
         console.log(this.word);
     }
 
@@ -79,7 +79,12 @@ export class Game implements GameData {
             return SpecialTurnResponse.BadGuess;
         }
         if (guess === this.word) {
+            if (this.currentTimeout !== undefined)
+                clearTimeout(this.currentTimeout);
             return SpecialTurnResponse.WonGame;
+        }
+        if (this.wordKeys.indexOf(guess) === -1) {
+            return SpecialTurnResponse.NotAWord;
         }
 
         const chars: CharState[] = [];

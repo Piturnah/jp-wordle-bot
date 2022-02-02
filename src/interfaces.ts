@@ -4,6 +4,7 @@ export enum SpecialTurnResponse {
     WrongPlayer,
     WonGame,
     BadGuess,
+    NotAWord,
 }
 
 export enum CharState {
