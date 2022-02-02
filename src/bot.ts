@@ -8,7 +8,7 @@ import {
 } from "discord.js";
 import { config as readEnv } from "dotenv";
 
-import { COMMANDS } from "./commands";
+import { Commands } from "./commands";
 import { Game as GameImpl } from "./game";
 import { CharState, Game, SpecialTurnResponse, State } from "./interfaces";
 import { Basic as Renderer } from "./renderer";
@@ -49,17 +49,31 @@ class Bot {
         if (undefined !== activeGame && userId !== client.user?.id) {
             switch (activeGame.getState()) {
                 case State.Setup:
-                    if (message.content.startsWith(COMMANDS.JOIN)) {
+                    if (message.content.startsWith(Commands.Join)) {
                         if (activeGame.join(userId))
                             this.sendMessage(
                                 message.channelId,
                                 `Player <@${userId}> joined the lobby!`,
                             );
-                    } else if (message.content.startsWith(COMMANDS.START)) {
+                    } else if (message.content.startsWith(Commands.Start)) {
                         if (activeGame.start(userId)) {
                             this.prompt(
                                 activeGame.nextGuessExpectedFrom(),
                                 message.channelId,
+                            );
+                        }
+                    } else if (message.content.startsWith(Commands.Leave)) {
+                        const result = activeGame.leave(userId);
+                        if (typeof result === "boolean" && result) {
+                            this.sendMessage(
+                                message.channelId,
+                                `Game ended as last player left the lobby!`,
+                            );
+                            this.activeGames.delete(message.channelId);
+                        } else {
+                            this.sendMessage(
+                                message.channelId,
+                                `With <@${userId}> leaving the lobby, <@${result}> is now the session owner!`,
                             );
                         }
                     }
@@ -73,7 +87,7 @@ class Bot {
                     );
                     break;
             }
-        } else if (message.content.startsWith(COMMANDS.WAKE_UP)) {
+        } else if (message.content.startsWith(Commands.WakeUp)) {
             this.activeGames.set(
                 message.channelId,
                 new GameImpl(

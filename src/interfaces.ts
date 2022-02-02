@@ -33,6 +33,7 @@ export interface Game {
         player: Snowflake,
         guess: string,
     ): SpecialTurnResponse | CharState[];
+    leave(player: Snowflake): Snowflake | boolean;
 }
 
 export interface Colors {
@@ -49,22 +50,22 @@ export interface RenderDimensions {
 }
 
 export class Small implements RenderDimensions {
-    imageSize: number = 50;
-    marginBottom: number = 12;
-    fontSize: number = 40;
-    borderSize: number = 1;
+    imageSize = 50;
+    marginBottom = 12;
+    fontSize = 40;
+    borderSize = 1;
 }
 export class Default implements RenderDimensions {
-    imageSize: number = 200;
-    marginBottom: number = 36;
-    fontSize: number = 180;
-    borderSize: number = 2;
+    imageSize = 200;
+    marginBottom = 36;
+    fontSize = 180;
+    borderSize = 2;
 }
 
 export class DefaultColors implements Colors {
-    wrong: string = "#FFFFFF"; // White
-    right: string = "#65E43C"; // Atlantis
-    wrongPosition: string = "#E6CD2E"; // Sunflower
+    wrong = "#FFFFFF"; // White
+    right = "#65E43C"; // Atlantis
+    wrongPosition = "#E6CD2E"; // Sunflower
 }
 
 export class RenderParameters {

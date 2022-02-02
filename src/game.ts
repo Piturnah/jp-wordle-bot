@@ -55,6 +55,22 @@ export class Game implements GameData {
         return true;
     }
 
+    leave(player: Snowflake): Snowflake | boolean {
+        const index = this.players.indexOf(player);
+        if (-1 !== index) {
+            this.players.splice(index, 1);
+            if (this.players.length === 0) {
+                return true;
+            } else {
+                if (this.createdPlayer === player) {
+                    this.createdPlayer = this.players[0];
+                    return this.createdPlayer;
+                }
+                return false;
+            }
+        }
+        return false;
+    }
     start(player: Snowflake): boolean {
         if (player !== this.createdPlayer) {
             return false;

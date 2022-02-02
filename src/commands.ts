@@ -1,5 +1,6 @@
-export const enum COMMANDS {
-    JOIN = "!join",
-    START = "!start",
-    WAKE_UP = "!jp-wordle",
+export const enum Commands {
+    WakeUp = "!jp-wordle",
+    Join = "!join",
+    Start = "!start",
+    Leave = "!leave",
 }
