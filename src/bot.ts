@@ -1,24 +1,20 @@
-require("dotenv").config();
-
 import {
     Client,
     Intents,
     Message,
+    MessagePayload,
     Snowflake,
     TextChannel,
-    MessagePayload,
 } from "discord.js";
-import { SpecialTurnResponse, Game, CharState, State } from "./interfaces";
-import { Basic as Renderer } from "./renderer";
-import { Game as GameImpl } from "./game";
-import { WordLists } from "./word_lists";
-import { COMMANDS } from "./commands";
+import { config as readEnv } from "dotenv";
 
-const charStateFeedback: Map<CharState, string> = new Map([
-    [CharState.Correct, "！"],
-    [CharState.Moved, "？"],
-    [CharState.Wrong, ""],
-]);
+import { COMMANDS } from "./commands";
+import { Game as GameImpl } from "./game";
+import { CharState, Game, SpecialTurnResponse, State } from "./interfaces";
+import { Basic as Renderer } from "./renderer";
+import { WordLists } from "./word_lists";
+
+readEnv();
 
 class Bot {
     private client: Client;

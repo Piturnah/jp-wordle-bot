@@ -1,12 +1,12 @@
-import { debug } from "console";
 import { Snowflake } from "discord.js";
-import { WordLists } from "./word_lists";
+
 import {
-    SpecialTurnResponse,
     CharState,
-    State,
     Game as GameData,
+    SpecialTurnResponse,
+    State,
 } from "./interfaces";
+import { WordLists } from "./word_lists";
 
 const timeoutTime = 25000;
 

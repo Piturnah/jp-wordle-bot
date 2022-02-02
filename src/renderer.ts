@@ -1,6 +1,6 @@
-import { Renderer, CharState, RenderParameters, resolve } from "./interfaces";
+import { HorizontalImage, UltimateTextToImage } from "ultimate-text-to-image";
 
-import { UltimateTextToImage, HorizontalImage } from "ultimate-text-to-image";
+import { CharState, RenderParameters, Renderer, resolve } from "./interfaces";
 
 export class Basic implements Renderer {
     render(
@@ -11,10 +11,7 @@ export class Basic implements Renderer {
         const params = parameters || new RenderParameters();
         const images: UltimateTextToImage[] = [];
         [...word].forEach((character, index) => {
-            const backgroundColor = resolve(
-                guessResult[index],
-                params.colors,
-            );
+            const backgroundColor = resolve(guessResult[index], params.colors);
             images.push(
                 new UltimateTextToImage(character, {
                     valign: "bottom",
