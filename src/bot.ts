@@ -188,6 +188,6 @@ const client = new Client({
     intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
 });
 
-let bot = new Bot(client);
+const bot = new Bot(client);
 
 bot.start(process.env.DISCORD_TOKEN);
