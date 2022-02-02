@@ -97,9 +97,9 @@ class Bot {
         channelId: Snowflake,
     ) {
         if (typeof guessResult === "number") {
+            const wordInfo = WordLists.fourKana.get(guess);
             switch (guessResult) {
                 case SpecialTurnResponse.WonGame:
-                    const wordInfo = WordLists.fourKana.get(guess);
                     this.sendMessage(
                         channelId,
                         `<@${userId}> guessed the word correctly! The word was ${guess} ${
