@@ -1,5 +1,6 @@
 node_modules
 dist
 src/word_lists/source.json
+src/word_lists/words.json
 **/venv
 .env
