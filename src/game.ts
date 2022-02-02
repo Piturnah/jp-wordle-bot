@@ -1,5 +1,6 @@
 import { debug } from "console";
 import { Snowflake } from "discord.js";
+import { WordLists } from "./word_lists";
 import {
     SpecialTurnResponse,
     CharState,
@@ -18,7 +19,6 @@ export class Game implements GameData {
     currentTimeout: undefined | ReturnType<typeof setTimeout>;
     timeoutCallback: (player: Snowflake, channelId: Snowflake) => void;
 
-    words: string[];
     word: string;
 
     constructor(
@@ -34,8 +34,11 @@ export class Game implements GameData {
         this.currentTimeout = undefined;
         this.timeoutCallback = timeoutCallback;
 
-        this.words = ["まいとし"];
-        this.word = this.words[Math.floor(Math.random() * this.words.length)];
+        this.word =
+            WordLists.fourKana[
+                Math.floor(Math.random() * WordLists.fourKana.length)
+            ];
+        console.log(this.word);
     }
 
     getState(): State {

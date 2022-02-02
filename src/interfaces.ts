@@ -17,6 +17,12 @@ export enum State {
     Running,
 }
 
+export interface WordLists {
+    fourKana: string[];
+    fiveKana?: string[];
+    sixKana?: string[];
+}
+
 export interface Game {
     getState(): State;
     join(player: Snowflake): boolean;
