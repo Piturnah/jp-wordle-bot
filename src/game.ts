@@ -9,6 +9,12 @@ import {
 import { WordLists } from "./word_lists";
 
 const timeoutTime = 25000;
+const lobbyTimeoutTime = 60000;
+
+enum TimeoutCallback {
+    Player,
+    Lobby,
+}
 
 export class Game implements GameData {
     state: State;
@@ -18,6 +24,7 @@ export class Game implements GameData {
     playerIndex: number;
     currentTimeout: undefined | ReturnType<typeof setTimeout>;
     timeoutCallback: (player: Snowflake, channelId: Snowflake) => void;
+    lobbyTimeoutCallback: (player: Snowflake, channelId: Snowflake) => void;
 
     wordKeys: string[];
     word: string;
@@ -26,6 +33,7 @@ export class Game implements GameData {
         player: Snowflake,
         channelId: Snowflake,
         timeoutCallback: (player: Snowflake, channelId: Snowflake) => void,
+        lobbyTimeoutCallback: (player: Snowflake, channelId: Snowflake) => void,
     ) {
         this.state = State.Setup;
         this.channelId = channelId;
@@ -34,10 +42,14 @@ export class Game implements GameData {
         this.playerIndex = 0;
         this.currentTimeout = undefined;
         this.timeoutCallback = timeoutCallback;
+        this.lobbyTimeoutCallback = lobbyTimeoutCallback;
 
         this.wordKeys = Array.from(WordLists.fourKana.keys());
         this.word =
             this.wordKeys[Math.floor(Math.random() * this.wordKeys.length)];
+
+        this.setTimeoutCallback(TimeoutCallback.Lobby);
+
         console.log(this.word);
     }
 
@@ -46,6 +58,8 @@ export class Game implements GameData {
     }
 
     join(player: Snowflake): boolean {
+        this.setTimeoutCallback(TimeoutCallback.Lobby);
+
         // Player already in players
         if (this.players.indexOf(player) > -1) {
             return false;
@@ -56,6 +70,8 @@ export class Game implements GameData {
     }
 
     leave(player: Snowflake): Snowflake | boolean {
+        this.setTimeoutCallback(TimeoutCallback.Lobby);
+
         const index = this.players.indexOf(player);
         if (-1 !== index) {
             this.players.splice(index, 1);
@@ -71,6 +87,7 @@ export class Game implements GameData {
         }
         return false;
     }
+
     start(player: Snowflake): boolean {
         if (player !== this.createdPlayer) {
             return false;
@@ -137,17 +154,38 @@ export class Game implements GameData {
             this.playerIndex = (this.playerIndex + 1) % this.players.length;
         }
 
+        this.setTimeoutCallback(TimeoutCallback.Player);
+    }
+
+    setTimeoutCallback(callback: TimeoutCallback) {
         if (this.currentTimeout !== undefined) {
             clearTimeout(this.currentTimeout);
         }
-        this.currentTimeout = setTimeout(() => {
-            this.callTimeoutCallback();
-        }, timeoutTime);
+
+        switch (callback) {
+            case TimeoutCallback.Player:
+                this.currentTimeout = setTimeout(() => {
+                    this.callTimeoutCallback(TimeoutCallback.Player);
+                }, timeoutTime);
+                break;
+            case TimeoutCallback.Lobby:
+                this.currentTimeout = setTimeout(() => {
+                    this.callTimeoutCallback(TimeoutCallback.Lobby);
+                }, lobbyTimeoutTime);
+                break;
+        }
     }
 
-    callTimeoutCallback() {
-        const delayedPlayer = this.players[this.playerIndex];
-        this.updatePlayerIndex();
-        this.timeoutCallback(delayedPlayer, this.channelId);
+    callTimeoutCallback(callback: TimeoutCallback) {
+        switch (callback) {
+            case TimeoutCallback.Player:
+                const delayedPlayer = this.players[this.playerIndex];
+                this.updatePlayerIndex();
+                this.timeoutCallback(delayedPlayer, this.channelId);
+                break;
+            case TimeoutCallback.Lobby:
+                this.lobbyTimeoutCallback(this.createdPlayer, this.channelId);
+                break;
+        }
     }
 }

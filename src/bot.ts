@@ -94,7 +94,9 @@ class Bot {
                     userId,
                     message.channelId,
                     (userId: Snowflake, channelId: Snowflake) =>
-                        this.timeout(userId, channelId),
+                        this.playerTimeout(userId, channelId),
+                    (userId: Snowflake, channelId: Snowflake) =>
+                        this.lobbyTimeout(userId, channelId),
                 ),
             );
             this.sendMessage(
@@ -170,7 +172,7 @@ class Bot {
         return false;
     }
 
-    private timeout(userId: Snowflake, channelId: Snowflake) {
+    private playerTimeout(userId: Snowflake, channelId: Snowflake) {
         this.sendMessage(
             channelId,
             `<@${userId}> took too long to guess! Passing the baton...`,
@@ -179,6 +181,14 @@ class Bot {
         const activeGame = this.activeGames.get(channelId);
         if (undefined !== activeGame)
             this.prompt(activeGame.nextGuessExpectedFrom(), channelId);
+    }
+
+    private lobbyTimeout(userId: Snowflake, channelId: Snowflake) {
+        this.sendMessage(
+            channelId,
+            `No activity in lobby in the alloted time. Shutting it down.\n(INFO: lobby created by <@${userId}>)`,
+        );
+        this.activeGames.delete(channelId);
     }
 
     private prompt(userId: Snowflake, channelId: Snowflake) {
