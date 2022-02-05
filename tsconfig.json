@@ -6,12 +6,9 @@
         "baseUrl": ".",
         "outDir": "dist",
         "removeComments": true,
-	"downlevelIteration": true,
+        "downlevelIteration": true,
+        "lib": ["ES2021.String"]
     },
-    "include": [
-        "src/**/*.ts"
-    ],
-    "exclude": [
-        "node_modules"
-    ]
+    "include": ["src/**/*.ts"],
+    "exclude": ["node_modules"]
 }

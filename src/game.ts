@@ -103,14 +103,25 @@ export class Game implements GameData {
             return SpecialTurnResponse.NotAWord;
         }
 
-        const chars: CharState[] = [];
-        for (let i = 0; i < guess.length; i++) {
-            if (this.word.charAt(i) === guess.charAt(i)) {
-                chars[i] = CharState.Correct;
-            } else if (this.word.indexOf(guess.charAt(i)) > -1) {
-                chars[i] = CharState.Moved;
-            } else {
-                chars[i] = CharState.Wrong;
+        const chars: CharState[] = Array(this.word.length).fill(
+            CharState.Wrong,
+        );
+        for (let i = 0; i < this.word.length; i++) {
+            // Case: letter is in guess
+            if (guess.indexOf(this.word.charAt(i)) > -1) {
+                const res: number[] = [];
+                guess.replaceAll(
+                    this.word.charAt(i),
+                    function (match, offset: number) {
+                        res.push(offset);
+                        return match;
+                    },
+                );
+                if (res.indexOf(i) > -1) {
+                    chars[i] = CharState.Correct;
+                } else {
+                    chars[res[0]] = CharState.Moved;
+                }
             }
         }
 
