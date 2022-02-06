@@ -11,6 +11,7 @@ import { config as readEnv } from "dotenv";
 import { Commands } from "./commands";
 import { Game as GameImpl } from "./game";
 import { CharState, Game, SpecialTurnResponse, State } from "./interfaces";
+import { DebugMode, ListManager } from "./list_manager";
 import { Basic as Renderer } from "./renderer";
 import { WordLists } from "./word_lists";
 
@@ -21,9 +22,28 @@ class Bot {
 
     private activeGames = new Map<Snowflake, Game>();
     private renderer = new Renderer();
+    private listManager: ListManager;
 
     constructor(client: Client) {
         this.client = client;
+        this.listManager = new ListManager(new DebugMode());
+        for (const language of this.listManager.getLanguages()) {
+            const lists = this.listManager.getLists(language);
+            console.log(
+                `Successfully loaded lists for language ${language}: ${lists.map(
+                    (ident) => ident.list,
+                )}`,
+            );
+
+            lists.forEach((list) => {
+                console.log(
+                    `Got random word from list: ${list.getUserString()}: ${this.listManager.randomWord(
+                        list,
+                        4,
+                    )}`,
+                );
+            });
+        }
     }
 
     start(token: string | undefined) {

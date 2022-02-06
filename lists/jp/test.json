@@ -1,0 +1,21 @@
+{
+    "debug": true,
+    "words": [
+        {
+            "word": "test",
+            "additionalInfo": {
+                "alternateSpelling": "TEST"
+            }
+        },
+        {
+            "word": "fish"
+        },
+        {
+            "word": "tiger",
+            "additionalInfo": {
+                "alternateSpelling": "TEST",
+                "meaning": ".. that you should probably start running!"
+            }
+        }
+    ]
+}
