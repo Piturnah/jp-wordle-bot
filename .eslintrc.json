@@ -13,5 +13,5 @@
             }
         ]
     },
-    "ignorePatterns": ["src/**/*.test.ts", "src/dist/*"]
+    "ignorePatterns": ["src/**/*.test.ts", "dist/*"]
 }
