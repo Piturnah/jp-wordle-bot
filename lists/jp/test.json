@@ -1,5 +1,6 @@
 {
     "debug": true,
+    "default": true,
     "words": [
         {
             "word": "test",

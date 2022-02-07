@@ -10,9 +10,13 @@ export class DebugMode extends Settings {
     debug = true;
 }
 
+export interface Meaning {
+    language: string;
+    meaning: string;
+}
 export interface AdditionalInfo {
     alternateSpelling?: string;
-    meaning?: string;
+    meaning?: Meaning;
 }
 
 export type Language = string;
@@ -31,6 +35,15 @@ export class ListIdentifier {
 
     getUserString(): string {
         return this.language + "/" + this.list;
+    }
+
+    static parse(userString: string): ListIdentifier | undefined {
+        const values = userString.split("/");
+        if (2 === values.length) {
+            return new ListIdentifier(values[0], values[1]);
+        } else {
+            return undefined;
+        }
     }
 }
 
@@ -62,6 +75,7 @@ export class ListManager {
         Language,
         Map<List, Map<WordLength, Map<Word, AdditionalInfo | undefined>>>
     > = new Map();
+    private defaultsPerLanguage: Map<Language, List> = new Map();
 
     constructor(settings: Settings = new Settings()) {
         this.settings = settings;
@@ -76,6 +90,7 @@ export class ListManager {
                 const lists = new Map();
                 this.lists.set(language, lists);
                 ListManager.fill(
+                    (list) => this.defaultsPerLanguage.set(language, list),
                     this.settings.listPath + this.settings.separator + language,
                     this.settings.separator,
                     this.settings.debug,
@@ -87,6 +102,7 @@ export class ListManager {
     }
 
     private static fill(
+        setDefault: (list: List) => void,
         path: string,
         separator: string,
         debugOnly: boolean,
@@ -96,10 +112,9 @@ export class ListManager {
             Map<WordLength, Map<Word, AdditionalInfo | undefined>>
         >,
     ) {
-        const dirEntries = fs.readdirSync(path, {
+        fs.readdirSync(path, {
             withFileTypes: true,
-        });
-        [...dirEntries].forEach((dirEntry) => {
+        }).forEach((dirEntry) => {
             if (dirEntry.isFile() && dirEntry.name.endsWith(".json")) {
                 const contents = JSON.parse(
                     fs.readFileSync(path + separator + dirEntry.name, {
@@ -118,13 +133,17 @@ export class ListManager {
                         WordLength,
                         Map<string, AdditionalInfo>
                     > = new Map();
-                    lists.set(
-                        dirEntry.name.substring(
-                            0,
-                            dirEntry.name.length - ".json".length,
-                        ),
-                        words,
+                    const listName = dirEntry.name.substring(
+                        0,
+                        dirEntry.name.length - ".json".length,
                     );
+                    lists.set(listName, words);
+                    if (
+                        undefined !== contents.default &&
+                        (contents.default as boolean)
+                    ) {
+                        setDefault(listName);
+                    }
                     [...contents.words].forEach((word) => {
                         const wordAsString: string = word.word;
                         const wordLength = wordAsString.length;
@@ -219,5 +238,14 @@ export class ListManager {
             }
         }
         return false;
+    }
+
+    getDefaultListForLanguage(language: Language): ListIdentifier | undefined {
+        const list = this.defaultsPerLanguage.get(language);
+        if (undefined !== list) {
+            return new ListIdentifier(language, list);
+        } else {
+            return undefined;
+        }
     }
 }

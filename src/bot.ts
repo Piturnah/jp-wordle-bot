@@ -11,9 +11,8 @@ import { config as readEnv } from "dotenv";
 import { Commands } from "./commands";
 import { Game as GameImpl } from "./game";
 import { CharState, Game, SpecialTurnResponse, State } from "./interfaces";
-import { DebugMode, ListManager } from "./list_manager";
+import { ListIdentifier, ListManager } from "./list_manager";
 import { Basic as Renderer } from "./renderer";
-import { WordLists } from "./word_lists";
 
 readEnv();
 
@@ -26,7 +25,8 @@ class Bot {
 
     constructor(client: Client) {
         this.client = client;
-        this.listManager = new ListManager(new DebugMode());
+        // this.listManager = new ListManager(new DebugMode());
+        this.listManager = new ListManager();
         for (const language of this.listManager.getLanguages()) {
             const lists = this.listManager.getLists(language);
             console.log(
@@ -117,6 +117,9 @@ class Bot {
                         this.playerTimeout(userId, channelId),
                     (userId: Snowflake, channelId: Snowflake) =>
                         this.lobbyTimeout(userId, channelId),
+                    this.listManager,
+                    this.listManager.getDefaultListForLanguage("jp") ??
+                        new ListIdentifier("", ""), // TODO
                 ),
             );
             this.sendMessage(
@@ -133,16 +136,21 @@ class Bot {
         channelId: Snowflake,
     ) {
         if (typeof guessResult === "number") {
-            const wordInfo = WordLists.fourKana.get(guess);
+            // const wordInfo = "this still needs to be FIXED";
             switch (guessResult) {
                 case SpecialTurnResponse.WonGame:
                     this.sendMessage(
                         channelId,
-                        `<@${userId}> guessed the word correctly! The word was ${guess} ${
-                            wordInfo!.kanji !== "" ? `(${wordInfo!.kanji})` : ""
-                        }.\nMeaning: ${wordInfo!.eng}`,
+                        `<@${userId}> guessed the word correctly! It was ${guess}.`, // TODO
                     );
-                    this.activeGames.delete(channelId); // NOTE: I am not sure if this is garbage collected. There is no way to directly destroy class instance in JS it seems.
+                    // this;
+                    // .sendMessage
+                    // channelId,
+                    // `<@${userId}> guessed the word correctly! The word was ${guess} ${
+                    //     wordInfo!.kanji !== "" ? `(${wordInfo!.kanji})` : ""
+                    // }.\nMeaning: ${wordInfo!.eng}`,
+                    // ();
+                    this.activeGames.delete(channelId);
                     break;
                 case SpecialTurnResponse.WrongPlayer:
                     break;

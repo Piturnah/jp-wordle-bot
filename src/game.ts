@@ -6,7 +6,7 @@ import {
     SpecialTurnResponse,
     State,
 } from "./interfaces";
-import { WordLists } from "./word_lists";
+import { ListIdentifier, ListManager } from "./list_manager";
 
 const timeoutTime = 25000;
 const lobbyTimeoutTime = 60000;
@@ -26,14 +26,17 @@ export class Game implements GameData {
     timeoutCallback: (player: Snowflake, channelId: Snowflake) => void;
     lobbyTimeoutCallback: (player: Snowflake, channelId: Snowflake) => void;
 
-    wordKeys: string[];
     word: string;
+    currentList: ListIdentifier;
+    listManager: ListManager;
 
     constructor(
         player: Snowflake,
         channelId: Snowflake,
         timeoutCallback: (player: Snowflake, channelId: Snowflake) => void,
         lobbyTimeoutCallback: (player: Snowflake, channelId: Snowflake) => void,
+        listManager: ListManager,
+        list: ListIdentifier,
     ) {
         this.state = State.Setup;
         this.channelId = channelId;
@@ -43,10 +46,10 @@ export class Game implements GameData {
         this.currentTimeout = undefined;
         this.timeoutCallback = timeoutCallback;
         this.lobbyTimeoutCallback = lobbyTimeoutCallback;
+        this.listManager = listManager;
+        this.currentList = list;
 
-        this.wordKeys = Array.from(WordLists.fourKana.keys());
-        this.word =
-            this.wordKeys[Math.floor(Math.random() * this.wordKeys.length)];
+        this.word = listManager.randomWord(this.currentList, 4) ?? ""; // TODO
 
         this.setTimeoutCallback(TimeoutCallback.Lobby);
 
@@ -116,7 +119,7 @@ export class Game implements GameData {
                 clearTimeout(this.currentTimeout);
             return SpecialTurnResponse.WonGame;
         }
-        if (this.wordKeys.indexOf(guess) === -1) {
+        if (!this.listManager.checkGlobal(this.currentList.language, guess)) {
             return SpecialTurnResponse.NotAWord;
         }
 
@@ -178,11 +181,12 @@ export class Game implements GameData {
 
     callTimeoutCallback(callback: TimeoutCallback) {
         switch (callback) {
-            case TimeoutCallback.Player:
+            case TimeoutCallback.Player: {
                 const delayedPlayer = this.players[this.playerIndex];
                 this.updatePlayerIndex();
                 this.timeoutCallback(delayedPlayer, this.channelId);
                 break;
+            }
             case TimeoutCallback.Lobby:
                 this.lobbyTimeoutCallback(this.createdPlayer, this.channelId);
                 break;
