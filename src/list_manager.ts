@@ -12,7 +12,7 @@ export class DebugMode extends Settings {
 
 export interface Meaning {
     language: string;
-    meaning: string;
+    definitions: string[];
 }
 export interface AdditionalInfo {
     alternateSpelling?: string;

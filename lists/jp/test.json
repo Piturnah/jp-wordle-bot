@@ -15,7 +15,12 @@
             "word": "tiger",
             "additionalInfo": {
                 "alternateSpelling": "TEST",
-                "meaning": ".. that you should probably start running!"
+                "meaning": {
+                    "language": "en",
+                    "definitions": [
+                        ".. that you should probably start running!"
+                    ]
+                }
             }
         }
     ]

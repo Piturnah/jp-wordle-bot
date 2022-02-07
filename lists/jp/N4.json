@@ -1,0 +1,7984 @@
+{
+   "debug": false,
+   "words": [
+      {
+         "word": "まわり",
+         "additionalInfo": {
+            "alternateSpelling": "周り",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "circumference",
+                  "girth"
+               ]
+            }
+         }
+      },
+      {
+         "word": "あげる",
+         "additionalInfo": {
+            "alternateSpelling": "上げる",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to raise",
+                  "to elevate"
+               ]
+            }
+         }
+      },
+      {
+         "word": "うで",
+         "additionalInfo": {
+            "alternateSpelling": "腕",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "arm"
+               ]
+            }
+         }
+      },
+      {
+         "word": "にんぎょう",
+         "additionalInfo": {
+            "alternateSpelling": "人形",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "doll",
+                  "puppet",
+                  "figure"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ぶんか",
+         "additionalInfo": {
+            "alternateSpelling": "文化",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "culture",
+                  "civilization",
+                  "civilisation"
+               ]
+            }
+         }
+      },
+      {
+         "word": "かいがん",
+         "additionalInfo": {
+            "alternateSpelling": "海岸",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "coast",
+                  "beach"
+               ]
+            }
+         }
+      },
+      {
+         "word": "さんぎょう",
+         "additionalInfo": {
+            "alternateSpelling": "産業",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "industry"
+               ]
+            }
+         }
+      },
+      {
+         "word": "どうぶつえん",
+         "additionalInfo": {
+            "alternateSpelling": "動物園",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "zoo",
+                  "zoological gardens"
+               ]
+            }
+         }
+      },
+      {
+         "word": "びじゅつかん",
+         "additionalInfo": {
+            "alternateSpelling": "美術館",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "art museum",
+                  "art gallery"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ひこうじょう",
+         "additionalInfo": {
+            "alternateSpelling": "飛行場",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "airfield",
+                  "airport"
+               ]
+            }
+         }
+      },
+      {
+         "word": "すいどう",
+         "additionalInfo": {
+            "alternateSpelling": "水道",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "water supply",
+                  "water service",
+                  "waterworks",
+                  "tap water"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ぶどう",
+         "additionalInfo": {
+            "alternateSpelling": "葡萄",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "grape",
+                  "grapevine"
+               ]
+            }
+         }
+      },
+      {
+         "word": "じこ",
+         "additionalInfo": {
+            "alternateSpelling": "事故",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "accident",
+                  "incident",
+                  "trouble"
+               ]
+            }
+         }
+      },
+      {
+         "word": "むすこ",
+         "additionalInfo": {
+            "alternateSpelling": "息子",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "son"
+               ]
+            }
+         }
+      },
+      {
+         "word": "せいかつ",
+         "additionalInfo": {
+            "alternateSpelling": "生活",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "life",
+                  "living"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ちゅうい",
+         "additionalInfo": {
+            "alternateSpelling": "注意",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "attention",
+                  "notice",
+                  "heed"
+               ]
+            }
+         }
+      },
+      {
+         "word": "いきる",
+         "additionalInfo": {
+            "alternateSpelling": "生きる",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to live",
+                  "to exist"
+               ]
+            }
+         }
+      },
+      {
+         "word": "じょせい",
+         "additionalInfo": {
+            "alternateSpelling": "女性",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "woman",
+                  "female"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ふね",
+         "additionalInfo": {
+            "alternateSpelling": "船",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "ship",
+                  "boat",
+                  "watercraft",
+                  "vessel",
+                  "seaplane"
+               ]
+            }
+         }
+      },
+      {
+         "word": "せつめい",
+         "additionalInfo": {
+            "alternateSpelling": "説明",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "explanation",
+                  "exposition",
+                  "description",
+                  "account",
+                  "caption",
+                  "legend"
+               ]
+            }
+         }
+      },
+      {
+         "word": "けいさつ",
+         "additionalInfo": {
+            "alternateSpelling": "警察",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "police"
+               ]
+            }
+         }
+      },
+      {
+         "word": "きけん",
+         "additionalInfo": {
+            "alternateSpelling": "危険",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "danger",
+                  "peril",
+                  "hazard"
+               ]
+            }
+         }
+      },
+      {
+         "word": "せかい",
+         "additionalInfo": {
+            "alternateSpelling": "世界",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "the world",
+                  "society",
+                  "the universe"
+               ]
+            }
+         }
+      },
+      {
+         "word": "せんそう",
+         "additionalInfo": {
+            "alternateSpelling": "戦争",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "war"
+               ]
+            }
+         }
+      },
+      {
+         "word": "しょうせつ",
+         "additionalInfo": {
+            "alternateSpelling": "小説",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "novel",
+                  "(short) story"
+               ]
+            }
+         }
+      },
+      {
+         "word": "かんけい",
+         "additionalInfo": {
+            "alternateSpelling": "関係",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "relation",
+                  "relationship",
+                  "connection"
+               ]
+            }
+         }
+      },
+      {
+         "word": "けんきゅう",
+         "additionalInfo": {
+            "alternateSpelling": "研究",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "study",
+                  "research",
+                  "investigation"
+               ]
+            }
+         }
+      },
+      {
+         "word": "かいぎ",
+         "additionalInfo": {
+            "alternateSpelling": "会議",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "meeting",
+                  "conference",
+                  "session",
+                  "assembly",
+                  "council",
+                  "convention",
+                  "congress"
+               ]
+            }
+         }
+      },
+      {
+         "word": "おと",
+         "additionalInfo": {
+            "alternateSpelling": "音",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "sound",
+                  "noise",
+                  "report"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ふつう",
+         "additionalInfo": {
+            "alternateSpelling": "普通",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "normal",
+                  "ordinary",
+                  "regular",
+                  "usual",
+                  "common",
+                  "average"
+               ]
+            }
+         }
+      },
+      {
+         "word": "みずうみ",
+         "additionalInfo": {
+            "alternateSpelling": "湖",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "lake"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ゆめ",
+         "additionalInfo": {
+            "alternateSpelling": "夢",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "dream"
+               ]
+            }
+         }
+      },
+      {
+         "word": "くうこう",
+         "additionalInfo": {
+            "alternateSpelling": "空港",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "airport"
+               ]
+            }
+         }
+      },
+      {
+         "word": "すうがく",
+         "additionalInfo": {
+            "alternateSpelling": "数学",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "mathematics"
+               ]
+            }
+         }
+      },
+      {
+         "word": "きょういく",
+         "additionalInfo": {
+            "alternateSpelling": "教育",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "education",
+                  "schooling",
+                  "training",
+                  "instruction",
+                  "teaching",
+                  "upbringing"
+               ]
+            }
+         }
+      },
+      {
+         "word": "あかちゃん",
+         "additionalInfo": {
+            "alternateSpelling": "赤ちゃん",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "baby",
+                  "infant"
+               ]
+            }
+         }
+      },
+      {
+         "word": "じゆう",
+         "additionalInfo": {
+            "alternateSpelling": "自由",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "freedom",
+                  "liberty"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ひ",
+         "additionalInfo": {
+            "alternateSpelling": "火",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "fire",
+                  "flame",
+                  "blaze"
+               ]
+            }
+         }
+      },
+      {
+         "word": "もり",
+         "additionalInfo": {
+            "alternateSpelling": "森",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "forest"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ほうりつ",
+         "additionalInfo": {
+            "alternateSpelling": "法律",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "law"
+               ]
+            }
+         }
+      },
+      {
+         "word": "きぶん",
+         "additionalInfo": {
+            "alternateSpelling": "気分",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "feeling",
+                  "mood"
+               ]
+            }
+         }
+      },
+      {
+         "word": "かべ",
+         "additionalInfo": {
+            "alternateSpelling": "壁",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "wall",
+                  "partition"
+               ]
+            }
+         }
+      },
+      {
+         "word": "いなか",
+         "additionalInfo": {
+            "alternateSpelling": "田舎",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "rural area",
+                  "countryside",
+                  "the sticks"
+               ]
+            }
+         }
+      },
+      {
+         "word": "き",
+         "additionalInfo": {
+            "alternateSpelling": "気",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "spirit",
+                  "mind",
+                  "heart"
+               ]
+            }
+         }
+      },
+      {
+         "word": "だんせい",
+         "additionalInfo": {
+            "alternateSpelling": "男性",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "man",
+                  "male"
+               ]
+            }
+         }
+      },
+      {
+         "word": "じしん",
+         "additionalInfo": {
+            "alternateSpelling": "地震",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "earthquake"
+               ]
+            }
+         }
+      },
+      {
+         "word": "じんこう",
+         "additionalInfo": {
+            "alternateSpelling": "人口",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "population"
+               ]
+            }
+         }
+      },
+      {
+         "word": "こしょう",
+         "additionalInfo": {
+            "alternateSpelling": "故障",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "breakdown",
+                  "failure",
+                  "fault",
+                  "accident",
+                  "out of order"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ざんねん",
+         "additionalInfo": {
+            "alternateSpelling": "残念",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "regrettable",
+                  "unfortunate",
+                  "disappointing",
+                  "vexing"
+               ]
+            }
+         }
+      },
+      {
+         "word": "しま",
+         "additionalInfo": {
+            "alternateSpelling": "島",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "island"
+               ]
+            }
+         }
+      },
+      {
+         "word": "れきし",
+         "additionalInfo": {
+            "alternateSpelling": "歴史",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "history"
+               ]
+            }
+         }
+      },
+      {
+         "word": "きょうかい",
+         "additionalInfo": {
+            "alternateSpelling": "教会",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "church",
+                  "congregation"
+               ]
+            }
+         }
+      },
+      {
+         "word": "しゃかい",
+         "additionalInfo": {
+            "alternateSpelling": "社会",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "society",
+                  "public",
+                  "community",
+                  "the world"
+               ]
+            }
+         }
+      },
+      {
+         "word": "じゅうしょ",
+         "additionalInfo": {
+            "alternateSpelling": "住所",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "address",
+                  "residence",
+                  "domicile"
+               ]
+            }
+         }
+      },
+      {
+         "word": "こうじょう",
+         "additionalInfo": {
+            "alternateSpelling": "工場",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "factory",
+                  "plant",
+                  "mill",
+                  "workshop"
+               ]
+            }
+         }
+      },
+      {
+         "word": "しゅみ",
+         "additionalInfo": {
+            "alternateSpelling": "趣味",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "hobby",
+                  "pastime"
+               ]
+            }
+         }
+      },
+      {
+         "word": "けいざい",
+         "additionalInfo": {
+            "alternateSpelling": "経済",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "economy",
+                  "economics"
+               ]
+            }
+         }
+      },
+      {
+         "word": "たいふう",
+         "additionalInfo": {
+            "alternateSpelling": "台風",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "typhoon",
+                  "hurricane"
+               ]
+            }
+         }
+      },
+      {
+         "word": "そつぎょう",
+         "additionalInfo": {
+            "alternateSpelling": "卒業",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "graduation",
+                  "completion (of a course)"
+               ]
+            }
+         }
+      },
+      {
+         "word": "くも",
+         "additionalInfo": {
+            "alternateSpelling": "雲",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "cloud"
+               ]
+            }
+         }
+      },
+      {
+         "word": "おくりもの",
+         "additionalInfo": {
+            "alternateSpelling": "贈り物",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "present",
+                  "gift"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ひかり",
+         "additionalInfo": {
+            "alternateSpelling": "光",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "light"
+               ]
+            }
+         }
+      },
+      {
+         "word": "かがく",
+         "additionalInfo": {
+            "alternateSpelling": "科学",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "science"
+               ]
+            }
+         }
+      },
+      {
+         "word": "せいじ",
+         "additionalInfo": {
+            "alternateSpelling": "政治",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "politics",
+                  "government"
+               ]
+            }
+         }
+      },
+      {
+         "word": "とくべつ",
+         "additionalInfo": {
+            "alternateSpelling": "特別",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "special",
+                  "particular",
+                  "extraordinary",
+                  "exceptional",
+                  "especial"
+               ]
+            }
+         }
+      },
+      {
+         "word": "すいえい",
+         "additionalInfo": {
+            "alternateSpelling": "水泳",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "swimming"
+               ]
+            }
+         }
+      },
+      {
+         "word": "こうぎ",
+         "additionalInfo": {
+            "alternateSpelling": "講義",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "lecture"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ゆび",
+         "additionalInfo": {
+            "alternateSpelling": "指",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "finger",
+                  "toe",
+                  "digit"
+               ]
+            }
+         }
+      },
+      {
+         "word": "せいさん",
+         "additionalInfo": {
+            "alternateSpelling": "生産",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "production",
+                  "manufacture"
+               ]
+            }
+         }
+      },
+      {
+         "word": "かいわ",
+         "additionalInfo": {
+            "alternateSpelling": "会話",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "conversation",
+                  "talk",
+                  "chat"
+               ]
+            }
+         }
+      },
+      {
+         "word": "きせつ",
+         "additionalInfo": {
+            "alternateSpelling": "季節",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "season",
+                  "time of year"
+               ]
+            }
+         }
+      },
+      {
+         "word": "おもちゃ",
+         "additionalInfo": {
+            "alternateSpelling": "玩具",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "toy"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ほんやく",
+         "additionalInfo": {
+            "alternateSpelling": "翻訳",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "translation"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ぼうえき",
+         "additionalInfo": {
+            "alternateSpelling": "貿易",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "trade (foreign)"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ぶんがく",
+         "additionalInfo": {
+            "alternateSpelling": "文学",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "literature"
+               ]
+            }
+         }
+      },
+      {
+         "word": "は",
+         "additionalInfo": {
+            "alternateSpelling": "葉",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "leaf",
+                  "blade (of grass)",
+                  "(pine) needle"
+               ]
+            }
+         }
+      },
+      {
+         "word": "こうつう",
+         "additionalInfo": {
+            "alternateSpelling": "交通",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "traffic",
+                  "transportation",
+                  "communication",
+                  "exchange (of ideas, etc.)",
+                  "intercourse"
+               ]
+            }
+         }
+      },
+      {
+         "word": "あそび",
+         "additionalInfo": {
+            "alternateSpelling": "遊び",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "playing"
+               ]
+            }
+         }
+      },
+      {
+         "word": "どうぐ",
+         "additionalInfo": {
+            "alternateSpelling": "道具",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "tool",
+                  "implement",
+                  "instrument",
+                  "utensil",
+                  "apparatus",
+                  "device"
+               ]
+            }
+         }
+      },
+      {
+         "word": "にゅうがく",
+         "additionalInfo": {
+            "alternateSpelling": "入学",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "admission (to a school or university)",
+                  "entrance",
+                  "enrolment",
+                  "enrollment",
+                  "matriculation"
+               ]
+            }
+         }
+      },
+      {
+         "word": "にゅうがく",
+         "additionalInfo": {
+            "alternateSpelling": "入学",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "admission (to a school or university)",
+                  "entrance",
+                  "enrolment",
+                  "enrollment",
+                  "matriculation"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ゆびわ",
+         "additionalInfo": {
+            "alternateSpelling": "指輪",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "(finger) ring"
+               ]
+            }
+         }
+      },
+      {
+         "word": "はつおん",
+         "additionalInfo": {
+            "alternateSpelling": "発音",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "pronunciation"
+               ]
+            }
+         }
+      },
+      {
+         "word": "いがく",
+         "additionalInfo": {
+            "alternateSpelling": "医学",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "medical science",
+                  "medicine"
+               ]
+            }
+         }
+      },
+      {
+         "word": "まんが",
+         "additionalInfo": {
+            "alternateSpelling": "漫画",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "cartoon",
+                  "comic",
+                  "comic strip",
+                  "manga"
+               ]
+            }
+         }
+      },
+      {
+         "word": "かがみ",
+         "additionalInfo": {
+            "alternateSpelling": "鏡",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "mirror",
+                  "looking-glass"
+               ]
+            }
+         }
+      },
+      {
+         "word": "でんぽう",
+         "additionalInfo": {
+            "alternateSpelling": "電報",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "telegram"
+               ]
+            }
+         }
+      },
+      {
+         "word": "こうちょう",
+         "additionalInfo": {
+            "alternateSpelling": "校長",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "principal",
+                  "headmaster"
+               ]
+            }
+         }
+      },
+      {
+         "word": "こくさい",
+         "additionalInfo": {
+            "alternateSpelling": "国際",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "international"
+               ]
+            }
+         }
+      },
+      {
+         "word": "こうがい",
+         "additionalInfo": {
+            "alternateSpelling": "郊外",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "suburb",
+                  "residential area on the outskirt of a city",
+                  "commuter belt"
+               ]
+            }
+         }
+      },
+      {
+         "word": "しみん",
+         "additionalInfo": {
+            "alternateSpelling": "市民",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "citizen",
+                  "citizenry",
+                  "public"
+               ]
+            }
+         }
+      },
+      {
+         "word": "すな",
+         "additionalInfo": {
+            "alternateSpelling": "砂",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "sand",
+                  "grit"
+               ]
+            }
+         }
+      },
+      {
+         "word": "てぶくろ",
+         "additionalInfo": {
+            "alternateSpelling": "手袋",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "glove",
+                  "mitten",
+                  "mitt"
+               ]
+            }
+         }
+      },
+      {
+         "word": "にっき",
+         "additionalInfo": {
+            "alternateSpelling": "日記",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "diary",
+                  "journal"
+               ]
+            }
+         }
+      },
+      {
+         "word": "きぬ",
+         "additionalInfo": {
+            "alternateSpelling": "絹",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "silk"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ぶんぽう",
+         "additionalInfo": {
+            "alternateSpelling": "文法",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "grammar"
+               ]
+            }
+         }
+      },
+      {
+         "word": "いと",
+         "additionalInfo": {
+            "alternateSpelling": "糸",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "thread",
+                  "yarn",
+                  "string"
+               ]
+            }
+         }
+      },
+      {
+         "word": "じんじゃ",
+         "additionalInfo": {
+            "alternateSpelling": "神社",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "Shinto shrine"
+               ]
+            }
+         }
+      },
+      {
+         "word": "しょうがっこう",
+         "additionalInfo": {
+            "alternateSpelling": "小学校",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "primary school",
+                  "elementary school",
+                  "grade school"
+               ]
+            }
+         }
+      },
+      {
+         "word": "てんらんかい",
+         "additionalInfo": {
+            "alternateSpelling": "展覧会",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "exhibition"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ちゅうしゃじょう",
+         "additionalInfo": {
+            "alternateSpelling": "駐車場",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "parking lot",
+                  "car park",
+                  "carpark",
+                  "parking garage"
+               ]
+            }
+         }
+      },
+      {
+         "word": "せいよう",
+         "additionalInfo": {
+            "alternateSpelling": "西洋",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "the West",
+                  "the Occident",
+                  "Western countries"
+               ]
+            }
+         }
+      },
+      {
+         "word": "せんぱい",
+         "additionalInfo": {
+            "alternateSpelling": "先輩",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "senior (at work or school)",
+                  "superior",
+                  "elder",
+                  "older graduate",
+                  "progenitor",
+                  "old-timer"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ちゅうしゃ",
+         "additionalInfo": {
+            "alternateSpelling": "注射",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "injection",
+                  "jab",
+                  "shot"
+               ]
+            }
+         }
+      },
+      {
+         "word": "さか",
+         "additionalInfo": {
+            "alternateSpelling": "坂",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "slope",
+                  "incline",
+                  "hill"
+               ]
+            }
+         }
+      },
+      {
+         "word": "のりもの",
+         "additionalInfo": {
+            "alternateSpelling": "乗り物",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "vehicle",
+                  "conveyance",
+                  "transport"
+               ]
+            }
+         }
+      },
+      {
+         "word": "りょかん",
+         "additionalInfo": {
+            "alternateSpelling": "旅館",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "ryokan",
+                  "traditional inn",
+                  "Japanese-style lodging, usu. professionally-run"
+               ]
+            }
+         }
+      },
+      {
+         "word": "はやし",
+         "additionalInfo": {
+            "alternateSpelling": "林",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "wood",
+                  "woods",
+                  "forest",
+                  "grove",
+                  "copse",
+                  "thicket"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ふとん",
+         "additionalInfo": {
+            "alternateSpelling": "布団",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "futon",
+                  "Japanese bedding consisting of a mattress and a duvet"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ちゅうがっこう",
+         "additionalInfo": {
+            "alternateSpelling": "中学校",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "junior high school",
+                  "middle school",
+                  "lower secondary school"
+               ]
+            }
+         }
+      },
+      {
+         "word": "じゅうどう",
+         "additionalInfo": {
+            "alternateSpelling": "柔道",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "judo"
+               ]
+            }
+         }
+      },
+      {
+         "word": "けんきゅうしつ",
+         "additionalInfo": {
+            "alternateSpelling": "研究室",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "laboratory"
+               ]
+            }
+         }
+      },
+      {
+         "word": "かいぎしつ",
+         "additionalInfo": {
+            "alternateSpelling": "会議室",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "conference room",
+                  "council room"
+               ]
+            }
+         }
+      },
+      {
+         "word": "こうとうがっこう",
+         "additionalInfo": {
+            "alternateSpelling": "高等学校",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "senior high school",
+                  "high school"
+               ]
+            }
+         }
+      },
+      {
+         "word": "はなみ",
+         "additionalInfo": {
+            "alternateSpelling": "花見",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "cherry blossom viewing",
+                  "flower viewing"
+               ]
+            }
+         }
+      },
+      {
+         "word": "こうむいん",
+         "additionalInfo": {
+            "alternateSpelling": "公務員",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "government worker",
+                  "public servant",
+                  "civil servant"
+               ]
+            }
+         }
+      },
+      {
+         "word": "じてん",
+         "additionalInfo": {
+            "alternateSpelling": "辞典",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "dictionary",
+                  "lexicon"
+               ]
+            }
+         }
+      },
+      {
+         "word": "こころ",
+         "additionalInfo": {
+            "alternateSpelling": "心",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "mind",
+                  "heart",
+                  "spirit"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ちから",
+         "additionalInfo": {
+            "alternateSpelling": "力",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "force",
+                  "strength",
+                  "might",
+                  "vigour",
+                  "vigor",
+                  "energy"
+               ]
+            }
+         }
+      },
+      {
+         "word": "けんか",
+         "additionalInfo": {
+            "alternateSpelling": "喧嘩",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "quarrel",
+                  "brawl",
+                  "fight",
+                  "squabble",
+                  "scuffle",
+                  "argument"
+               ]
+            }
+         }
+      },
+      {
+         "word": "てんきよほう",
+         "additionalInfo": {
+            "alternateSpelling": "天気予報",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "weather forecast",
+                  "weather report"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ひげ",
+         "additionalInfo": {
+            "alternateSpelling": "髭",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "moustache",
+                  "beard",
+                  "whiskers"
+               ]
+            }
+         }
+      },
+      {
+         "word": "おしいれ",
+         "additionalInfo": {
+            "alternateSpelling": "押入れ",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "closet (built into the wall of a room)",
+                  "(built-in) wardrobe"
+               ]
+            }
+         }
+      },
+      {
+         "word": "みそ",
+         "additionalInfo": {
+            "alternateSpelling": "味噌",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "miso",
+                  "fermented condiment usu. made from soybeans"
+               ]
+            }
+         }
+      },
+      {
+         "word": "みんな",
+         "additionalInfo": {
+            "alternateSpelling": "皆",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "everyone",
+                  "everybody",
+                  "all"
+               ]
+            }
+         }
+      },
+      {
+         "word": "あした",
+         "additionalInfo": {
+            "alternateSpelling": "明日",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "tomorrow"
+               ]
+            }
+         }
+      },
+      {
+         "word": "かける",
+         "additionalInfo": {
+            "alternateSpelling": "掛ける",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to hang up (e.g. a coat, a picture on the wall)",
+                  "to let hang",
+                  "to suspend (from)",
+                  "to hoist (e.g. sail)",
+                  "to raise (e.g. flag)"
+               ]
+            }
+         }
+      },
+      {
+         "word": "おりる",
+         "additionalInfo": {
+            "alternateSpelling": "降りる",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to descend (e.g. a mountain)",
+                  "to go down",
+                  "to come down"
+               ]
+            }
+         }
+      },
+      {
+         "word": "かれ",
+         "additionalInfo": {
+            "alternateSpelling": "彼",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "he",
+                  "him"
+               ]
+            }
+         }
+      },
+      {
+         "word": "きゃく",
+         "additionalInfo": {
+            "alternateSpelling": "客",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "guest",
+                  "visitor"
+               ]
+            }
+         }
+      },
+      {
+         "word": "そふ",
+         "additionalInfo": {
+            "alternateSpelling": "祖父",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "grandfather"
+               ]
+            }
+         }
+      },
+      {
+         "word": "こうこう",
+         "additionalInfo": {
+            "alternateSpelling": "高校",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "senior high school",
+                  "high school"
+               ]
+            }
+         }
+      },
+      {
+         "word": "きんじょ",
+         "additionalInfo": {
+            "alternateSpelling": "近所",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "neighbourhood",
+                  "neighborhood"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ばんぐみ",
+         "additionalInfo": {
+            "alternateSpelling": "番組",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "program (e.g. TV)",
+                  "programme"
+               ]
+            }
+         }
+      },
+      {
+         "word": "けんぶつ",
+         "additionalInfo": {
+            "alternateSpelling": "見物",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "sightseeing",
+                  "watching",
+                  "viewing"
+               ]
+            }
+         }
+      },
+      {
+         "word": "アメリカ",
+         "additionalInfo": {
+            "alternateSpelling": "亜米利加",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "(United States of) America",
+                  "United States",
+                  "US",
+                  "USA"
+               ]
+            }
+         }
+      },
+      {
+         "word": "かのじょ",
+         "additionalInfo": {
+            "alternateSpelling": "彼女",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "she",
+                  "her"
+               ]
+            }
+         }
+      },
+      {
+         "word": "おもう",
+         "additionalInfo": {
+            "alternateSpelling": "思う",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to think",
+                  "to consider",
+                  "to believe",
+                  "to reckon"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ぼく",
+         "additionalInfo": {
+            "alternateSpelling": "僕",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "I",
+                  "me"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ひつよう",
+         "additionalInfo": {
+            "alternateSpelling": "必要",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "necessary",
+                  "needed",
+                  "essential",
+                  "indispensable"
+               ]
+            }
+         }
+      },
+      {
+         "word": "みえる",
+         "additionalInfo": {
+            "alternateSpelling": "見える",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to be seen",
+                  "to be in sight"
+               ]
+            }
+         }
+      },
+      {
+         "word": "かんがえる",
+         "additionalInfo": {
+            "alternateSpelling": "考える",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to think (about, of)",
+                  "to think over",
+                  "to ponder",
+                  "to contemplate",
+                  "to reflect (on)",
+                  "to meditate (on)"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ため",
+         "additionalInfo": {
+            "alternateSpelling": "為",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "good",
+                  "advantage",
+                  "benefit",
+                  "welfare"
+               ]
+            }
+         }
+      },
+      {
+         "word": "はじめる",
+         "additionalInfo": {
+            "alternateSpelling": "始める",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to start",
+                  "to begin",
+                  "to commence",
+                  "to initiate",
+                  "to originate"
+               ]
+            }
+         }
+      },
+      {
+         "word": "うける",
+         "additionalInfo": {
+            "alternateSpelling": "受ける",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to receive",
+                  "to get"
+               ]
+            }
+         }
+      },
+      {
+         "word": "うつくしい",
+         "additionalInfo": {
+            "alternateSpelling": "美しい",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "beautiful",
+                  "pretty",
+                  "lovely",
+                  "sweet",
+                  "pure (heart, friendship, etc.)"
+               ]
+            }
+         }
+      },
+      {
+         "word": "しけん",
+         "additionalInfo": {
+            "alternateSpelling": "試験",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "examination",
+                  "exam",
+                  "test"
+               ]
+            }
+         }
+      },
+      {
+         "word": "しんせつ",
+         "additionalInfo": {
+            "alternateSpelling": "親切",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "kind",
+                  "gentle",
+                  "considerate",
+                  "generous",
+                  "friendly",
+                  "nice"
+               ]
+            }
+         }
+      },
+      {
+         "word": "しっぱい",
+         "additionalInfo": {
+            "alternateSpelling": "失敗",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "failure",
+                  "mistake",
+                  "blunder"
+               ]
+            }
+         }
+      },
+      {
+         "word": "いじょう",
+         "additionalInfo": {
+            "alternateSpelling": "以上",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "not less than",
+                  "... and over",
+                  "... and above",
+                  "... and upwards",
+                  "... or more"
+               ]
+            }
+         }
+      },
+      {
+         "word": "いけん",
+         "additionalInfo": {
+            "alternateSpelling": "意見",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "opinion",
+                  "view",
+                  "comment"
+               ]
+            }
+         }
+      },
+      {
+         "word": "けっして",
+         "additionalInfo": {
+            "alternateSpelling": "決して",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "(not) ever",
+                  "(not) by any means",
+                  "(not) in the least",
+                  "(not) in any way",
+                  "(not) at all"
+               ]
+            }
+         }
+      },
+      {
+         "word": "じゅうぶん",
+         "additionalInfo": {
+            "alternateSpelling": "十分",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "enough",
+                  "sufficient",
+                  "plenty",
+                  "adequate",
+                  "satisfactory"
+               ]
+            }
+         }
+      },
+      {
+         "word": "しあい",
+         "additionalInfo": {
+            "alternateSpelling": "試合",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "match",
+                  "game",
+                  "bout",
+                  "contest"
+               ]
+            }
+         }
+      },
+      {
+         "word": "いっしょうけんめい",
+         "additionalInfo": {
+            "alternateSpelling": "一生懸命",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "very hard",
+                  "with utmost effort",
+                  "as hard as one can",
+                  "with all one's might",
+                  "for dear life",
+                  "eagerly",
+                  "desperately"
+               ]
+            }
+         }
+      },
+      {
+         "word": "こ",
+         "additionalInfo": {
+            "alternateSpelling": "子",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "child",
+                  "kid",
+                  "teenager",
+                  "youngster",
+                  "young (non-adult) person"
+               ]
+            }
+         }
+      },
+      {
+         "word": "さがす",
+         "additionalInfo": {
+            "alternateSpelling": "探す",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to search for",
+                  "to look for",
+                  "to hunt for",
+                  "to seek"
+               ]
+            }
+         }
+      },
+      {
+         "word": "いそぐ",
+         "additionalInfo": {
+            "alternateSpelling": "急ぐ",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to hurry",
+                  "to rush",
+                  "to hasten",
+                  "to make something happen sooner"
+               ]
+            }
+         }
+      },
+      {
+         "word": "えらぶ",
+         "additionalInfo": {
+            "alternateSpelling": "選ぶ",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to choose",
+                  "to select"
+               ]
+            }
+         }
+      },
+      {
+         "word": "おくる",
+         "additionalInfo": {
+            "alternateSpelling": "送る",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to send (a thing)",
+                  "to dispatch",
+                  "to despatch",
+                  "to transmit"
+               ]
+            }
+         }
+      },
+      {
+         "word": "かならず",
+         "additionalInfo": {
+            "alternateSpelling": "必ず",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "always",
+                  "without exception",
+                  "necessarily",
+                  "certainly",
+                  "without fail",
+                  "positively",
+                  "invariably"
+               ]
+            }
+         }
+      },
+      {
+         "word": "おこる",
+         "additionalInfo": {
+            "alternateSpelling": "怒る",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to get angry",
+                  "to get mad"
+               ]
+            }
+         }
+      },
+      {
+         "word": "さいきん",
+         "additionalInfo": {
+            "alternateSpelling": "最近",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "recently",
+                  "lately",
+                  "these days",
+                  "nowadays",
+                  "right now"
+               ]
+            }
+         }
+      },
+      {
+         "word": "はらう",
+         "additionalInfo": {
+            "alternateSpelling": "払う",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to pay (e.g. money, bill)"
+               ]
+            }
+         }
+      },
+      {
+         "word": "てん",
+         "additionalInfo": {
+            "alternateSpelling": "点",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "dot",
+                  "spot",
+                  "point",
+                  "speck",
+                  "mark"
+               ]
+            }
+         }
+      },
+      {
+         "word": "あう",
+         "additionalInfo": {
+            "alternateSpelling": "合う",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to come together",
+                  "to merge",
+                  "to unite",
+                  "to meet"
+               ]
+            }
+         }
+      },
+      {
+         "word": "きめる",
+         "additionalInfo": {
+            "alternateSpelling": "決める",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to decide",
+                  "to choose",
+                  "to determine",
+                  "to make up one's mind",
+                  "to resolve",
+                  "to set one's heart on",
+                  "to settle",
+                  "to arrange",
+                  "to set",
+                  "to appoint",
+                  "to fix"
+               ]
+            }
+         }
+      },
+      {
+         "word": "わらう",
+         "additionalInfo": {
+            "alternateSpelling": "笑う",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to laugh"
+               ]
+            }
+         }
+      },
+      {
+         "word": "さいしょ",
+         "additionalInfo": {
+            "alternateSpelling": "最初",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "beginning",
+                  "outset",
+                  "first",
+                  "onset"
+               ]
+            }
+         }
+      },
+      {
+         "word": "はんたい",
+         "additionalInfo": {
+            "alternateSpelling": "反対",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "opposition",
+                  "resistance",
+                  "antagonism",
+                  "hostility",
+                  "objection",
+                  "dissent"
+               ]
+            }
+         }
+      },
+      {
+         "word": "つま",
+         "additionalInfo": {
+            "alternateSpelling": "妻",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "wife"
+               ]
+            }
+         }
+      },
+      {
+         "word": "むすめ",
+         "additionalInfo": {
+            "alternateSpelling": "娘",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "daughter"
+               ]
+            }
+         }
+      },
+      {
+         "word": "りゆう",
+         "additionalInfo": {
+            "alternateSpelling": "理由",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "reason",
+                  "pretext",
+                  "motive"
+               ]
+            }
+         }
+      },
+      {
+         "word": "よろこぶ",
+         "additionalInfo": {
+            "alternateSpelling": "喜ぶ",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to be delighted",
+                  "to be glad",
+                  "to be pleased"
+               ]
+            }
+         }
+      },
+      {
+         "word": "むかし",
+         "additionalInfo": {
+            "alternateSpelling": "昔",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "olden days",
+                  "former"
+               ]
+            }
+         }
+      },
+      {
+         "word": "やくそく",
+         "additionalInfo": {
+            "alternateSpelling": "約束",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "promise",
+                  "agreement",
+                  "arrangement",
+                  "one's word",
+                  "contract",
+                  "pact",
+                  "appointment",
+                  "engagement",
+                  "date"
+               ]
+            }
+         }
+      },
+      {
+         "word": "おもいだす",
+         "additionalInfo": {
+            "alternateSpelling": "思い出す",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to recall",
+                  "to remember",
+                  "to recollect"
+               ]
+            }
+         }
+      },
+      {
+         "word": "かわる",
+         "additionalInfo": {
+            "alternateSpelling": "変わる",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to change",
+                  "to be transformed",
+                  "to be altered",
+                  "to vary"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ただしい",
+         "additionalInfo": {
+            "alternateSpelling": "正しい",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "right",
+                  "correct"
+               ]
+            }
+         }
+      },
+      {
+         "word": "おちる",
+         "additionalInfo": {
+            "alternateSpelling": "落ちる",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to fall down",
+                  "to drop",
+                  "to fall (e.g. rain)",
+                  "to sink (e.g. sun or moon)",
+                  "to fall onto (e.g. light or one's gaze)",
+                  "to be used in a certain place (e.g. money)"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ばしょ",
+         "additionalInfo": {
+            "alternateSpelling": "場所",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "place",
+                  "location",
+                  "spot",
+                  "position"
+               ]
+            }
+         }
+      },
+      {
+         "word": "たのしむ",
+         "additionalInfo": {
+            "alternateSpelling": "楽しむ",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to enjoy",
+                  "to take pleasure in",
+                  "to have a good time",
+                  "to have fun"
+               ]
+            }
+         }
+      },
+      {
+         "word": "りよう",
+         "additionalInfo": {
+            "alternateSpelling": "利用",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "use",
+                  "utilization",
+                  "utilisation",
+                  "application"
+               ]
+            }
+         }
+      },
+      {
+         "word": "まにあう",
+         "additionalInfo": {
+            "alternateSpelling": "間に合う",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to be in time (for)"
+               ]
+            }
+         }
+      },
+      {
+         "word": "こんど",
+         "additionalInfo": {
+            "alternateSpelling": "今度",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "this time",
+                  "now"
+               ]
+            }
+         }
+      },
+      {
+         "word": "よてい",
+         "additionalInfo": {
+            "alternateSpelling": "予定",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "plans",
+                  "arrangement",
+                  "schedule",
+                  "program",
+                  "programme",
+                  "expectation",
+                  "estimate"
+               ]
+            }
+         }
+      },
+      {
+         "word": "たずねる",
+         "additionalInfo": {
+            "alternateSpelling": "訪ねる",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to visit",
+                  "to call on",
+                  "to pay a visit to"
+               ]
+            }
+         }
+      },
+      {
+         "word": "あかんぼう",
+         "additionalInfo": {
+            "alternateSpelling": "赤ん坊",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "baby",
+                  "infant"
+               ]
+            }
+         }
+      },
+      {
+         "word": "すすむ",
+         "additionalInfo": {
+            "alternateSpelling": "進む",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to advance",
+                  "to go forward"
+               ]
+            }
+         }
+      },
+      {
+         "word": "さいご",
+         "additionalInfo": {
+            "alternateSpelling": "最後",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "end",
+                  "conclusion"
+               ]
+            }
+         }
+      },
+      {
+         "word": "むかう",
+         "additionalInfo": {
+            "alternateSpelling": "向かう",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to face"
+               ]
+            }
+         }
+      },
+      {
+         "word": "きょうみ",
+         "additionalInfo": {
+            "alternateSpelling": "興味",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "interest (in something)",
+                  "curiosity (about something)",
+                  "zest (for)"
+               ]
+            }
+         }
+      },
+      {
+         "word": "とおる",
+         "additionalInfo": {
+            "alternateSpelling": "通る",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to go by",
+                  "to go past",
+                  "to go along",
+                  "to travel along",
+                  "to pass through",
+                  "to use (a road)",
+                  "to take (a route)",
+                  "to go via",
+                  "to go by way of"
+               ]
+            }
+         }
+      },
+      {
+         "word": "じだい",
+         "additionalInfo": {
+            "alternateSpelling": "時代",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "period",
+                  "epoch",
+                  "era",
+                  "age"
+               ]
+            }
+         }
+      },
+      {
+         "word": "とちゅう",
+         "additionalInfo": {
+            "alternateSpelling": "途中",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "on the way",
+                  "en route"
+               ]
+            }
+         }
+      },
+      {
+         "word": "きもち",
+         "additionalInfo": {
+            "alternateSpelling": "気持ち",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "feeling",
+                  "sensation",
+                  "mood",
+                  "state of mind"
+               ]
+            }
+         }
+      },
+      {
+         "word": "へんじ",
+         "additionalInfo": {
+            "alternateSpelling": "返事",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "reply",
+                  "answer",
+                  "response"
+               ]
+            }
+         }
+      },
+      {
+         "word": "かんたん",
+         "additionalInfo": {
+            "alternateSpelling": "簡単",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "simple",
+                  "easy",
+                  "uncomplicated"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ふかい",
+         "additionalInfo": {
+            "alternateSpelling": "深い",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "deep"
+               ]
+            }
+         }
+      },
+      {
+         "word": "おこす",
+         "additionalInfo": {
+            "alternateSpelling": "起こす",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to raise",
+                  "to raise up",
+                  "to set up",
+                  "to pick up"
+               ]
+            }
+         }
+      },
+      {
+         "word": "おっと",
+         "additionalInfo": {
+            "alternateSpelling": "夫",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "husband"
+               ]
+            }
+         }
+      },
+      {
+         "word": "いちど",
+         "additionalInfo": {
+            "alternateSpelling": "一度",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "once",
+                  "one time",
+                  "on one occasion"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ばあい",
+         "additionalInfo": {
+            "alternateSpelling": "場合",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "case",
+                  "situation"
+               ]
+            }
+         }
+      },
+      {
+         "word": "はこぶ",
+         "additionalInfo": {
+            "alternateSpelling": "運ぶ",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to carry",
+                  "to transport",
+                  "to move",
+                  "to convey"
+               ]
+            }
+         }
+      },
+      {
+         "word": "こんや",
+         "additionalInfo": {
+            "alternateSpelling": "今夜",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "this evening",
+                  "tonight"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ぬすむ",
+         "additionalInfo": {
+            "alternateSpelling": "盗む",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to steal"
+               ]
+            }
+         }
+      },
+      {
+         "word": "しゅうかん",
+         "additionalInfo": {
+            "alternateSpelling": "習慣",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "habit"
+               ]
+            }
+         }
+      },
+      {
+         "word": "たいてい",
+         "additionalInfo": {
+            "alternateSpelling": "大抵",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "mostly",
+                  "ordinarily",
+                  "usually",
+                  "generally"
+               ]
+            }
+         }
+      },
+      {
+         "word": "のこる",
+         "additionalInfo": {
+            "alternateSpelling": "残る",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to remain",
+                  "to be left"
+               ]
+            }
+         }
+      },
+      {
+         "word": "あがる",
+         "additionalInfo": {
+            "alternateSpelling": "上がる",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to rise",
+                  "to go up",
+                  "to come up",
+                  "to ascend",
+                  "to be raised"
+               ]
+            }
+         }
+      },
+      {
+         "word": "せき",
+         "additionalInfo": {
+            "alternateSpelling": "席",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "seat"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ねだん",
+         "additionalInfo": {
+            "alternateSpelling": "値段",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "price",
+                  "cost"
+               ]
+            }
+         }
+      },
+      {
+         "word": "しょうらい",
+         "additionalInfo": {
+            "alternateSpelling": "将来",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "future (usually near)",
+                  "prospects"
+               ]
+            }
+         }
+      },
+      {
+         "word": "やさしい",
+         "additionalInfo": {
+            "alternateSpelling": "優しい",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "tender",
+                  "kind",
+                  "gentle",
+                  "graceful",
+                  "affectionate",
+                  "amiable"
+               ]
+            }
+         }
+      },
+      {
+         "word": "いたす",
+         "additionalInfo": {
+            "alternateSpelling": "致す",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to do"
+               ]
+            }
+         }
+      },
+      {
+         "word": "にげる",
+         "additionalInfo": {
+            "alternateSpelling": "逃げる",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to escape",
+                  "to run away"
+               ]
+            }
+         }
+      },
+      {
+         "word": "くうき",
+         "additionalInfo": {
+            "alternateSpelling": "空気",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "air",
+                  "atmosphere"
+               ]
+            }
+         }
+      },
+      {
+         "word": "やくにたつ",
+         "additionalInfo": {
+            "alternateSpelling": "役に立つ",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to be helpful",
+                  "to be useful"
+               ]
+            }
+         }
+      },
+      {
+         "word": "こたえ",
+         "additionalInfo": {
+            "alternateSpelling": "答え",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "answer",
+                  "reply",
+                  "response"
+               ]
+            }
+         }
+      },
+      {
+         "word": "きかい",
+         "additionalInfo": {
+            "alternateSpelling": "機会",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "chance",
+                  "opportunity"
+               ]
+            }
+         }
+      },
+      {
+         "word": "きかい",
+         "additionalInfo": {
+            "alternateSpelling": "機会",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "chance",
+                  "opportunity"
+               ]
+            }
+         }
+      },
+      {
+         "word": "げんいん",
+         "additionalInfo": {
+            "alternateSpelling": "原因",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "cause",
+                  "origin",
+                  "source"
+               ]
+            }
+         }
+      },
+      {
+         "word": "かじ",
+         "additionalInfo": {
+            "alternateSpelling": "火事",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "fire",
+                  "conflagration"
+               ]
+            }
+         }
+      },
+      {
+         "word": "どろぼう",
+         "additionalInfo": {
+            "alternateSpelling": "泥棒",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "thief",
+                  "burglar",
+                  "robber"
+               ]
+            }
+         }
+      },
+      {
+         "word": "かみ",
+         "additionalInfo": {
+            "alternateSpelling": "髪",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "hair (on the head)"
+               ]
+            }
+         }
+      },
+      {
+         "word": "きそく",
+         "additionalInfo": {
+            "alternateSpelling": "規則",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "rule",
+                  "regulation"
+               ]
+            }
+         }
+      },
+      {
+         "word": "おこなう",
+         "additionalInfo": {
+            "alternateSpelling": "行う",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to perform",
+                  "to do",
+                  "to conduct oneself",
+                  "to carry out"
+               ]
+            }
+         }
+      },
+      {
+         "word": "かわり",
+         "additionalInfo": {
+            "alternateSpelling": "代わり",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "substitute",
+                  "replacement",
+                  "substituting",
+                  "replacing"
+               ]
+            }
+         }
+      },
+      {
+         "word": "みつかる",
+         "additionalInfo": {
+            "alternateSpelling": "見つかる",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to be found",
+                  "to be discovered"
+               ]
+            }
+         }
+      },
+      {
+         "word": "うつ",
+         "additionalInfo": {
+            "alternateSpelling": "打つ",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to hit",
+                  "to strike",
+                  "to knock",
+                  "to beat",
+                  "to punch",
+                  "to slap",
+                  "to tap",
+                  "to bang",
+                  "to clap",
+                  "to pound"
+               ]
+            }
+         }
+      },
+      {
+         "word": "きびしい",
+         "additionalInfo": {
+            "alternateSpelling": "厳しい",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "severe",
+                  "strict",
+                  "rigid",
+                  "unsparing",
+                  "relentless"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ふえる",
+         "additionalInfo": {
+            "alternateSpelling": "増える",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to increase",
+                  "to multiply"
+               ]
+            }
+         }
+      },
+      {
+         "word": "むかえる",
+         "additionalInfo": {
+            "alternateSpelling": "迎える",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to go out to meet"
+               ]
+            }
+         }
+      },
+      {
+         "word": "こわい",
+         "additionalInfo": {
+            "alternateSpelling": "怖い",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "scary",
+                  "frightening",
+                  "eerie",
+                  "dreadful"
+               ]
+            }
+         }
+      },
+      {
+         "word": "しゃちょう",
+         "additionalInfo": {
+            "alternateSpelling": "社長",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "company president",
+                  "manager",
+                  "director"
+               ]
+            }
+         }
+      },
+      {
+         "word": "しょうかい",
+         "additionalInfo": {
+            "alternateSpelling": "紹介",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "introduction",
+                  "presentation"
+               ]
+            }
+         }
+      },
+      {
+         "word": "あつめる",
+         "additionalInfo": {
+            "alternateSpelling": "集める",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to collect",
+                  "to assemble",
+                  "to gather"
+               ]
+            }
+         }
+      },
+      {
+         "word": "じむしょ",
+         "additionalInfo": {
+            "alternateSpelling": "事務所",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "office"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ほし",
+         "additionalInfo": {
+            "alternateSpelling": "星",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "star (usu. not including the Sun)",
+                  "planet (usu. not including Earth)",
+                  "heavenly body"
+               ]
+            }
+         }
+      },
+      {
+         "word": "とくに",
+         "additionalInfo": {
+            "alternateSpelling": "特に",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "particularly",
+                  "especially",
+                  "in particular",
+                  "expressly"
+               ]
+            }
+         }
+      },
+      {
+         "word": "あつまる",
+         "additionalInfo": {
+            "alternateSpelling": "集まる",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to gather",
+                  "to collect",
+                  "to assemble"
+               ]
+            }
+         }
+      },
+      {
+         "word": "くらべる",
+         "additionalInfo": {
+            "alternateSpelling": "比べる",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to compare",
+                  "to make a comparison"
+               ]
+            }
+         }
+      },
+      {
+         "word": "むり",
+         "additionalInfo": {
+            "alternateSpelling": "無理",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "unreasonable",
+                  "unnatural",
+                  "unjustifiable"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ようい",
+         "additionalInfo": {
+            "alternateSpelling": "用意",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "preparation",
+                  "arrangements",
+                  "provision",
+                  "getting ready",
+                  "laying out (e.g. a meal)"
+               ]
+            }
+         }
+      },
+      {
+         "word": "おとす",
+         "additionalInfo": {
+            "alternateSpelling": "落とす",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to drop",
+                  "to lose",
+                  "to let fall",
+                  "to shed (light)",
+                  "to cast (one's gaze)",
+                  "to pour in (liquid)",
+                  "to leave behind"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ぐあい",
+         "additionalInfo": {
+            "alternateSpelling": "具合",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "condition",
+                  "state"
+               ]
+            }
+         }
+      },
+      {
+         "word": "こわれる",
+         "additionalInfo": {
+            "alternateSpelling": "壊れる",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to be broken",
+                  "to break"
+               ]
+            }
+         }
+      },
+      {
+         "word": "たおれる",
+         "additionalInfo": {
+            "alternateSpelling": "倒れる",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to fall (over, down)",
+                  "to collapse",
+                  "to take a fall",
+                  "to topple"
+               ]
+            }
+         }
+      },
+      {
+         "word": "あじ",
+         "additionalInfo": {
+            "alternateSpelling": "味",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "flavor",
+                  "flavour",
+                  "taste"
+               ]
+            }
+         }
+      },
+      {
+         "word": "あんぜん",
+         "additionalInfo": {
+            "alternateSpelling": "安全",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "safety",
+                  "security"
+               ]
+            }
+         }
+      },
+      {
+         "word": "へん",
+         "additionalInfo": {
+            "alternateSpelling": "変",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "strange",
+                  "odd",
+                  "peculiar",
+                  "weird",
+                  "curious",
+                  "queer",
+                  "eccentric",
+                  "funny",
+                  "suspicious",
+                  "fishy"
+               ]
+            }
+         }
+      },
+      {
+         "word": "れんらく",
+         "additionalInfo": {
+            "alternateSpelling": "連絡",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "contacting",
+                  "(making) contact",
+                  "getting in touch",
+                  "communication",
+                  "correspondence",
+                  "call",
+                  "message"
+               ]
+            }
+         }
+      },
+      {
+         "word": "そぼ",
+         "additionalInfo": {
+            "alternateSpelling": "祖母",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "grandmother"
+               ]
+            }
+         }
+      },
+      {
+         "word": "だいじ",
+         "additionalInfo": {
+            "alternateSpelling": "大事",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "important",
+                  "serious",
+                  "crucial"
+               ]
+            }
+         }
+      },
+      {
+         "word": "こわす",
+         "additionalInfo": {
+            "alternateSpelling": "壊す",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to break",
+                  "to destroy",
+                  "to demolish"
+               ]
+            }
+         }
+      },
+      {
+         "word": "さがる",
+         "additionalInfo": {
+            "alternateSpelling": "下がる",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to come down",
+                  "to go down",
+                  "to fall",
+                  "to drop",
+                  "to sink",
+                  "to get lower"
+               ]
+            }
+         }
+      },
+      {
+         "word": "きまる",
+         "additionalInfo": {
+            "alternateSpelling": "決まる",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to be decided",
+                  "to be settled",
+                  "to be fixed",
+                  "to be arranged"
+               ]
+            }
+         }
+      },
+      {
+         "word": "たのしみ",
+         "additionalInfo": {
+            "alternateSpelling": "楽しみ",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "enjoyment",
+                  "pleasure",
+                  "diversion",
+                  "amusement",
+                  "hobby"
+               ]
+            }
+         }
+      },
+      {
+         "word": "たしか",
+         "additionalInfo": {
+            "alternateSpelling": "確か",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "sure",
+                  "certain",
+                  "positive",
+                  "definite"
+               ]
+            }
+         }
+      },
+      {
+         "word": "きしゃ",
+         "additionalInfo": {
+            "alternateSpelling": "汽車",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "train (esp. long distance train)"
+               ]
+            }
+         }
+      },
+      {
+         "word": "すみ",
+         "additionalInfo": {
+            "alternateSpelling": "隅",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "corner",
+                  "nook",
+                  "recess"
+               ]
+            }
+         }
+      },
+      {
+         "word": "おかしい",
+         "additionalInfo": {
+            "alternateSpelling": "可笑しい",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "funny",
+                  "amusing",
+                  "comical",
+                  "laughable",
+                  "ridiculous"
+               ]
+            }
+         }
+      },
+      {
+         "word": "きょうそう",
+         "additionalInfo": {
+            "alternateSpelling": "競争",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "competition",
+                  "contest",
+                  "rivalry",
+                  "race"
+               ]
+            }
+         }
+      },
+      {
+         "word": "にゅういん",
+         "additionalInfo": {
+            "alternateSpelling": "入院",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "hospitalization",
+                  "hospitalisation"
+               ]
+            }
+         }
+      },
+      {
+         "word": "かたち",
+         "additionalInfo": {
+            "alternateSpelling": "形",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "form",
+                  "shape",
+                  "figure"
+               ]
+            }
+         }
+      },
+      {
+         "word": "しかた",
+         "additionalInfo": {
+            "alternateSpelling": "仕方",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "way",
+                  "method",
+                  "means",
+                  "resource",
+                  "course"
+               ]
+            }
+         }
+      },
+      {
+         "word": "けしき",
+         "additionalInfo": {
+            "alternateSpelling": "景色",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "scenery",
+                  "scene",
+                  "landscape"
+               ]
+            }
+         }
+      },
+      {
+         "word": "るす",
+         "additionalInfo": {
+            "alternateSpelling": "留守",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "absence",
+                  "being away from home"
+               ]
+            }
+         }
+      },
+      {
+         "word": "くび",
+         "additionalInfo": {
+            "alternateSpelling": "首",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "neck"
+               ]
+            }
+         }
+      },
+      {
+         "word": "きみ",
+         "additionalInfo": {
+            "alternateSpelling": "君",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "you",
+                  "buddy",
+                  "pal"
+               ]
+            }
+         }
+      },
+      {
+         "word": "いない",
+         "additionalInfo": {
+            "alternateSpelling": "以内",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "within",
+                  "inside of",
+                  "less than"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ち",
+         "additionalInfo": {
+            "alternateSpelling": "血",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "blood"
+               ]
+            }
+         }
+      },
+      {
+         "word": "たとえば",
+         "additionalInfo": {
+            "alternateSpelling": "例えば",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "for example",
+                  "for instance",
+                  "e.g."
+               ]
+            }
+         }
+      },
+      {
+         "word": "わかれる",
+         "additionalInfo": {
+            "alternateSpelling": "別れる",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to part (usu. of people)",
+                  "to part from",
+                  "to part with",
+                  "to be apart from"
+               ]
+            }
+         }
+      },
+      {
+         "word": "たな",
+         "additionalInfo": {
+            "alternateSpelling": "棚",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "shelf",
+                  "ledge",
+                  "rack"
+               ]
+            }
+         }
+      },
+      {
+         "word": "もうしあげる",
+         "additionalInfo": {
+            "alternateSpelling": "申し上げる",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to say",
+                  "to tell",
+                  "to state",
+                  "to express",
+                  "to offer",
+                  "to extend (greetings, congratulations, etc.)"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ひっこす",
+         "additionalInfo": {
+            "alternateSpelling": "引っ越す",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to move (house)",
+                  "to change residence"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ふくざつ",
+         "additionalInfo": {
+            "alternateSpelling": "複雑",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "complex",
+                  "complicated",
+                  "intricate",
+                  "mixed (feelings)"
+               ]
+            }
+         }
+      },
+      {
+         "word": "しなもの",
+         "additionalInfo": {
+            "alternateSpelling": "品物",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "goods",
+                  "article",
+                  "thing"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ぎじゅつ",
+         "additionalInfo": {
+            "alternateSpelling": "技術",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "technology",
+                  "engineering"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ごぞんじ",
+         "additionalInfo": {
+            "alternateSpelling": "ご存じ",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "knowing"
+               ]
+            }
+         }
+      },
+      {
+         "word": "くさ",
+         "additionalInfo": {
+            "alternateSpelling": "草",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "grass",
+                  "weed",
+                  "herb",
+                  "thatch"
+               ]
+            }
+         }
+      },
+      {
+         "word": "いか",
+         "additionalInfo": {
+            "alternateSpelling": "以下",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "not exceeding",
+                  "and downward",
+                  "... and below"
+               ]
+            }
+         }
+      },
+      {
+         "word": "りょうほう",
+         "additionalInfo": {
+            "alternateSpelling": "両方",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "both",
+                  "both sides",
+                  "both parties"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ばい",
+         "additionalInfo": {
+            "alternateSpelling": "倍",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "double",
+                  "twice (as much)"
+               ]
+            }
+         }
+      },
+      {
+         "word": "あんしん",
+         "additionalInfo": {
+            "alternateSpelling": "安心",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "relief",
+                  "peace of mind"
+               ]
+            }
+         }
+      },
+      {
+         "word": "みなと",
+         "additionalInfo": {
+            "alternateSpelling": "港",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "harbour",
+                  "harbor",
+                  "port"
+               ]
+            }
+         }
+      },
+      {
+         "word": "だいたい",
+         "additionalInfo": {
+            "alternateSpelling": "大体",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "generally",
+                  "on the whole",
+                  "mostly",
+                  "almost",
+                  "nearly",
+                  "approximately",
+                  "roughly",
+                  "about"
+               ]
+            }
+         }
+      },
+      {
+         "word": "せん",
+         "additionalInfo": {
+            "alternateSpelling": "線",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "line",
+                  "stripe",
+                  "stria"
+               ]
+            }
+         }
+      },
+      {
+         "word": "さげる",
+         "additionalInfo": {
+            "alternateSpelling": "下げる",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to hang",
+                  "to suspend",
+                  "to wear (e.g. decoration)"
+               ]
+            }
+         }
+      },
+      {
+         "word": "むし",
+         "additionalInfo": {
+            "alternateSpelling": "虫",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "insect",
+                  "bug",
+                  "cricket",
+                  "moth"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ことり",
+         "additionalInfo": {
+            "alternateSpelling": "小鳥",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "small bird",
+                  "little bird"
+               ]
+            }
+         }
+      },
+      {
+         "word": "こうこうせい",
+         "additionalInfo": {
+            "alternateSpelling": "高校生",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "senior high school student"
+               ]
+            }
+         }
+      },
+      {
+         "word": "のりかえる",
+         "additionalInfo": {
+            "alternateSpelling": "乗り換える",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to transfer (trains)",
+                  "to change (bus, train)"
+               ]
+            }
+         }
+      },
+      {
+         "word": "えだ",
+         "additionalInfo": {
+            "alternateSpelling": "枝",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "branch",
+                  "bough",
+                  "limb",
+                  "twig",
+                  "sprig",
+                  "spray"
+               ]
+            }
+         }
+      },
+      {
+         "word": "てら",
+         "additionalInfo": {
+            "alternateSpelling": "寺",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "temple (Buddhist)"
+               ]
+            }
+         }
+      },
+      {
+         "word": "おわり",
+         "additionalInfo": {
+            "alternateSpelling": "終わり",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "end",
+                  "ending",
+                  "close",
+                  "conclusion"
+               ]
+            }
+         }
+      },
+      {
+         "word": "かえり",
+         "additionalInfo": {
+            "alternateSpelling": "帰り",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "return",
+                  "coming back"
+               ]
+            }
+         }
+      },
+      {
+         "word": "てんいん",
+         "additionalInfo": {
+            "alternateSpelling": "店員",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "employee (of a store)",
+                  "shop assistant",
+                  "clerk",
+                  "salesperson"
+               ]
+            }
+         }
+      },
+      {
+         "word": "きもの",
+         "additionalInfo": {
+            "alternateSpelling": "着物",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "kimono",
+                  "Japanese traditional clothing (esp. full-length)"
+               ]
+            }
+         }
+      },
+      {
+         "word": "かよう",
+         "additionalInfo": {
+            "alternateSpelling": "通う",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to go to and from (a place)",
+                  "to go back and forth between",
+                  "to run between (e.g. bus, train, etc.)",
+                  "to ply between"
+               ]
+            }
+         }
+      },
+      {
+         "word": "やわらかい",
+         "additionalInfo": {
+            "alternateSpelling": "柔らかい",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "soft",
+                  "tender",
+                  "pliant",
+                  "supple",
+                  "limber",
+                  "limp"
+               ]
+            }
+         }
+      },
+      {
+         "word": "さわぐ",
+         "additionalInfo": {
+            "alternateSpelling": "騒ぐ",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to make noise",
+                  "to make racket",
+                  "to be noisy"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ふむ",
+         "additionalInfo": {
+            "alternateSpelling": "踏む",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to step on",
+                  "to tread on",
+                  "to trample on"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ていねい",
+         "additionalInfo": {
+            "alternateSpelling": "丁寧",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "polite",
+                  "courteous",
+                  "civil"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ひえる",
+         "additionalInfo": {
+            "alternateSpelling": "冷える",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to grow cold (from room temperature, e.g. in refrigerator)",
+                  "to get chilly",
+                  "to cool down"
+               ]
+            }
+         }
+      },
+      {
+         "word": "まんなか",
+         "additionalInfo": {
+            "alternateSpelling": "真ん中",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "middle",
+                  "centre",
+                  "center",
+                  "midpoint",
+                  "heart"
+               ]
+            }
+         }
+      },
+      {
+         "word": "うら",
+         "additionalInfo": {
+            "alternateSpelling": "裏",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "opposite side",
+                  "bottom",
+                  "other side",
+                  "side hidden from view",
+                  "undersurface",
+                  "reverse side"
+               ]
+            }
+         }
+      },
+      {
+         "word": "かざる",
+         "additionalInfo": {
+            "alternateSpelling": "飾る",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to decorate",
+                  "to ornament",
+                  "to adorn"
+               ]
+            }
+         }
+      },
+      {
+         "word": "おもて",
+         "additionalInfo": {
+            "alternateSpelling": "表",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "surface"
+               ]
+            }
+         }
+      },
+      {
+         "word": "えんりょ",
+         "additionalInfo": {
+            "alternateSpelling": "遠慮",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "reserve",
+                  "constraint",
+                  "restraint",
+                  "modesty",
+                  "diffidence",
+                  "hesitation",
+                  "holding back",
+                  "discretion",
+                  "tact",
+                  "thoughtfulness"
+               ]
+            }
+         }
+      },
+      {
+         "word": "つごう",
+         "additionalInfo": {
+            "alternateSpelling": "都合",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "circumstances",
+                  "condition",
+                  "convenience"
+               ]
+            }
+         }
+      },
+      {
+         "word": "くれる",
+         "additionalInfo": {
+            "alternateSpelling": "暮れる",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to get dark",
+                  "to grow dark"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ひるま",
+         "additionalInfo": {
+            "alternateSpelling": "昼間",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "daytime",
+                  "during the day",
+                  "time from sunrise until sunset",
+                  "diurnal period"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ぶちょう",
+         "additionalInfo": {
+            "alternateSpelling": "部長",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "head (chief, director) of a section or department"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ひさしぶり",
+         "additionalInfo": {
+            "alternateSpelling": "久しぶり",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "a long time (since the last time)",
+                  "first in a long time"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ひきだし",
+         "additionalInfo": {
+            "alternateSpelling": "引き出し",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "drawer"
+               ]
+            }
+         }
+      },
+      {
+         "word": "きゅう",
+         "additionalInfo": {
+            "alternateSpelling": "急",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "sudden",
+                  "abrupt",
+                  "unexpected"
+               ]
+            }
+         }
+      },
+      {
+         "word": "かいじょう",
+         "additionalInfo": {
+            "alternateSpelling": "会場",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "assembly hall",
+                  "meeting place",
+                  "venue",
+                  "site",
+                  "grounds"
+               ]
+            }
+         }
+      },
+      {
+         "word": "おどり",
+         "additionalInfo": {
+            "alternateSpelling": "踊り",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "dance"
+               ]
+            }
+         }
+      },
+      {
+         "word": "きゅうこう",
+         "additionalInfo": {
+            "alternateSpelling": "急行",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "hurrying (to somewhere)",
+                  "rushing",
+                  "hastening"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ちり",
+         "additionalInfo": {
+            "alternateSpelling": "地理",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "geography"
+               ]
+            }
+         }
+      },
+      {
+         "word": "または",
+         "additionalInfo": {
+            "alternateSpelling": "又は",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "or",
+                  "either ... or ..."
+               ]
+            }
+         }
+      },
+      {
+         "word": "でんとう",
+         "additionalInfo": {
+            "alternateSpelling": "電灯",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "electric light"
+               ]
+            }
+         }
+      },
+      {
+         "word": "こまかい",
+         "additionalInfo": {
+            "alternateSpelling": "細かい",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "small"
+               ]
+            }
+         }
+      },
+      {
+         "word": "てきとう",
+         "additionalInfo": {
+            "alternateSpelling": "適当",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "suitable",
+                  "proper",
+                  "appropriate",
+                  "adequate",
+                  "fit",
+                  "fair"
+               ]
+            }
+         }
+      },
+      {
+         "word": "かちょう",
+         "additionalInfo": {
+            "alternateSpelling": "課長",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "section manager",
+                  "section chief"
+               ]
+            }
+         }
+      },
+      {
+         "word": "さかん",
+         "additionalInfo": {
+            "alternateSpelling": "盛ん",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "prosperous",
+                  "flourishing",
+                  "thriving",
+                  "successful"
+               ]
+            }
+         }
+      },
+      {
+         "word": "わりあい",
+         "additionalInfo": {
+            "alternateSpelling": "割合",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "rate",
+                  "ratio",
+                  "percentage",
+                  "proportion"
+               ]
+            }
+         }
+      },
+      {
+         "word": "だんぼう",
+         "additionalInfo": {
+            "alternateSpelling": "暖房",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "(indoor) heating"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ひきだす",
+         "additionalInfo": {
+            "alternateSpelling": "引き出す",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to pull out",
+                  "to take out",
+                  "to draw out"
+               ]
+            }
+         }
+      },
+      {
+         "word": "もうす",
+         "additionalInfo": {
+            "alternateSpelling": "申す",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to say",
+                  "to be called"
+               ]
+            }
+         }
+      },
+      {
+         "word": "うりば",
+         "additionalInfo": {
+            "alternateSpelling": "売り場",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "selling area",
+                  "counter",
+                  "section",
+                  "department",
+                  "sales floor"
+               ]
+            }
+         }
+      },
+      {
+         "word": "たいいん",
+         "additionalInfo": {
+            "alternateSpelling": "退院",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "leaving hospital",
+                  "discharge from hospital"
+               ]
+            }
+         }
+      },
+      {
+         "word": "げしゅく",
+         "additionalInfo": {
+            "alternateSpelling": "下宿",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "boarding",
+                  "lodging",
+                  "board and lodging",
+                  "room and board"
+               ]
+            }
+         }
+      },
+      {
+         "word": "うけつけ",
+         "additionalInfo": {
+            "alternateSpelling": "受付",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "reception (desk)",
+                  "information desk"
+               ]
+            }
+         }
+      },
+      {
+         "word": "しょくりょうひん",
+         "additionalInfo": {
+            "alternateSpelling": "食料品",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "foodstuff",
+                  "groceries"
+               ]
+            }
+         }
+      },
+      {
+         "word": "しんぶんしゃ",
+         "additionalInfo": {
+            "alternateSpelling": "新聞社",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "newspaper company"
+               ]
+            }
+         }
+      },
+      {
+         "word": "にがい",
+         "additionalInfo": {
+            "alternateSpelling": "苦い",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "bitter"
+               ]
+            }
+         }
+      },
+      {
+         "word": "こうどう",
+         "additionalInfo": {
+            "alternateSpelling": "講堂",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "auditorium",
+                  "lecture hall"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ふべん",
+         "additionalInfo": {
+            "alternateSpelling": "不便",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "inconvenience",
+                  "inexpediency",
+                  "unhandiness"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ゆ",
+         "additionalInfo": {
+            "alternateSpelling": "湯",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "hot water"
+               ]
+            }
+         }
+      },
+      {
+         "word": "うつす",
+         "additionalInfo": {
+            "alternateSpelling": "写す",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to transcribe",
+                  "to duplicate",
+                  "to reproduce",
+                  "to imitate",
+                  "to trace"
+               ]
+            }
+         }
+      },
+      {
+         "word": "おくじょう",
+         "additionalInfo": {
+            "alternateSpelling": "屋上",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "rooftop"
+               ]
+            }
+         }
+      },
+      {
+         "word": "こうぎょう",
+         "additionalInfo": {
+            "alternateSpelling": "工業",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "(manufacturing) industry"
+               ]
+            }
+         }
+      },
+      {
+         "word": "れいぼう",
+         "additionalInfo": {
+            "alternateSpelling": "冷房",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "air conditioning",
+                  "air cooling"
+               ]
+            }
+         }
+      },
+      {
+         "word": "したぎ",
+         "additionalInfo": {
+            "alternateSpelling": "下着",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "underwear",
+                  "undergarment",
+                  "underclothes",
+                  "lingerie"
+               ]
+            }
+         }
+      },
+      {
+         "word": "たたみ",
+         "additionalInfo": {
+            "alternateSpelling": "畳",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "tatami mat",
+                  "Japanese straw floor coverings"
+               ]
+            }
+         }
+      },
+      {
+         "word": "おじょうさん",
+         "additionalInfo": {
+            "alternateSpelling": "お嬢さん",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "(another's) daughter"
+               ]
+            }
+         }
+      },
+      {
+         "word": "わかす",
+         "additionalInfo": {
+            "alternateSpelling": "沸かす",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to boil",
+                  "to heat"
+               ]
+            }
+         }
+      },
+      {
+         "word": "とっきゅう",
+         "additionalInfo": {
+            "alternateSpelling": "特急",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "limited express (train for which a limited-express ticket is required)"
+               ]
+            }
+         }
+      },
+      {
+         "word": "つける",
+         "additionalInfo": {
+            "alternateSpelling": "漬ける",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to soak (in)",
+                  "to steep",
+                  "to dip",
+                  "to dunk"
+               ]
+            }
+         }
+      },
+      {
+         "word": "くれる",
+         "additionalInfo": {
+            "alternateSpelling": "呉れる",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to give",
+                  "to let (one) have"
+               ]
+            }
+         }
+      },
+      {
+         "word": "すぎる",
+         "additionalInfo": {
+            "alternateSpelling": "過ぎる",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to pass through",
+                  "to pass by",
+                  "to go beyond"
+               ]
+            }
+         }
+      },
+      {
+         "word": "つもり",
+         "additionalInfo": {
+            "alternateSpelling": "積もり",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "intention",
+                  "plan",
+                  "purpose",
+                  "expectation"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ほとんど",
+         "additionalInfo": {
+            "alternateSpelling": "殆ど",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "almost",
+                  "nearly",
+                  "mostly",
+                  "practically",
+                  "virtually",
+                  "basically",
+                  "just about",
+                  "all but"
+               ]
+            }
+         }
+      },
+      {
+         "word": "とめる",
+         "additionalInfo": {
+            "alternateSpelling": "止める",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to stop",
+                  "to turn off"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ひどい",
+         "additionalInfo": {
+            "alternateSpelling": "酷い",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "cruel",
+                  "heartless",
+                  "hard",
+                  "harsh",
+                  "severe"
+               ]
+            }
+         }
+      },
+      {
+         "word": "おくれる",
+         "additionalInfo": {
+            "alternateSpelling": "遅れる",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to be late",
+                  "to be delayed",
+                  "to fall behind schedule",
+                  "to be overdue"
+               ]
+            }
+         }
+      },
+      {
+         "word": "つづける",
+         "additionalInfo": {
+            "alternateSpelling": "続ける",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to continue",
+                  "to keep up",
+                  "to keep on"
+               ]
+            }
+         }
+      },
+      {
+         "word": "てつだう",
+         "additionalInfo": {
+            "alternateSpelling": "手伝う",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to help",
+                  "to assist",
+                  "to aid"
+               ]
+            }
+         }
+      },
+      {
+         "word": "みつける",
+         "additionalInfo": {
+            "alternateSpelling": "見つける",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to discover",
+                  "to find (e.g. an error in a book)",
+                  "to come across",
+                  "to detect",
+                  "to spot"
+               ]
+            }
+         }
+      },
+      {
+         "word": "おどろく",
+         "additionalInfo": {
+            "alternateSpelling": "驚く",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to be surprised",
+                  "to be astonished"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ひらく",
+         "additionalInfo": {
+            "alternateSpelling": "開く",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to open",
+                  "to undo",
+                  "to unseal",
+                  "to unpack"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ねむる",
+         "additionalInfo": {
+            "alternateSpelling": "眠る",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to sleep"
+               ]
+            }
+         }
+      },
+      {
+         "word": "かつ",
+         "additionalInfo": {
+            "alternateSpelling": "勝つ",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to win",
+                  "to gain victory"
+               ]
+            }
+         }
+      },
+      {
+         "word": "きこえる",
+         "additionalInfo": {
+            "alternateSpelling": "聞こえる",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to be heard",
+                  "to be audible",
+                  "to reach one's ears"
+               ]
+            }
+         }
+      },
+      {
+         "word": "たずねる",
+         "additionalInfo": {
+            "alternateSpelling": "尋ねる",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to ask",
+                  "to enquire",
+                  "to inquire"
+               ]
+            }
+         }
+      },
+      {
+         "word": "なれる",
+         "additionalInfo": {
+            "alternateSpelling": "慣れる",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to get used to",
+                  "to grow accustomed to",
+                  "to become familiar with"
+               ]
+            }
+         }
+      },
+      {
+         "word": "なく",
+         "additionalInfo": {
+            "alternateSpelling": "泣く",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to cry",
+                  "to weep",
+                  "to sob",
+                  "to howl"
+               ]
+            }
+         }
+      },
+      {
+         "word": "にる",
+         "additionalInfo": {
+            "alternateSpelling": "似る",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to resemble",
+                  "to look like",
+                  "to be like",
+                  "to be alike",
+                  "to be similar",
+                  "to take after"
+               ]
+            }
+         }
+      },
+      {
+         "word": "きっと",
+         "additionalInfo": {
+            "alternateSpelling": "屹度",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "surely",
+                  "undoubtedly",
+                  "almost certainly",
+                  "most likely (e.g. 90 percent)"
+               ]
+            }
+         }
+      },
+      {
+         "word": "もどる",
+         "additionalInfo": {
+            "alternateSpelling": "戻る",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to turn back (e.g. half-way)"
+               ]
+            }
+         }
+      },
+      {
+         "word": "しらべる",
+         "additionalInfo": {
+            "alternateSpelling": "調べる",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to examine",
+                  "to look up",
+                  "to investigate",
+                  "to check up",
+                  "to sense",
+                  "to study",
+                  "to inquire",
+                  "to search"
+               ]
+            }
+         }
+      },
+      {
+         "word": "つたえる",
+         "additionalInfo": {
+            "alternateSpelling": "伝える",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to convey",
+                  "to report",
+                  "to transmit",
+                  "to communicate",
+                  "to tell",
+                  "to impart",
+                  "to propagate",
+                  "to teach",
+                  "to bequeath"
+               ]
+            }
+         }
+      },
+      {
+         "word": "はず",
+         "additionalInfo": {
+            "alternateSpelling": "筈",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "should (be)",
+                  "bound (to be)",
+                  "expected (to be)",
+                  "must (be)"
+               ]
+            }
+         }
+      },
+      {
+         "word": "なくなる",
+         "additionalInfo": {
+            "alternateSpelling": "無くなる",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to be lost (e.g. luggage)",
+                  "to be missing"
+               ]
+            }
+         }
+      },
+      {
+         "word": "うごく",
+         "additionalInfo": {
+            "alternateSpelling": "動く",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to move",
+                  "to stir",
+                  "to shift",
+                  "to shake",
+                  "to swing"
+               ]
+            }
+         }
+      },
+      {
+         "word": "しらせる",
+         "additionalInfo": {
+            "alternateSpelling": "知らせる",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to notify",
+                  "to advise",
+                  "to inform"
+               ]
+            }
+         }
+      },
+      {
+         "word": "つづく",
+         "additionalInfo": {
+            "alternateSpelling": "続く",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to continue",
+                  "to last",
+                  "to go on"
+               ]
+            }
+         }
+      },
+      {
+         "word": "べつ",
+         "additionalInfo": {
+            "alternateSpelling": "別",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "distinction",
+                  "difference",
+                  "discrimination"
+               ]
+            }
+         }
+      },
+      {
+         "word": "なる",
+         "additionalInfo": {
+            "alternateSpelling": "鳴る",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to sound",
+                  "to ring",
+                  "to resound",
+                  "to echo",
+                  "to roar",
+                  "to rumble"
+               ]
+            }
+         }
+      },
+      {
+         "word": "し",
+         "additionalInfo": {
+            "alternateSpelling": "市",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "city"
+               ]
+            }
+         }
+      },
+      {
+         "word": "まける",
+         "additionalInfo": {
+            "alternateSpelling": "負ける",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to lose",
+                  "to be defeated"
+               ]
+            }
+         }
+      },
+      {
+         "word": "かなしい",
+         "additionalInfo": {
+            "alternateSpelling": "悲しい",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "sad",
+                  "miserable",
+                  "unhappy",
+                  "sorrowful"
+               ]
+            }
+         }
+      },
+      {
+         "word": "なくなる",
+         "additionalInfo": {
+            "alternateSpelling": "亡くなる",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to die"
+               ]
+            }
+         }
+      },
+      {
+         "word": "いがい",
+         "additionalInfo": {
+            "alternateSpelling": "以外",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "with the exception of",
+                  "excepting",
+                  "excluding"
+               ]
+            }
+         }
+      },
+      {
+         "word": "なおす",
+         "additionalInfo": {
+            "alternateSpelling": "治す",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to cure",
+                  "to heal"
+               ]
+            }
+         }
+      },
+      {
+         "word": "しばらく",
+         "additionalInfo": {
+            "alternateSpelling": "暫く",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "for a moment",
+                  "for a minute"
+               ]
+            }
+         }
+      },
+      {
+         "word": "まちがえる",
+         "additionalInfo": {
+            "alternateSpelling": "間違える",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to make a mistake (in)",
+                  "to commit an error (e.g. in calculation)"
+               ]
+            }
+         }
+      },
+      {
+         "word": "まわる",
+         "additionalInfo": {
+            "alternateSpelling": "回る",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to turn",
+                  "to revolve"
+               ]
+            }
+         }
+      },
+      {
+         "word": "すてる",
+         "additionalInfo": {
+            "alternateSpelling": "捨てる",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to throw away",
+                  "to cast away",
+                  "to dump",
+                  "to discard"
+               ]
+            }
+         }
+      },
+      {
+         "word": "しっかり",
+         "additionalInfo": {
+            "alternateSpelling": "確り",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "tightly (holding on)",
+                  "firmly",
+                  "securely"
+               ]
+            }
+         }
+      },
+      {
+         "word": "そだてる",
+         "additionalInfo": {
+            "alternateSpelling": "育てる",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to raise",
+                  "to rear",
+                  "to bring up"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ほめる",
+         "additionalInfo": {
+            "alternateSpelling": "褒める",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to praise",
+                  "to commend",
+                  "to compliment",
+                  "to speak well of",
+                  "to speak highly of"
+               ]
+            }
+         }
+      },
+      {
+         "word": "いし",
+         "additionalInfo": {
+            "alternateSpelling": "石",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "stone"
+               ]
+            }
+         }
+      },
+      {
+         "word": "はずかしい",
+         "additionalInfo": {
+            "alternateSpelling": "恥ずかしい",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "embarrassing",
+                  "embarrassed",
+                  "ashamed",
+                  "humiliated",
+                  "shy"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ぬる",
+         "additionalInfo": {
+            "alternateSpelling": "塗る",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to paint",
+                  "to plaster",
+                  "to lacquer",
+                  "to varnish",
+                  "to spread",
+                  "to smear",
+                  "to put up (wallpaper)"
+               ]
+            }
+         }
+      },
+      {
+         "word": "とまる",
+         "additionalInfo": {
+            "alternateSpelling": "泊まる",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to stay at (e.g. hotel)"
+               ]
+            }
+         }
+      },
+      {
+         "word": "かたづける",
+         "additionalInfo": {
+            "alternateSpelling": "片付ける",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to tidy up",
+                  "to put in order",
+                  "to straighten up",
+                  "to put away"
+               ]
+            }
+         }
+      },
+      {
+         "word": "やむ",
+         "additionalInfo": {
+            "alternateSpelling": "止む",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to cease",
+                  "to stop",
+                  "to be over"
+               ]
+            }
+         }
+      },
+      {
+         "word": "とおく",
+         "additionalInfo": {
+            "alternateSpelling": "遠く",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "far away",
+                  "distant place",
+                  "a (great) distance",
+                  "a long way off",
+                  "afar"
+               ]
+            }
+         }
+      },
+      {
+         "word": "すむ",
+         "additionalInfo": {
+            "alternateSpelling": "済む",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to finish",
+                  "to end",
+                  "to be completed"
+               ]
+            }
+         }
+      },
+      {
+         "word": "とうとう",
+         "additionalInfo": {
+            "alternateSpelling": "到頭",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "finally",
+                  "at last",
+                  "ultimately",
+                  "in the end"
+               ]
+            }
+         }
+      },
+      {
+         "word": "つかまえる",
+         "additionalInfo": {
+            "alternateSpelling": "捕まえる",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to catch",
+                  "to capture",
+                  "to arrest",
+                  "to seize",
+                  "to restrain"
+               ]
+            }
+         }
+      },
+      {
+         "word": "おどる",
+         "additionalInfo": {
+            "alternateSpelling": "踊る",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to dance (orig. a hopping dance)"
+               ]
+            }
+         }
+      },
+      {
+         "word": "たりる",
+         "additionalInfo": {
+            "alternateSpelling": "足りる",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to be sufficient",
+                  "to be enough"
+               ]
+            }
+         }
+      },
+      {
+         "word": "なおる",
+         "additionalInfo": {
+            "alternateSpelling": "治る",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to get better",
+                  "to get well",
+                  "to recover (from an illness)",
+                  "to be cured",
+                  "to be restored",
+                  "to heal"
+               ]
+            }
+         }
+      },
+      {
+         "word": "なさる",
+         "additionalInfo": {
+            "alternateSpelling": "為さる",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to do"
+               ]
+            }
+         }
+      },
+      {
+         "word": "かたい",
+         "additionalInfo": {
+            "alternateSpelling": "硬い",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "hard",
+                  "solid",
+                  "tough"
+               ]
+            }
+         }
+      },
+      {
+         "word": "たてる",
+         "additionalInfo": {
+            "alternateSpelling": "建てる",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to build",
+                  "to construct"
+               ]
+            }
+         }
+      },
+      {
+         "word": "すごい",
+         "additionalInfo": {
+            "alternateSpelling": "凄い",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "terrible",
+                  "dreadful"
+               ]
+            }
+         }
+      },
+      {
+         "word": "あやまる",
+         "additionalInfo": {
+            "alternateSpelling": "謝る",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to apologize",
+                  "to apologise"
+               ]
+            }
+         }
+      },
+      {
+         "word": "これから",
+         "additionalInfo": {
+            "alternateSpelling": "此れから",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "from now on",
+                  "after this",
+                  "in the future",
+                  "in future"
+               ]
+            }
+         }
+      },
+      {
+         "word": "たてる",
+         "additionalInfo": {
+            "alternateSpelling": "立てる",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to stand up",
+                  "to put up",
+                  "to set up",
+                  "to erect",
+                  "to raise"
+               ]
+            }
+         }
+      },
+      {
+         "word": "さびしい",
+         "additionalInfo": {
+            "alternateSpelling": "寂しい",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "lonely",
+                  "lonesome",
+                  "solitary",
+                  "desolate"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ぬれる",
+         "additionalInfo": {
+            "alternateSpelling": "濡れる",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to get wet"
+               ]
+            }
+         }
+      },
+      {
+         "word": "なげる",
+         "additionalInfo": {
+            "alternateSpelling": "投げる",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to throw",
+                  "to hurl",
+                  "to fling",
+                  "to toss",
+                  "to cast"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ふとる",
+         "additionalInfo": {
+            "alternateSpelling": "太る",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to put on weight",
+                  "to gain weight",
+                  "to grow fat",
+                  "to get stout"
+               ]
+            }
+         }
+      },
+      {
+         "word": "よる",
+         "additionalInfo": {
+            "alternateSpelling": "寄る",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to approach",
+                  "to draw near",
+                  "to come near",
+                  "to be close to"
+               ]
+            }
+         }
+      },
+      {
+         "word": "はいしゃ",
+         "additionalInfo": {
+            "alternateSpelling": "歯医者",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "dentist"
+               ]
+            }
+         }
+      },
+      {
+         "word": "めしあがる",
+         "additionalInfo": {
+            "alternateSpelling": "召し上がる",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to eat",
+                  "to drink"
+               ]
+            }
+         }
+      },
+      {
+         "word": "まいる",
+         "additionalInfo": {
+            "alternateSpelling": "参る",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to go",
+                  "to come",
+                  "to call"
+               ]
+            }
+         }
+      },
+      {
+         "word": "めずらしい",
+         "additionalInfo": {
+            "alternateSpelling": "珍しい",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "unusual",
+                  "rare",
+                  "curious"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ゆれる",
+         "additionalInfo": {
+            "alternateSpelling": "揺れる",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to shake",
+                  "to sway",
+                  "to waver"
+               ]
+            }
+         }
+      },
+      {
+         "word": "いのる",
+         "additionalInfo": {
+            "alternateSpelling": "祈る",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to pray",
+                  "to wish"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ガラス",
+         "additionalInfo": {
+            "alternateSpelling": "硝子",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "glass",
+                  "pane"
+               ]
+            }
+         }
+      },
+      {
+         "word": "こむ",
+         "additionalInfo": {
+            "alternateSpelling": "込む",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to be crowded",
+                  "to be packed",
+                  "to be congested",
+                  "to be thronged (with)"
+               ]
+            }
+         }
+      },
+      {
+         "word": "おる",
+         "additionalInfo": {
+            "alternateSpelling": "折る",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to break",
+                  "to fracture",
+                  "to break off",
+                  "to snap off",
+                  "to pick (e.g. flowers)"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ねむい",
+         "additionalInfo": {
+            "alternateSpelling": "眠い",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "sleepy",
+                  "drowsy",
+                  "somnolent"
+               ]
+            }
+         }
+      },
+      {
+         "word": "だいがくせい",
+         "additionalInfo": {
+            "alternateSpelling": "大学生",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "university student",
+                  "college student"
+               ]
+            }
+         }
+      },
+      {
+         "word": "おれい",
+         "additionalInfo": {
+            "alternateSpelling": "お礼",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "thanks",
+                  "gratitude"
+               ]
+            }
+         }
+      },
+      {
+         "word": "それほど",
+         "additionalInfo": {
+            "alternateSpelling": "それ程",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to that degree",
+                  "to that extent",
+                  "that much"
+               ]
+            }
+         }
+      },
+      {
+         "word": "やせる",
+         "additionalInfo": {
+            "alternateSpelling": "痩せる",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to become thin",
+                  "to lose weight",
+                  "to reduce (one's) weight",
+                  "to slim"
+               ]
+            }
+         }
+      },
+      {
+         "word": "たまに",
+         "additionalInfo": {
+            "alternateSpelling": "偶に",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "occasionally",
+                  "once in a while",
+                  "now and then",
+                  "rarely",
+                  "seldom"
+               ]
+            }
+         }
+      },
+      {
+         "word": "かむ",
+         "additionalInfo": {
+            "alternateSpelling": "噛む",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to bite"
+               ]
+            }
+         }
+      },
+      {
+         "word": "さわる",
+         "additionalInfo": {
+            "alternateSpelling": "触る",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to touch",
+                  "to feel"
+               ]
+            }
+         }
+      },
+      {
+         "word": "おく",
+         "additionalInfo": {
+            "alternateSpelling": "億",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "10^8",
+                  "100,000,000",
+                  "hundred million"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ガス",
+         "additionalInfo": {
+            "alternateSpelling": "瓦斯",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "gas (as a fuel)"
+               ]
+            }
+         }
+      },
+      {
+         "word": "すり",
+         "additionalInfo": {
+            "alternateSpelling": "掏摸",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "pickpocket"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ひろう",
+         "additionalInfo": {
+            "alternateSpelling": "拾う",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to pick up",
+                  "to find",
+                  "to gather"
+               ]
+            }
+         }
+      },
+      {
+         "word": "やく",
+         "additionalInfo": {
+            "alternateSpelling": "焼く",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to burn"
+               ]
+            }
+         }
+      },
+      {
+         "word": "なるほど",
+         "additionalInfo": {
+            "alternateSpelling": "なる程",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "I see",
+                  "that's right",
+                  "indeed"
+               ]
+            }
+         }
+      },
+      {
+         "word": "すべる",
+         "additionalInfo": {
+            "alternateSpelling": "滑る",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to glide",
+                  "to slide (e.g. on skis)",
+                  "to slip"
+               ]
+            }
+         }
+      },
+      {
+         "word": "われる",
+         "additionalInfo": {
+            "alternateSpelling": "割れる",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to break",
+                  "to be smashed"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ちっとも",
+         "additionalInfo": {
+            "alternateSpelling": "些とも",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "(not) at all",
+                  "(not) a bit",
+                  "(not) in the least",
+                  "(not) in the slightest"
+               ]
+            }
+         }
+      },
+      {
+         "word": "おたく",
+         "additionalInfo": {
+            "alternateSpelling": "お宅",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "your house",
+                  "your home",
+                  "your family"
+               ]
+            }
+         }
+      },
+      {
+         "word": "おれる",
+         "additionalInfo": {
+            "alternateSpelling": "折れる",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to break",
+                  "to be broken",
+                  "to snap",
+                  "to fracture"
+               ]
+            }
+         }
+      },
+      {
+         "word": "うつる",
+         "additionalInfo": {
+            "alternateSpelling": "移る",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to move (house)",
+                  "to transfer (department)"
+               ]
+            }
+         }
+      },
+      {
+         "word": "うえる",
+         "additionalInfo": {
+            "alternateSpelling": "植える",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to plant",
+                  "to grow",
+                  "to raise"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ひかる",
+         "additionalInfo": {
+            "alternateSpelling": "光る",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to shine",
+                  "to glitter",
+                  "to be bright"
+               ]
+            }
+         }
+      },
+      {
+         "word": "じ",
+         "additionalInfo": {
+            "alternateSpelling": "字",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "character (esp. kanji)",
+                  "letter",
+                  "written text"
+               ]
+            }
+         }
+      },
+      {
+         "word": "さしあげる",
+         "additionalInfo": {
+            "alternateSpelling": "差し上げる",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to give",
+                  "to offer"
+               ]
+            }
+         }
+      },
+      {
+         "word": "やける",
+         "additionalInfo": {
+            "alternateSpelling": "焼ける",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to burn",
+                  "to burn down",
+                  "to go down in flames"
+               ]
+            }
+         }
+      },
+      {
+         "word": "おいわい",
+         "additionalInfo": {
+            "alternateSpelling": "お祝い",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "congratulation",
+                  "congratulations",
+                  "celebration",
+                  "festival"
+               ]
+            }
+         }
+      },
+      {
+         "word": "とりかえる",
+         "additionalInfo": {
+            "alternateSpelling": "取り替える",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to exchange",
+                  "to swap",
+                  "to barter"
+               ]
+            }
+         }
+      },
+      {
+         "word": "かわく",
+         "additionalInfo": {
+            "alternateSpelling": "乾く",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to get dry"
+               ]
+            }
+         }
+      },
+      {
+         "word": "つる",
+         "additionalInfo": {
+            "alternateSpelling": "釣る",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to fish",
+                  "to angle",
+                  "to catch"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ようじ",
+         "additionalInfo": {
+            "alternateSpelling": "用事",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "tasks",
+                  "things to do",
+                  "errand",
+                  "business (to take care of)",
+                  "affairs",
+                  "engagement"
+               ]
+            }
+         }
+      },
+      {
+         "word": "なるべく",
+         "additionalInfo": {
+            "alternateSpelling": "成るべく",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "as (much) as possible",
+                  "as (much) as one can",
+                  "wherever practicable",
+                  "if possible"
+               ]
+            }
+         }
+      },
+      {
+         "word": "あさい",
+         "additionalInfo": {
+            "alternateSpelling": "浅い",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "shallow",
+                  "superficial"
+               ]
+            }
+         }
+      },
+      {
+         "word": "いじめる",
+         "additionalInfo": {
+            "alternateSpelling": "苛める",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to ill-treat",
+                  "to bully",
+                  "to torment",
+                  "to pick on",
+                  "to tease",
+                  "to be cruel to",
+                  "to persecute"
+               ]
+            }
+         }
+      },
+      {
+         "word": "とどける",
+         "additionalInfo": {
+            "alternateSpelling": "届ける",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to deliver",
+                  "to forward",
+                  "to send"
+               ]
+            }
+         }
+      },
+      {
+         "word": "とこや",
+         "additionalInfo": {
+            "alternateSpelling": "床屋",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "barbershop",
+                  "barber shop",
+                  "barber"
+               ]
+            }
+         }
+      },
+      {
+         "word": "はいけん",
+         "additionalInfo": {
+            "alternateSpelling": "拝見",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "seeing",
+                  "looking at"
+               ]
+            }
+         }
+      },
+      {
+         "word": "おみやげ",
+         "additionalInfo": {
+            "alternateSpelling": "お土産",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "local specialty or souvenir bought as a gift while travelling"
+               ]
+            }
+         }
+      },
+      {
+         "word": "よしゅう",
+         "additionalInfo": {
+            "alternateSpelling": "予習",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "preparation for a lesson"
+               ]
+            }
+         }
+      },
+      {
+         "word": "おつり",
+         "additionalInfo": {
+            "alternateSpelling": "お釣り",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "change (for a purchase)"
+               ]
+            }
+         }
+      },
+      {
+         "word": "たす",
+         "additionalInfo": {
+            "alternateSpelling": "足す",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to add (numbers)"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ねぼう",
+         "additionalInfo": {
+            "alternateSpelling": "寝坊",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "sleeping in late",
+                  "oversleeping"
+               ]
+            }
+         }
+      },
+      {
+         "word": "わすれもの",
+         "additionalInfo": {
+            "alternateSpelling": "忘れ物",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "lost article",
+                  "something forgotten"
+               ]
+            }
+         }
+      },
+      {
+         "word": "わく",
+         "additionalInfo": {
+            "alternateSpelling": "沸く",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to grow hot (e.g. water)",
+                  "to boil"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ふくしゅう",
+         "additionalInfo": {
+            "alternateSpelling": "復習",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "review (of learned material)",
+                  "revision"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ごしゅじん",
+         "additionalInfo": {
+            "alternateSpelling": "ご主人",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "your husband",
+                  "her husband"
+               ]
+            }
+         }
+      },
+      {
+         "word": "さらいしゅう",
+         "additionalInfo": {
+            "alternateSpelling": "再来週",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "week after next"
+               ]
+            }
+         }
+      },
+      {
+         "word": "さらいげつ",
+         "additionalInfo": {
+            "alternateSpelling": "再来月",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "month after next"
+               ]
+            }
+         }
+      },
+      {
+         "word": "つく",
+         "additionalInfo": {
+            "alternateSpelling": "付く",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to be attached",
+                  "to be connected with",
+                  "to adhere",
+                  "to stick",
+                  "to cling"
+               ]
+            }
+         }
+      },
+      {
+         "word": "かえる",
+         "additionalInfo": {
+            "alternateSpelling": "変える",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to change",
+                  "to alter",
+                  "to transform",
+                  "to convert",
+                  "to turn",
+                  "to vary"
+               ]
+            }
+         }
+      },
+      {
+         "word": "アフリカ",
+         "additionalInfo": {
+            "alternateSpelling": "阿弗利加",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "Africa"
+               ]
+            }
+         }
+      },
+      {
+         "word": "こう",
+         "additionalInfo": {
+            "alternateSpelling": "斯う",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "in this way",
+                  "thus",
+                  "such"
+               ]
+            }
+         }
+      },
+      {
+         "word": "かんごし",
+         "additionalInfo": {
+            "alternateSpelling": "看護師",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "(hospital) nurse",
+                  "registered nurse",
+                  "RN"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ふりだす",
+         "additionalInfo": {
+            "alternateSpelling": "降り出す",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to begin to rain",
+                  "to begin to snow"
+               ]
+            }
+         }
+      },
+      {
+         "word": "けど",
+         "additionalInfo": {
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "but",
+                  "however",
+                  "although"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ひ",
+         "additionalInfo": {
+            "alternateSpelling": "日",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "day",
+                  "days"
+               ]
+            }
+         }
+      },
+      {
+         "word": "だいぶ",
+         "additionalInfo": {
+            "alternateSpelling": "大分",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "considerably",
+                  "greatly",
+                  "a lot"
+               ]
+            }
+         }
+      },
+      {
+         "word": "あいだ",
+         "additionalInfo": {
+            "alternateSpelling": "間",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "space (between)",
+                  "gap",
+                  "interval",
+                  "distance",
+                  "stretch"
+               ]
+            }
+         }
+      },
+      {
+         "word": "おや",
+         "additionalInfo": {
+            "alternateSpelling": "親",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "parent",
+                  "parents",
+                  "mother and father"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ねつ",
+         "additionalInfo": {
+            "alternateSpelling": "熱",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "heat"
+               ]
+            }
+         }
+      },
+      {
+         "word": "うんてんしゅ",
+         "additionalInfo": {
+            "alternateSpelling": "運転手",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "driver",
+                  "chauffeur"
+               ]
+            }
+         }
+      },
+      {
+         "word": "もめん",
+         "additionalInfo": {
+            "alternateSpelling": "木綿",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "cotton (material)"
+               ]
+            }
+         }
+      },
+      {
+         "word": "けしゴム",
+         "additionalInfo": {
+            "alternateSpelling": "消しゴム",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "eraser",
+                  "rubber"
+               ]
+            }
+         }
+      },
+      {
+         "word": "テニス",
+         "additionalInfo": {
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "tennis"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ピアノ",
+         "additionalInfo": {
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "piano"
+               ]
+            }
+         }
+      },
+      {
+         "word": "コンピュータ",
+         "additionalInfo": {
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "computer"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ケーキ",
+         "additionalInfo": {
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "cake"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ビル",
+         "additionalInfo": {
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "multi-floor building",
+                  "multi-storey building"
+               ]
+            }
+         }
+      },
+      {
+         "word": "カーテン",
+         "additionalInfo": {
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "curtain",
+                  "curtains"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ガソリン",
+         "additionalInfo": {
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "gasoline",
+                  "petrol"
+               ]
+            }
+         }
+      },
+      {
+         "word": "アルコール",
+         "additionalInfo": {
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "alcohol"
+               ]
+            }
+         }
+      },
+      {
+         "word": "サンドイッチ",
+         "additionalInfo": {
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "sandwich"
+               ]
+            }
+         }
+      },
+      {
+         "word": "オートバイ",
+         "additionalInfo": {
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "motorcycle",
+                  "motorbike"
+               ]
+            }
+         }
+      },
+      {
+         "word": "サラダ",
+         "additionalInfo": {
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "salad"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ガソリンスタンド",
+         "additionalInfo": {
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "gas station",
+                  "petrol station",
+                  "filling station"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ソフト",
+         "additionalInfo": {
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "soft"
+               ]
+            }
+         }
+      },
+      {
+         "word": "テキスト",
+         "additionalInfo": {
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "text"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ステレオ",
+         "additionalInfo": {
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "stereo (sound)"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ジャム",
+         "additionalInfo": {
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "jam"
+               ]
+            }
+         }
+      },
+      {
+         "word": "アナウンサー",
+         "additionalInfo": {
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "announcer",
+                  "presenter",
+                  "broadcaster",
+                  "reporter"
+               ]
+            }
+         }
+      },
+      {
+         "word": "パート",
+         "additionalInfo": {
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "part"
+               ]
+            }
+         }
+      },
+      {
+         "word": "アクセサリー",
+         "additionalInfo": {
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "accessory (fashion)",
+                  "jewelry"
+               ]
+            }
+         }
+      },
+      {
+         "word": "エスカレーター",
+         "additionalInfo": {
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "escalator"
+               ]
+            }
+         }
+      },
+      {
+         "word": "あっ",
+         "additionalInfo": {
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "ah",
+                  "oh"
+               ]
+            }
+         }
+      },
+      {
+         "word": "スーツケース",
+         "additionalInfo": {
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "suitcase"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ステーキ",
+         "additionalInfo": {
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "steak"
+               ]
+            }
+         }
+      },
+      {
+         "word": "アジア",
+         "additionalInfo": {
+            "alternateSpelling": "亜細亜",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "Asia"
+               ]
+            }
+         }
+      },
+      {
+         "word": "チェック",
+         "additionalInfo": {
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "check",
+                  "plaid",
+                  "checkered"
+               ]
+            }
+         }
+      },
+      {
+         "word": "サンダル",
+         "additionalInfo": {
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "sandal"
+               ]
+            }
+         }
+      },
+      {
+         "word": "スクリーン",
+         "additionalInfo": {
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "screen"
+               ]
+            }
+         }
+      },
+      {
+         "word": "あく",
+         "additionalInfo": {
+            "alternateSpelling": "開く",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to open (e.g. doors)"
+               ]
+            }
+         }
+      },
+      {
+         "word": "いっぱい",
+         "additionalInfo": {
+            "alternateSpelling": "一杯",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "one cup (of)",
+                  "one glass (of)",
+                  "one bowl (of)",
+                  "cupful",
+                  "glassful",
+                  "bowlful",
+                  "spoonful"
+               ]
+            }
+         }
+      },
+      {
+         "word": "よう",
+         "additionalInfo": {
+            "alternateSpelling": "用",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "business",
+                  "task",
+                  "errand",
+                  "engagement"
+               ]
+            }
+         }
+      },
+      {
+         "word": "レジ",
+         "additionalInfo": {
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "(cash) register"
+               ]
+            }
+         }
+      },
+      {
+         "word": "うち",
+         "additionalInfo": {
+            "alternateSpelling": "内",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "inside",
+                  "within"
+               ]
+            }
+         }
+      },
+      {
+         "word": "わけ",
+         "additionalInfo": {
+            "alternateSpelling": "訳",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "conclusion from reasoning, judgement or calculation based on something read or heard",
+                  "reason",
+                  "cause",
+                  "meaning",
+                  "circumstances",
+                  "situation"
+               ]
+            }
+         }
+      },
+      {
+         "word": "おかげ",
+         "additionalInfo": {
+            "alternateSpelling": "お陰",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "grace (of God)",
+                  "benevolence (of Buddha)",
+                  "blessing"
+               ]
+            }
+         }
+      },
+      {
+         "word": "もうすぐ",
+         "additionalInfo": {
+            "alternateSpelling": "もう直ぐ",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "soon",
+                  "shortly",
+                  "before long",
+                  "nearly",
+                  "almost"
+               ]
+            }
+         }
+      },
+      {
+         "word": "くん",
+         "additionalInfo": {
+            "alternateSpelling": "君",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "Mr (junior)",
+                  "master",
+                  "boy"
+               ]
+            }
+         }
+      },
+      {
+         "word": "つつむ",
+         "additionalInfo": {
+            "alternateSpelling": "包む",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to wrap up",
+                  "to pack",
+                  "to bundle",
+                  "to do up"
+               ]
+            }
+         }
+      },
+      {
+         "word": "け",
+         "additionalInfo": {
+            "alternateSpelling": "毛",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "hair"
+               ]
+            }
+         }
+      },
+      {
+         "word": "およぎかた",
+         "additionalInfo": {
+            "alternateSpelling": "泳ぎ方",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "way of swimming"
+               ]
+            }
+         }
+      },
+      {
+         "word": "と",
+         "additionalInfo": {
+            "alternateSpelling": "都",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "Metropolis (of Tokyo)",
+                  "(Tokyo) Metropolitan District",
+                  "metropolitan prefecture"
+               ]
+            }
+         }
+      },
+      {
+         "word": "かない",
+         "additionalInfo": {
+            "alternateSpelling": "家内",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "(my) wife"
+               ]
+            }
+         }
+      },
+      {
+         "word": "おみまい",
+         "additionalInfo": {
+            "alternateSpelling": "お見舞い",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "calling on someone who is ill",
+                  "enquiry",
+                  "inquiry"
+               ]
+            }
+         }
+      },
+      {
+         "word": "そう",
+         "additionalInfo": {
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "appearing that",
+                  "seeming that",
+                  "looking like",
+                  "having the appearance of"
+               ]
+            }
+         }
+      },
+      {
+         "word": "そんな",
+         "additionalInfo": {
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "such",
+                  "that sort of",
+                  "that kind of",
+                  "like that"
+               ]
+            }
+         }
+      },
+      {
+         "word": "もし",
+         "additionalInfo": {
+            "alternateSpelling": "若し",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "if",
+                  "in case",
+                  "supposing"
+               ]
+            }
+         }
+      },
+      {
+         "word": "やめる",
+         "additionalInfo": {
+            "alternateSpelling": "止める",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to stop (an activity)",
+                  "to cease",
+                  "to discontinue",
+                  "to end",
+                  "to quit"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ひじょうに",
+         "additionalInfo": {
+            "alternateSpelling": "非常に",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "very",
+                  "extremely",
+                  "exceedingly"
+               ]
+            }
+         }
+      },
+      {
+         "word": "だから",
+         "additionalInfo": {
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "so",
+                  "therefore",
+                  "accordingly",
+                  "consequently",
+                  "on those grounds",
+                  "that is why",
+                  "for that reason"
+               ]
+            }
+         }
+      },
+      {
+         "word": "はっきり",
+         "additionalInfo": {
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "clearly",
+                  "plainly",
+                  "distinctly"
+               ]
+            }
+         }
+      },
+      {
+         "word": "すっかり",
+         "additionalInfo": {
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "all",
+                  "completely",
+                  "totally",
+                  "entirely",
+                  "thoroughly"
+               ]
+            }
+         }
+      },
+      {
+         "word": "コンサート",
+         "additionalInfo": {
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "concert"
+               ]
+            }
+         }
+      },
+      {
+         "word": "やっと",
+         "additionalInfo": {
+            "alternateSpelling": "漸と",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "at last",
+                  "finally"
+               ]
+            }
+         }
+      },
+      {
+         "word": "あんな",
+         "additionalInfo": {
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "that sort of",
+                  "that kind of",
+                  "like that",
+                  "such",
+                  "so"
+               ]
+            }
+         }
+      },
+      {
+         "word": "プレゼント",
+         "additionalInfo": {
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "present",
+                  "gift"
+               ]
+            }
+         }
+      },
+      {
+         "word": "タイプ",
+         "additionalInfo": {
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "type",
+                  "kind",
+                  "sort",
+                  "style"
+               ]
+            }
+         }
+      },
+      {
+         "word": "レポート",
+         "additionalInfo": {
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "report",
+                  "paper"
+               ]
+            }
+         }
+      },
+      {
+         "word": "そろそろ",
+         "additionalInfo": {
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "soon",
+                  "before long",
+                  "any time now",
+                  "momentarily"
+               ]
+            }
+         }
+      },
+      {
+         "word": "こめ",
+         "additionalInfo": {
+            "alternateSpelling": "米",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "(husked grains of) rice"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ベル",
+         "additionalInfo": {
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "bell"
+               ]
+            }
+         }
+      },
+      {
+         "word": "いらっしゃる",
+         "additionalInfo": {
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to come",
+                  "to go",
+                  "to be (somewhere)"
+               ]
+            }
+         }
+      },
+      {
+         "word": "それで",
+         "additionalInfo": {
+            "alternateSpelling": "其れで",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "and",
+                  "thereupon",
+                  "because of that"
+               ]
+            }
+         }
+      },
+      {
+         "word": "どんどん",
+         "additionalInfo": {
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "drumming (noise)",
+                  "beating",
+                  "pounding",
+                  "banging",
+                  "booming",
+                  "stamping"
+               ]
+            }
+         }
+      },
+      {
+         "word": "スーツ",
+         "additionalInfo": {
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "suit (clothing)"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ワープロ",
+         "additionalInfo": {
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "word processor"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ちゃん",
+         "additionalInfo": {
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "suffix for familiar person"
+               ]
+            }
+         }
+      },
+      {
+         "word": "よごれる",
+         "additionalInfo": {
+            "alternateSpelling": "汚れる",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to get dirty",
+                  "to become dirty"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ごちそう",
+         "additionalInfo": {
+            "alternateSpelling": "ご馳走",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "treat (esp. food and drink)",
+                  "entertainment",
+                  "treating someone (to a meal)",
+                  "taking someone to dinner"
+               ]
+            }
+         }
+      },
+      {
+         "word": "パソコン",
+         "additionalInfo": {
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "personal computer",
+                  "PC"
+               ]
+            }
+         }
+      },
+      {
+         "word": "このごろ",
+         "additionalInfo": {
+            "alternateSpelling": "この頃",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "these days",
+                  "nowadays",
+                  "now",
+                  "at present",
+                  "recently",
+                  "lately"
+               ]
+            }
+         }
+      },
+      {
+         "word": "アルバイト",
+         "additionalInfo": {
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "part-time job",
+                  "side job"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ハンドバッグ",
+         "additionalInfo": {
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "handbag",
+                  "purse"
+               ]
+            }
+         }
+      },
+      {
+         "word": "すると",
+         "additionalInfo": {
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "thereupon",
+                  "hereupon"
+               ]
+            }
+         }
+      },
+      {
+         "word": "さっき",
+         "additionalInfo": {
+            "alternateSpelling": "先",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "a short while ago",
+                  "a moment ago",
+                  "just now",
+                  "some time ago"
+               ]
+            }
+         }
+      },
+      {
+         "word": "このあいだ",
+         "additionalInfo": {
+            "alternateSpelling": "この間",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "the other day",
+                  "lately",
+                  "recently",
+                  "during this period"
+               ]
+            }
+         }
+      },
+      {
+         "word": "それに",
+         "additionalInfo": {
+            "alternateSpelling": "其れに",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "besides",
+                  "in addition",
+                  "also",
+                  "moreover"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ファックス",
+         "additionalInfo": {
+            "alternateSpelling": "ＦＡＸ",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "fax",
+                  "facsimile"
+               ]
+            }
+         }
+      },
+      {
+         "word": "すっと",
+         "additionalInfo": {
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "straight",
+                  "quickly",
+                  "directly",
+                  "all of a sudden"
+               ]
+            }
+         }
+      },
+      {
+         "word": "そんなに",
+         "additionalInfo": {
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "so much",
+                  "so",
+                  "like that"
+               ]
+            }
+         }
+      },
+      {
+         "word": "おっしゃる",
+         "additionalInfo": {
+            "alternateSpelling": "仰る",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to say",
+                  "to speak",
+                  "to tell",
+                  "to talk"
+               ]
+            }
+         }
+      },
+      {
+         "word": "うん",
+         "additionalInfo": {
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "yes",
+                  "yeah",
+                  "uh huh"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ああ",
+         "additionalInfo": {
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "like that",
+                  "so"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ごらんになる",
+         "additionalInfo": {
+            "alternateSpelling": "ご覧になる",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to see",
+                  "to look",
+                  "to watch"
+               ]
+            }
+         }
+      },
+      {
+         "word": "にかいだて",
+         "additionalInfo": {
+            "alternateSpelling": "二階建て",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "two-storied building"
+               ]
+            }
+         }
+      },
+      {
+         "word": "ひるやすみ",
+         "additionalInfo": {
+            "alternateSpelling": "昼休み",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "lunch break",
+                  "noon recess",
+                  "noon rest period"
+               ]
+            }
+         }
+      },
+      {
+         "word": "おいでになる",
+         "additionalInfo": {
+            "alternateSpelling": "お出でになる",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "to be"
+               ]
+            }
+         }
+      },
+      {
+         "word": "おまつり",
+         "additionalInfo": {
+            "alternateSpelling": "お祭り",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "festival",
+                  "feast",
+                  "carnival"
+               ]
+            }
+         }
+      },
+      {
+         "word": "つま",
+         "additionalInfo": {
+            "alternateSpelling": "端",
+            "meaning": {
+               "language": "en",
+               "definitions": [
+                  "edge",
+                  "tip",
+                  "end"
+               ]
+            }
+         }
+      }
+   ]
+}
