@@ -1,7 +1,7 @@
 import * as fs from "fs";
+import { Logger } from "tslog";
 
 export class Settings {
-    listPath = "./lists";
     separator = "/";
     debug = false;
 }
@@ -69,6 +69,7 @@ function addIfNotPresent<Key, Value>(
     return presentValue;
 }
 export class ListManager {
+    private readonly logger = new Logger();
     private settings: Settings;
     private allWords: Map<Language, Set<Word>> = new Map();
     private lists: Map<
@@ -79,21 +80,23 @@ export class ListManager {
 
     constructor(settings: Settings = new Settings()) {
         this.settings = settings;
-        const dirEntries = fs.readdirSync(this.settings.listPath, {
+    }
+
+    load(path = "./lists") {
+        this.logger.info("Loading lists from folder", path);
+        fs.readdirSync(path, {
             withFileTypes: true,
-        });
-        [...dirEntries].forEach((dirEntry) => {
+        }).forEach((dirEntry) => {
             if (dirEntry.isDirectory()) {
                 const language = dirEntry.name;
+                this.logger.info("Loading lists for language: ", language);
                 const allWords: Set<string> = new Set();
                 this.allWords.set(language, allWords);
                 const lists = new Map();
                 this.lists.set(language, lists);
-                ListManager.fill(
-                    (list) => this.defaultsPerLanguage.set(language, list),
-                    this.settings.listPath + this.settings.separator + language,
-                    this.settings.separator,
-                    this.settings.debug,
+                this.loadListsForLanguage(
+                    language,
+                    path + this.settings.separator + language,
                     allWords,
                     lists,
                 );
@@ -101,11 +104,9 @@ export class ListManager {
         });
     }
 
-    private static fill(
-        setDefault: (list: List) => void,
+    private loadListsForLanguage(
+        language: Language,
         path: string,
-        separator: string,
-        debugOnly: boolean,
         allWords: Set<string>,
         lists: Map<
             List,
@@ -116,16 +117,24 @@ export class ListManager {
             withFileTypes: true,
         }).forEach((dirEntry) => {
             if (dirEntry.isFile() && dirEntry.name.endsWith(".json")) {
+                this.logger.info("Attempting to load", dirEntry.name);
                 const contents = JSON.parse(
-                    fs.readFileSync(path + separator + dirEntry.name, {
-                        encoding: "utf8",
-                    }),
+                    fs.readFileSync(
+                        path + this.settings.separator + dirEntry.name,
+                        {
+                            encoding: "utf8",
+                        },
+                    ),
+                );
+                const listName = dirEntry.name.substring(
+                    0,
+                    dirEntry.name.length - ".json".length,
                 );
                 if (
-                    (debugOnly &&
+                    (this.settings.debug &&
                         undefined !== contents.debug &&
                         (contents.debug as boolean)) ||
-                    (!debugOnly &&
+                    (!this.settings.debug &&
                         (undefined === contents.debug ||
                             !(contents.debug as boolean)))
                 ) {
@@ -133,16 +142,18 @@ export class ListManager {
                         WordLength,
                         Map<string, AdditionalInfo>
                     > = new Map();
-                    const listName = dirEntry.name.substring(
-                        0,
-                        dirEntry.name.length - ".json".length,
-                    );
                     lists.set(listName, words);
                     if (
                         undefined !== contents.default &&
                         (contents.default as boolean)
                     ) {
-                        setDefault(listName);
+                        this.defaultsPerLanguage.set(language, listName);
+                        this.logger.info(
+                            "Setting list",
+                            listName,
+                            "as default for language",
+                            language,
+                        );
                     }
                     [...contents.words].forEach((word) => {
                         const wordAsString: string = word.word;
@@ -160,6 +171,24 @@ export class ListManager {
                             word.additionalInfo,
                         );
                     });
+                    this.logger.info(
+                        "List",
+                        listName,
+                        "succesfully loaded. Total word count:",
+                        Array.from(
+                            ListManager.computeWordsPerLength(words).entries(),
+                        ).reduce(
+                            (sum: number, entry): number => sum + entry[1],
+                            0,
+                        ),
+                    );
+                } else {
+                    this.logger.info(
+                        "List",
+                        listName,
+                        "ignored as debug flag was not",
+                        this.settings.debug,
+                    );
                 }
             }
         });
@@ -180,14 +209,9 @@ export class ListManager {
         if (undefined !== lists) {
             return Array.from(lists.keys()).map(
                 (listName: string): ListDetails => {
-                    const wordsPerLength: Map<WordLength, number> = new Map();
                     const listContents = lists.get(listName) || new Map();
-                    for (const length of listContents.keys()) {
-                        wordsPerLength.set(
-                            length,
-                            listContents.get(length).size,
-                        );
-                    }
+                    const wordsPerLength =
+                        ListManager.computeWordsPerLength(listContents);
                     return {
                         list: new ListIdentifier(language, listName),
                         listStats: { wordsPerLength: wordsPerLength },
@@ -197,6 +221,17 @@ export class ListManager {
         } else {
             return [];
         }
+    }
+
+    private static computeWordsPerLength(
+        list: Map<WordLength, Map<Word, AdditionalInfo>>,
+    ): Map<WordLength, number> {
+        const wordsPerLength: Map<WordLength, number> = new Map();
+
+        for (const entry of list.entries()) {
+            wordsPerLength.set(entry[0], entry[1].size);
+        }
+        return new Map([...wordsPerLength.entries()].sort());
     }
 
     randomWord(

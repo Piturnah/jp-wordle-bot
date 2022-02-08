@@ -7,6 +7,7 @@ import {
     TextChannel,
 } from "discord.js";
 import { config as readEnv } from "dotenv";
+import { Logger } from "tslog";
 
 import { Commands } from "./commands";
 import { Game as GameImpl } from "./game";
@@ -17,7 +18,8 @@ import { Basic as Renderer } from "./renderer";
 readEnv();
 
 class Bot {
-    private client: Client;
+    private readonly client: Client;
+    private readonly logger = new Logger();
 
     private activeGames = new Map<Snowflake, Game>();
     private renderer = new Renderer();
@@ -25,28 +27,12 @@ class Bot {
 
     constructor(client: Client) {
         this.client = client;
-        // this.listManager = new ListManager(new DebugMode());
         this.listManager = new ListManager();
-        for (const language of this.listManager.getLanguages()) {
-            const lists = this.listManager.getLists(language);
-            console.log(
-                `Successfully loaded lists for language ${language}: ${lists.map(
-                    (ident) => ident.list,
-                )}`,
-            );
-
-            lists.forEach((list) => {
-                console.log(
-                    `Got random word from list: ${list.getUserString()}: ${this.listManager.randomWord(
-                        list,
-                        4,
-                    )}`,
-                );
-            });
-        }
     }
 
     start(token: string | undefined) {
+        this.logger.info("Starting..");
+        this.listManager.load();
         client.once("ready", () => this.ready());
         client.on("messageCreate", (message: Message) =>
             this.messageCreate(message),
@@ -55,12 +41,11 @@ class Bot {
     }
 
     private ready() {
-        if (null !== client.user)
-            console.log(
-                `${
-                    client.user.tag
-                } successfully logged in at ${new Date().toTimeString()}`,
-            );
+        if (null !== this.client.user) {
+            this.logger.info("Sucessfully logged in as", this.client.user.tag);
+        } else {
+            this.logger.error("Error logging in..");
+        }
     }
 
     private messageCreate(message: Message) {
