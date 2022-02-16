@@ -9,7 +9,7 @@ import {
 import { config as readEnv } from "dotenv";
 import { Logger } from "tslog";
 
-import { Commands } from "./commands";
+import { CommandParser } from "./commands";
 import { Game as GameImpl } from "./game";
 import { CharState, Game, SpecialTurnResponse, State } from "./interfaces";
 import { ListIdentifier, ListManager } from "./list_manager";
@@ -21,9 +21,10 @@ class Bot {
     private readonly client: Client;
     private readonly logger = new Logger();
 
-    private activeGames = new Map<Snowflake, Game>();
-    private renderer = new Renderer();
-    private listManager: ListManager;
+    private readonly activeGames = new Map<Snowflake, Game>();
+    private readonly renderer = new Renderer();
+    private readonly listManager: ListManager;
+    private readonly commandParser = new CommandParser();
 
     constructor(client: Client) {
         this.client = client;
@@ -33,11 +34,40 @@ class Bot {
     start(token: string | undefined) {
         this.logger.info("Starting..");
         this.listManager.load();
+
+        this.commandParser.registerGlobalListener(
+            /!jp-wordle/,
+            (channel: Snowflake, user: Snowflake) => this.wakeUp(channel, user),
+        );
+
         client.once("ready", () => this.ready());
         client.on("messageCreate", (message: Message) =>
             this.messageCreate(message),
         );
         client.login(token);
+    }
+
+    private wakeUp(channel: Snowflake, player: Snowflake) {
+        if (!this.activeGames.has(channel)) {
+            this.activeGames.set(
+                channel,
+                new GameImpl(
+                    player,
+                    channel,
+                    (userId: Snowflake, channelId: Snowflake) =>
+                        this.playerTimeout(userId, channelId),
+                    (userId: Snowflake, channelId: Snowflake) =>
+                        this.lobbyTimeout(userId, channelId),
+                    this.listManager,
+                    this.listManager.getDefaultListForLanguage("jp") ??
+                        new ListIdentifier("", ""), // TODO
+                ),
+            );
+            this.sendMessage(
+                channel,
+                `<@${player}> is starting a new game! Type !join to join, and type !start to start!`,
+            );
+        }
     }
 
     private ready() {
@@ -92,25 +122,6 @@ class Bot {
                     );
                     break;
             }
-        } else if (message.content.startsWith(Commands.WakeUp)) {
-            this.activeGames.set(
-                message.channelId,
-                new GameImpl(
-                    userId,
-                    message.channelId,
-                    (userId: Snowflake, channelId: Snowflake) =>
-                        this.playerTimeout(userId, channelId),
-                    (userId: Snowflake, channelId: Snowflake) =>
-                        this.lobbyTimeout(userId, channelId),
-                    this.listManager,
-                    this.listManager.getDefaultListForLanguage("jp") ??
-                        new ListIdentifier("", ""), // TODO
-                ),
-            );
-            this.sendMessage(
-                message.channelId,
-                `<@${message.author.id}> is starting a new game! Type !join to join, and type !start to start!`,
-            );
         }
     }
 
