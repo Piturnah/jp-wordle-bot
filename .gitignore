@@ -4,3 +4,4 @@ src/word_lists/source.json
 src/word_lists/words.json
 **/venv
 .env
+fonts
