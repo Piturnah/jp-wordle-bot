@@ -1,195 +1,386 @@
-import { Snowflake } from "discord.js";
+import { MessagePayload, Snowflake, TextChannel } from "discord.js";
+import { Logger } from "tslog";
 
-import {
-    CharState,
-    Game as GameData,
-    SpecialTurnResponse,
-    State,
-} from "./interfaces";
+import { CommandParser } from "./commands";
+import { CharResult, Result, State } from "./interfaces";
 import { ListIdentifier, ListManager } from "./list_manager";
+import { Basic as Renderer } from "./renderer";
 
-const timeoutTime = 25000;
-const lobbyTimeoutTime = 60000;
+class Options {
+    turnTimeout = 25000;
+    lobbyTimeout = 60000;
+    multiRound = false;
+    // TODO: This value has yet to be used properly.
+    maxRounds? = 0;
+    wordLength? = 4;
+    maxGuessesFactor? = 4;
+    language = "jp";
+}
 
-enum TimeoutCallback {
-    Player,
+enum TimerUsecase {
+    Turn,
     Lobby,
 }
 
-export class Game implements GameData {
-    state: State;
-    channelId: Snowflake;
-    players: Snowflake[];
-    createdPlayer: Snowflake;
-    playerIndex: number;
-    currentTimeout: undefined | ReturnType<typeof setTimeout>;
-    timeoutCallback: (player: Snowflake, channelId: Snowflake) => void;
-    lobbyTimeoutCallback: (player: Snowflake, channelId: Snowflake) => void;
+export class Game {
+    private readonly listManager: ListManager;
+    private readonly channel: TextChannel;
+    private readonly commandParser: CommandParser;
+    private readonly renderer = new Renderer();
+    private readonly logger = new Logger();
 
-    word: string;
-    currentList: ListIdentifier;
-    listManager: ListManager;
+    private options = new Options();
+    private state: State;
+    private guessCount = 0;
+
+    private players: Snowflake[];
+    private createdPlayer: Snowflake;
+    private playerIndex = 0;
+    private currentTimeout: undefined | ReturnType<typeof setTimeout> =
+        undefined;
+
+    private word?: string = undefined;
+    private currentList?: ListIdentifier = undefined;
 
     constructor(
         player: Snowflake,
-        channelId: Snowflake,
-        timeoutCallback: (player: Snowflake, channelId: Snowflake) => void,
-        lobbyTimeoutCallback: (player: Snowflake, channelId: Snowflake) => void,
+        channel: TextChannel,
+        commandParser: CommandParser,
         listManager: ListManager,
-        list: ListIdentifier,
     ) {
         this.state = State.Setup;
-        this.channelId = channelId;
+        this.channel = channel;
+        this.commandParser = commandParser;
         this.createdPlayer = player;
         this.players = [this.createdPlayer];
-        this.playerIndex = 0;
-        this.currentTimeout = undefined;
-        this.timeoutCallback = timeoutCallback;
-        this.lobbyTimeoutCallback = lobbyTimeoutCallback;
+
         this.listManager = listManager;
-        this.currentList = list;
 
-        this.word = listManager.randomWord(this.currentList, 4) ?? ""; // TODO
+        this.setupListeners(commandParser);
+        this.startTimer(TimerUsecase.Lobby);
+    }
 
-        this.setTimeoutCallback(TimeoutCallback.Lobby);
+    private setupListeners(commandParser: CommandParser): void {
+        commandParser.registerChannelListener(
+            this.channel.id,
+            /!join/,
+            (_channel, player) => {
+                this.join(player);
+                return true;
+            },
+        );
 
-        console.log(this.word);
+        commandParser.registerChannelListener(
+            this.channel.id,
+            /!leave/,
+            (_channel, player) => {
+                this.leave(player);
+                return true;
+            },
+        );
+
+        commandParser.registerChannelListener(
+            this.channel.id,
+            /!start/,
+            (_channel, player) => {
+                this.start(player);
+                return true;
+            },
+        );
+
+        commandParser.registerChannelListener(
+            this.channel.id,
+            /(?<guess>\S+)/,
+            (_channel, player, guess) => {
+                this.makeGuess(player, guess[0]);
+                return true;
+            },
+        );
     }
 
     getState(): State {
         return this.state;
     }
 
-    join(player: Snowflake): boolean {
-        this.setTimeoutCallback(TimeoutCallback.Lobby);
-
-        // Player already in players
-        if (this.players.indexOf(player) > -1) {
-            return false;
-        }
-
-        this.players.push(player);
-        return true;
-    }
-
-    leave(player: Snowflake): Snowflake | boolean {
-        this.setTimeoutCallback(TimeoutCallback.Lobby);
-
-        const index = this.players.indexOf(player);
-        if (-1 !== index) {
-            this.players.splice(index, 1);
-            if (this.players.length === 0) {
-                return true;
-            } else {
-                if (this.createdPlayer === player) {
-                    this.createdPlayer = this.players[0];
-                    return this.createdPlayer;
-                }
-                return false;
+    join(player: Snowflake): void {
+        if (State.Setup === this.state) {
+            this.startTimer(TimerUsecase.Lobby);
+            if (this.players.indexOf(player) < 0) {
+                this.players.push(player);
+                this.channel.send(`Player <@${player}> has joined the lobby!`);
             }
         }
-        return false;
     }
 
-    start(player: Snowflake): boolean {
-        if (player !== this.createdPlayer) {
-            return false;
+    leave(player: Snowflake): void {
+        if (State.Setup === this.state) {
+            this.startTimer(TimerUsecase.Lobby);
+
+            const index = this.players.indexOf(player);
+            if (-1 !== index) {
+                this.players.splice(index, 1);
+                if (this.players.length === 0) {
+                    this.state = State.Ended;
+                    this.channel.send(
+                        `Game ended as last player left the lobby!`,
+                    );
+                    this.cleanUp();
+                } else {
+                    if (this.createdPlayer === player) {
+                        this.createdPlayer = this.players[0];
+                        this.channel.send(
+                            `With <@${player}> leaving the lobby, <@${this.createdPlayer}> is now the session owner!`,
+                        );
+                        this.playerIndex %= this.players.length;
+                    }
+                }
+            }
         }
-        this.updatePlayerIndex(0);
-        this.state = State.Running;
-        return true;
+    }
+
+    start(player: Snowflake) {
+        if (State.Setup === this.state) {
+            if (player === this.createdPlayer) {
+                if (undefined === this.currentList) {
+                    this.currentList =
+                        this.listManager.getDefaultListForLanguage(
+                            this.options.language,
+                        );
+                }
+                if (undefined === this.currentList) {
+                    this.logger.error(
+                        "Could not get default list for language",
+                        this.options.language,
+                        "!",
+                    );
+                } else {
+                    this.word = this.listManager.randomWord(
+                        this.currentList,
+                        this.options.wordLength,
+                    );
+
+                    if (undefined !== this.word) {
+                        this.logger.debug(
+                            "New game has started in channel",
+                            this.channel.id,
+                            ", word to be guessed is",
+                            this.word,
+                        );
+
+                        this.state = State.Running;
+
+                        this.updatePlayerIndex(this.playerIndex);
+
+                        this.feedback(
+                            new Array(this.word.length).fill({
+                                character: "?",
+                                result: Result.Wrong,
+                            }),
+                            `Who can guess the word with ${
+                                this.word.length
+                            } characters? <@${
+                                this.players[this.playerIndex]
+                            }> will be the first to guess..`,
+                        );
+                    } else {
+                        this.logger.error(
+                            "Could not get word with length",
+                            this.options.wordLength,
+                            "from list",
+                            this.currentList.getUserString(),
+                        );
+                    }
+                }
+            }
+        }
+    }
+
+    private feedback(guessResult: CharResult[], additionalText?: string) {
+        MessagePayload.resolveFile(this.renderer.render(guessResult)).then(
+            (file) =>
+                this.channel.send({ content: additionalText, files: [file] }),
+        );
     }
 
     nextGuessExpectedFrom(): Snowflake {
         return this.players[this.playerIndex];
     }
 
-    makeGuess(
-        player: Snowflake,
-        guess: string,
-    ): SpecialTurnResponse | CharState[] {
+    makeGuess(player: Snowflake, guess: string): void {
         if (player !== this.players[this.playerIndex]) {
-            return SpecialTurnResponse.WrongPlayer;
+            // For now, do nothing here.
+        } else if (guess.length !== this.options.wordLength) {
+            // For now, do nothing here.
+        } else if (
+            !this.listManager.checkGlobal(this.options.language, guess)
+        ) {
+            this.channel.send(
+                `Hmmm... I do not know "${guess}". Please try another word..`,
+            );
         }
-        if (guess.length !== this.word.length) {
-            return SpecialTurnResponse.BadGuess;
-        }
-        if (guess === this.word) {
-            if (this.currentTimeout !== undefined)
-                clearTimeout(this.currentTimeout);
-            return SpecialTurnResponse.WonGame;
-        }
-        if (!this.listManager.checkGlobal(this.currentList.language, guess)) {
-            return SpecialTurnResponse.NotAWord;
-        }
-
-        const chars: CharState[] = Array(this.word.length).fill(
-            CharState.Wrong,
-        );
-        for (let i = 0; i < this.word.length; i++) {
-            // Case: letter is in guess
-            if (guess.indexOf(this.word.charAt(i)) > -1) {
-                const res: number[] = [];
-                guess.replaceAll(
-                    this.word.charAt(i),
-                    function (match, offset: number) {
-                        res.push(offset);
-                        return match;
-                    },
+        // this should never happen, but ESLint forces us into the undefined check
+        else if (undefined !== this.word) {
+            const result = Game.generateResult(this.word, guess);
+            this.logger.debug("Result generated..");
+            if (
+                result.every(
+                    (charResult) => Result.Correct === charResult.result,
+                )
+            ) {
+                this.feedback(
+                    result,
+                    `Wow, <@${player}>! <@${
+                        this.players[this.playerIndex]
+                    }> got it right! Dropping you back to the lobby..`,
                 );
-                if (res.indexOf(i) > -1) {
-                    chars[i] = CharState.Correct;
+                this.dropBackToLobby();
+            } else {
+                if (
+                    undefined === this.options.maxGuessesFactor ||
+                    this.guessCount++ <=
+                        this.options.maxGuessesFactor * this.players.length
+                ) {
+                    this.updatePlayerIndex();
+                    if (this.players.length > 1) {
+                        this.feedback(
+                            result,
+                            `Close, <@${player}>! <@${
+                                this.players[this.playerIndex]
+                            }> is up next!`,
+                        );
+                    } else {
+                        this.feedback(
+                            result,
+                            `Not quite! Try again, <@${player}>!`,
+                        );
+                    }
                 } else {
-                    chars[res[0]] = CharState.Moved;
+                    this.feedback(result, `Close, <@${player}>!`);
+                    this.feedback(
+                        Game.generateResult(this.word, this.word),
+                        `... out of guesses! This was the correct word. Dropping you back into the lobby..`,
+                    );
+                    this.dropBackToLobby();
                 }
             }
         }
-
-        this.updatePlayerIndex();
-
-        return chars;
     }
 
-    updatePlayerIndex(index?: number) {
+    private dropBackToLobby(): void {
+        // this.playerIndex is purposefully not reset.
+        this.startTimer(TimerUsecase.Lobby);
+        this.guessCount = 0;
+        this.word = undefined;
+        this.state = State.Setup;
+    }
+
+    private static generateResult(word: string, guess: string): CharResult[] {
+        new Logger().debug(
+            "Generating result for word",
+            word,
+            "and guess",
+            guess,
+        );
+        const result: CharResult[] = new Array(word.length);
+        for (let i = 0; i < word.length; i++) {
+            new Logger().debug("Iteration", i);
+
+            const guessedCharacter = guess.charAt(i);
+            if (guessedCharacter === word.charAt(i)) {
+                result[i] = {
+                    character: guessedCharacter,
+                    result: Result.Correct,
+                };
+            } else {
+                // We only want to highlight a specific character as many times
+                // as it actually occurs in the word-to-be-guessed.
+                // To that end, we compute how many times the characters occur in both words,
+                // and then check if the index of the current occurence in the guess already
+                // exceeds the total amount of occurenes in the actual word, and if yes,
+                // also treat this occurence as wrong.
+                const numberOfOccurencesInWord = Game.indicesWith(
+                    word,
+                    guessedCharacter,
+                ).length;
+                const guessIndices = Game.indicesWith(guess, guessedCharacter);
+                if (guessIndices.indexOf(i) < numberOfOccurencesInWord) {
+                    result[i] = {
+                        character: guessedCharacter,
+                        result: Result.Moved,
+                    };
+                } else {
+                    result[i] = {
+                        character: guessedCharacter,
+                        result: Result.Wrong,
+                    };
+                }
+            }
+        }
+        return result;
+    }
+
+    private static indicesWith(target: string, character: string) {
+        const indices: number[] = [];
+
+        for (
+            let index = target.indexOf(character);
+            index > -1;
+            index = target.indexOf(character, index + 1) // TODO: Index shift?
+        ) {
+            indices.push(index);
+        }
+
+        return indices;
+    }
+
+    private updatePlayerIndex(index?: number) {
         if (index !== undefined) {
             this.playerIndex = index;
         } else {
             this.playerIndex = (this.playerIndex + 1) % this.players.length;
         }
 
-        this.setTimeoutCallback(TimeoutCallback.Player);
+        this.startTimer(TimerUsecase.Turn);
     }
 
-    setTimeoutCallback(callback: TimeoutCallback) {
+    startTimer(callback: TimerUsecase) {
         if (this.currentTimeout !== undefined) {
             clearTimeout(this.currentTimeout);
         }
 
         switch (callback) {
-            case TimeoutCallback.Player:
+            case TimerUsecase.Turn:
                 this.currentTimeout = setTimeout(() => {
-                    this.callTimeoutCallback(TimeoutCallback.Player);
-                }, timeoutTime);
+                    this.playerTimedOut();
+                }, this.options.turnTimeout);
                 break;
-            case TimeoutCallback.Lobby:
+            case TimerUsecase.Lobby:
                 this.currentTimeout = setTimeout(() => {
-                    this.callTimeoutCallback(TimeoutCallback.Lobby);
-                }, lobbyTimeoutTime);
+                    this.lobbyTimedOut();
+                }, this.options.lobbyTimeout);
                 break;
         }
     }
 
-    callTimeoutCallback(callback: TimeoutCallback) {
-        switch (callback) {
-            case TimeoutCallback.Player: {
-                const delayedPlayer = this.players[this.playerIndex];
-                this.updatePlayerIndex();
-                this.timeoutCallback(delayedPlayer, this.channelId);
-                break;
-            }
-            case TimeoutCallback.Lobby:
-                this.lobbyTimeoutCallback(this.createdPlayer, this.channelId);
-                break;
-        }
+    private lobbyTimedOut() {
+        this.channel.send(
+            "Game has been cancelled due to inactivity.. Restart at any time with '!start.'.",
+        );
+        this.cleanUp();
+    }
+
+    private cleanUp() {
+        this.state = State.Ended;
+        this.commandParser.removeAllForChannel(this.channel.id);
+    }
+
+    private playerTimedOut() {
+        const currentPlayer = this.players[this.playerIndex];
+        this.updatePlayerIndex();
+        this.channel.send(
+            `<@${currentPlayer}> took to long to answer! <@${
+                this.players[this.playerIndex]
+            }> is up next.`,
+        );
     }
 }

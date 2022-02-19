@@ -1,19 +1,11 @@
-import {
-    Client,
-    Intents,
-    Message,
-    MessagePayload,
-    Snowflake,
-    TextChannel,
-} from "discord.js";
+import { Client, Intents, Message, Snowflake, TextChannel } from "discord.js";
 import { config as readEnv } from "dotenv";
 import { Logger } from "tslog";
 
 import { CommandParser } from "./commands";
-import { Game as GameImpl } from "./game";
-import { CharState, Game, SpecialTurnResponse, State } from "./interfaces";
-import { ListIdentifier, ListManager } from "./list_manager";
-import { Basic as Renderer } from "./renderer";
+import { Game } from "./game";
+import { State } from "./interfaces";
+import { ListManager } from "./list_manager";
 
 readEnv();
 
@@ -22,13 +14,11 @@ class Bot {
     private readonly logger = new Logger();
 
     private readonly activeGames = new Map<Snowflake, Game>();
-    private readonly renderer = new Renderer();
-    private readonly listManager: ListManager;
+    private readonly listManager: ListManager = new ListManager();
     private readonly commandParser = new CommandParser();
 
     constructor(client: Client) {
         this.client = client;
-        this.listManager = new ListManager();
     }
 
     start(token: string | undefined) {
@@ -47,187 +37,52 @@ class Bot {
         client.login(token);
     }
 
-    private wakeUp(channel: Snowflake, player: Snowflake) {
-        if (!this.activeGames.has(channel)) {
-            this.activeGames.set(
-                channel,
-                new GameImpl(
-                    player,
-                    channel,
-                    (userId: Snowflake, channelId: Snowflake) =>
-                        this.playerTimeout(userId, channelId),
-                    (userId: Snowflake, channelId: Snowflake) =>
-                        this.lobbyTimeout(userId, channelId),
-                    this.listManager,
-                    this.listManager.getDefaultListForLanguage("jp") ??
-                        new ListIdentifier("", ""), // TODO
-                ),
-            );
-            this.sendMessage(
-                channel,
-                `<@${player}> is starting a new game! Type !join to join, and type !start to start!`,
-            );
+    private wakeUp(channelId: Snowflake, player: Snowflake): boolean {
+        const game = this.activeGames.get(channelId);
+        if (undefined === game || State.Ended === game.getState()) {
+            const channel = this.resolveChannel(channelId);
+            if (undefined !== channel) {
+                this.activeGames.set(
+                    channelId,
+                    new Game(
+                        player,
+                        channel,
+                        this.commandParser,
+                        this.listManager,
+                    ),
+                );
+                channel.send(
+                    `<@${player}> is starting a new game! Type !join to join, and type !start to start!`,
+                );
+            } else {
+                this.logger.error(
+                    "Could not find channel for snowflake",
+                    channelId,
+                    "!",
+                );
+            }
         }
+        return true;
     }
 
     private ready() {
         if (null !== this.client.user) {
             this.logger.info("Sucessfully logged in as", this.client.user.tag);
+            this.commandParser.setThisId(this.client.user.id);
         } else {
             this.logger.error("Error logging in..");
         }
     }
-
     private messageCreate(message: Message) {
-        const userId = message.author.id;
-        const activeGame = this.activeGames.get(message.channelId);
-        if (undefined !== activeGame && userId !== client.user?.id) {
-            switch (activeGame.getState()) {
-                case State.Setup:
-                    if (message.content.startsWith(Commands.Join)) {
-                        if (activeGame.join(userId))
-                            this.sendMessage(
-                                message.channelId,
-                                `Player <@${userId}> joined the lobby!`,
-                            );
-                    } else if (message.content.startsWith(Commands.Start)) {
-                        if (activeGame.start(userId)) {
-                            this.prompt(
-                                activeGame.nextGuessExpectedFrom(),
-                                message.channelId,
-                            );
-                        }
-                    } else if (message.content.startsWith(Commands.Leave)) {
-                        const result = activeGame.leave(userId);
-                        if (typeof result === "boolean" && result) {
-                            this.sendMessage(
-                                message.channelId,
-                                `Game ended as last player left the lobby!`,
-                            );
-                            this.activeGames.delete(message.channelId);
-                        } else {
-                            this.sendMessage(
-                                message.channelId,
-                                `With <@${userId}> leaving the lobby, <@${result}> is now the session owner!`,
-                            );
-                        }
-                    }
-                    break;
-                case State.Running:
-                    this.handleResponse(
-                        message.content,
-                        activeGame.makeGuess(userId, message.content),
-                        userId,
-                        message.channelId,
-                    );
-                    break;
-            }
-        }
+        this.commandParser.messageReceived(message);
     }
 
-    private handleResponse(
-        guess: string,
-        guessResult: SpecialTurnResponse | CharState[],
-        userId: Snowflake,
-        channelId: Snowflake,
-    ) {
-        if (typeof guessResult === "number") {
-            // const wordInfo = "this still needs to be FIXED";
-            switch (guessResult) {
-                case SpecialTurnResponse.WonGame:
-                    this.sendMessage(
-                        channelId,
-                        `<@${userId}> guessed the word correctly! It was ${guess}.`, // TODO
-                    );
-                    // this;
-                    // .sendMessage
-                    // channelId,
-                    // `<@${userId}> guessed the word correctly! The word was ${guess} ${
-                    //     wordInfo!.kanji !== "" ? `(${wordInfo!.kanji})` : ""
-                    // }.\nMeaning: ${wordInfo!.eng}`,
-                    // ();
-                    this.activeGames.delete(channelId);
-                    break;
-                case SpecialTurnResponse.WrongPlayer:
-                    break;
-                case SpecialTurnResponse.BadGuess:
-                    this.sendMessage(
-                        channelId,
-                        `Received a bad guess from <@${userId}>. Guess must be 4 chars long.`,
-                    );
-                    break;
-                case SpecialTurnResponse.NotAWord:
-                    this.sendMessage(
-                        channelId,
-                        `Received word 「${guess}」 not in the database of words.`,
-                    );
-                    break;
-            }
-        } else {
-            this.feedback(channelId, guess, guessResult as CharState[]);
-        }
-    }
-
-    private feedback(
-        channelId: Snowflake,
-        word: string,
-        guessResult: CharState[],
-    ) {
-        const channel = this.client.channels.cache.get(channelId);
+    private resolveChannel(id: Snowflake): TextChannel | undefined {
+        const channel = this.client.channels.cache.get(id);
         if (undefined !== channel) {
-            const textChannel = channel as TextChannel;
-            MessagePayload.resolveFile(
-                this.renderer.render(word, guessResult),
-            ).then((file) =>
-                textChannel
-                    .send({ files: [file] })
-                    .then(() =>
-                        this.prompt(
-                            this.activeGames
-                                .get(channelId)!
-                                .nextGuessExpectedFrom(),
-                            channelId,
-                        ),
-                    ),
-            );
-            return true;
+            return channel as TextChannel;
         }
-        console.warn(`No channel cached with ID ${channelId}!`);
-        return false;
-    }
-
-    private playerTimeout(userId: Snowflake, channelId: Snowflake) {
-        this.sendMessage(
-            channelId,
-            `<@${userId}> took too long to guess! Passing the baton...`,
-        );
-
-        const activeGame = this.activeGames.get(channelId);
-        if (undefined !== activeGame)
-            this.prompt(activeGame.nextGuessExpectedFrom(), channelId);
-    }
-
-    private lobbyTimeout(userId: Snowflake, channelId: Snowflake) {
-        this.sendMessage(
-            channelId,
-            `No activity in lobby in the alloted time. Shutting it down.\n(INFO: lobby created by <@${userId}>)`,
-        );
-        this.activeGames.delete(channelId);
-    }
-
-    private prompt(userId: Snowflake, channelId: Snowflake) {
-        this.sendMessage(channelId, `<@${userId}>: It is your turn.`);
-    }
-
-    private sendMessage(channelId: Snowflake, message: string): boolean {
-        const channel = this.client.channels.cache.get(channelId);
-        if (undefined !== channel) {
-            const textChannel = channel as TextChannel;
-            textChannel.send(message);
-            return true;
-        }
-        console.warn(`No channel cached with ID ${channelId}!`);
-        return false;
+        return undefined;
     }
 }
 

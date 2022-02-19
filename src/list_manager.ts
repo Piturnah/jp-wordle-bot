@@ -236,12 +236,19 @@ export class ListManager {
 
     randomWord(
         listIdent: ListIdentifier,
-        length: WordLength,
+        length?: WordLength,
     ): Word | undefined {
         const listsForLanguage = this.lists.get(listIdent.language);
         if (undefined !== listsForLanguage) {
             const list = listsForLanguage.get(listIdent.list);
             if (undefined !== list) {
+                if (undefined === length) {
+                    const availableLengths = Array.from(list.keys());
+                    length =
+                        availableLengths[
+                            Math.floor(Math.random() * availableLengths.length)
+                        ];
+                }
                 const wordsWithRequiredLength = list.get(length);
                 if (undefined !== wordsWithRequiredLength) {
                     // TODO: Potential performance issue, as we create a pretty big array every time..

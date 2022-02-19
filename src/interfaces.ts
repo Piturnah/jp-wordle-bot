@@ -1,13 +1,9 @@
-import { Snowflake } from "discord.js";
-
-export enum SpecialTurnResponse {
-    WrongPlayer,
-    WonGame,
-    BadGuess,
-    NotAWord,
+export interface CharResult {
+    character: string;
+    result: Result;
 }
 
-export enum CharState {
+export enum Result {
     Wrong,
     Moved,
     Correct,
@@ -16,24 +12,7 @@ export enum CharState {
 export enum State {
     Setup,
     Running,
-}
-
-export interface WordLists {
-    fourKana: string[];
-    fiveKana?: string[];
-    sixKana?: string[];
-}
-
-export interface Game {
-    getState(): State;
-    join(player: Snowflake): boolean;
-    start(player: Snowflake): boolean;
-    nextGuessExpectedFrom(): Snowflake;
-    makeGuess(
-        player: Snowflake,
-        guess: string,
-    ): SpecialTurnResponse | CharState[];
-    leave(player: Snowflake): Snowflake | boolean;
+    Ended,
 }
 
 export interface Colors {
@@ -73,22 +52,18 @@ export class RenderParameters {
     dimensions: RenderDimensions = new Default();
 }
 
-export function resolve(charResult: CharState, colors: Colors): string {
-    switch (charResult) {
-        case CharState.Correct:
+export function resolve(result: Result, colors: Colors): string {
+    switch (result) {
+        case Result.Correct:
             return colors.right;
-        case CharState.Moved:
+        case Result.Moved:
             return colors.wrongPosition;
-        case CharState.Wrong:
+        case Result.Wrong:
         default:
             return colors.wrong;
     }
 }
 
 export interface Renderer {
-    render(
-        word: string,
-        guessResult: CharState[],
-        parameters?: RenderParameters,
-    ): Buffer;
+    render(guessResult: CharResult[], parameters?: RenderParameters): Buffer;
 }
