@@ -10,9 +10,9 @@ class Options {
     turnTimeout = 25000;
     lobbyTimeout = 60000;
     multiRound = false;
-    // TODO: This value has yet to be used properly.
+    // TODO: This value is currently not used.
     maxRounds? = 0;
-    wordLength? = 4;
+    wordLength?: number;
     maxGuessesFactor? = 4;
     language = "jp";
 }
@@ -173,7 +173,7 @@ export class Game {
 
                         this.feedback(
                             new Array(this.word.length).fill({
-                                character: "?",
+                                character: " ",
                                 result: Result.Wrong,
                             }),
                             `Who can guess the word with ${
@@ -207,63 +207,74 @@ export class Game {
     }
 
     makeGuess(player: Snowflake, guess: string): void {
-        if (player !== this.players[this.playerIndex]) {
-            // For now, do nothing here.
-        } else if (guess.length !== this.options.wordLength) {
-            // For now, do nothing here.
-        } else if (
-            !this.listManager.checkGlobal(this.options.language, guess)
-        ) {
-            this.channel.send(
-                `Hmmm... I do not know "${guess}". Please try another word..`,
-            );
-        }
-        // this should never happen, but ESLint forces us into the undefined check
-        else if (undefined !== this.word) {
-            const result = Game.generateResult(this.word, guess);
-            this.logger.debug("Result generated..");
-            if (
-                result.every(
-                    (charResult) => Result.Correct === charResult.result,
-                )
+        if (undefined !== this.word) {
+            if (player !== this.players[this.playerIndex]) {
+                // For now, do nothing here.
+            } else if (guess.length !== this.word.length) {
+                // For now, do nothing here.
+            } else if (
+                !this.listManager.checkGlobal(this.options.language, guess)
             ) {
-                this.feedback(
-                    result,
-                    `Wow, <@${player}>! <@${
-                        this.players[this.playerIndex]
-                    }> got it right! Dropping you back to the lobby..`,
+                this.channel.send(
+                    `Hmmm... I do not know "${guess}". Please try another word..`,
                 );
-                this.dropBackToLobby();
-            } else {
+            }
+            // this should never happen, but ESLint forces us into the undefined check
+            else {
+                const result = Game.generateResult(this.word, guess);
+                this.logger.debug("Result generated..");
                 if (
-                    undefined === this.options.maxGuessesFactor ||
-                    this.guessCount++ <=
-                        this.options.maxGuessesFactor * this.players.length
+                    result.every(
+                        (charResult) => Result.Correct === charResult.result,
+                    )
                 ) {
-                    this.updatePlayerIndex();
-                    if (this.players.length > 1) {
-                        this.feedback(
-                            result,
-                            `Close, <@${player}>! <@${
-                                this.players[this.playerIndex]
-                            }> is up next!`,
-                        );
-                    } else {
-                        this.feedback(
-                            result,
-                            `Not quite! Try again, <@${player}>!`,
-                        );
-                    }
-                } else {
-                    this.feedback(result, `Close, <@${player}>!`);
                     this.feedback(
-                        Game.generateResult(this.word, this.word),
-                        `... out of guesses! This was the correct word. Dropping you back into the lobby..`,
+                        result,
+                        `Wow, <@${player}>! <@${
+                            this.players[this.playerIndex]
+                        }> got it right! Dropping you back to the lobby..`,
                     );
                     this.dropBackToLobby();
+                } else {
+                    if (!this.guessesExhausted(this.guessCount++)) {
+                        this.updatePlayerIndex();
+                        if (this.players.length > 1) {
+                            this.feedback(
+                                result,
+                                `Close, <@${player}>! <@${
+                                    this.players[this.playerIndex]
+                                }> is up next!`,
+                            );
+                        } else {
+                            this.feedback(
+                                result,
+                                `Not quite! Try again, <@${player}>!`,
+                            );
+                        }
+                    } else {
+                        this.feedback(result, `Close, <@${player}>!`);
+                        this.outOfGuesses();
+                    }
                 }
             }
         }
+    }
+
+    private outOfGuesses(): void {
+        if (undefined !== this.word) {
+            this.feedback(
+                Game.generateResult(this.word, this.word),
+                `... out of guesses! This was the correct word. Dropping you back into the lobby..`,
+            );
+        }
+        this.dropBackToLobby();
+    }
+
+    private guessesExhausted(guesses: number): boolean {
+        return (
+            undefined !== this.options.maxGuessesFactor &&
+            guesses >= this.options.maxGuessesFactor * this.players.length
+        );
     }
 
     private dropBackToLobby(): void {
@@ -370,17 +381,24 @@ export class Game {
     }
 
     private cleanUp() {
+        if (this.currentTimeout !== undefined) {
+            clearTimeout(this.currentTimeout);
+        }
         this.state = State.Ended;
         this.commandParser.removeAllForChannel(this.channel.id);
     }
 
     private playerTimedOut() {
         const currentPlayer = this.players[this.playerIndex];
-        this.updatePlayerIndex();
-        this.channel.send(
-            `<@${currentPlayer}> took to long to answer! <@${
-                this.players[this.playerIndex]
-            }> is up next.`,
-        );
+        if (!this.guessesExhausted(this.guessCount++)) {
+            this.updatePlayerIndex();
+            this.channel.send(
+                `<@${currentPlayer}> took to long to answer! <@${
+                    this.players[this.playerIndex]
+                }> is up next.`,
+            );
+        } else {
+            this.outOfGuesses();
+        }
     }
 }

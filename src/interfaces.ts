@@ -36,7 +36,7 @@ export class Small implements RenderDimensions {
 }
 export class Default implements RenderDimensions {
     imageSize = 200;
-    marginBottom = 36;
+    marginBottom = 28;
     fontSize = 180;
     borderSize = 2;
 }

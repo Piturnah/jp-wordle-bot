@@ -4,6 +4,9 @@ import { Logger } from "tslog";
 export class Settings {
     separator = "/";
     debug = false;
+    blacklistExpressions = [
+        /[\u30a0-\u30ff]/g, // katakana
+    ];
 }
 
 export class DebugMode extends Settings {
@@ -157,19 +160,35 @@ export class ListManager {
                     }
                     [...contents.words].forEach((word) => {
                         const wordAsString: string = word.word;
-                        const wordLength = wordAsString.length;
-                        allWords.add(wordAsString);
+                        let blacklisted = false;
+                        for (const pattern of this.settings
+                            .blacklistExpressions) {
+                            if (wordAsString.match(pattern)) {
+                                blacklisted = true;
+                                this.logger.debug(
+                                    "Word",
+                                    wordAsString,
+                                    "was ignored as it was blacklisted by pattern",
+                                    pattern.toString(),
+                                );
+                                break;
+                            }
+                        }
+                        if (!blacklisted) {
+                            const wordLength = wordAsString.length;
+                            allWords.add(wordAsString);
 
-                        const wordsWithSameLength = addIfNotPresent(
-                            words,
-                            wordLength,
-                            () => new Map(),
-                        );
+                            const wordsWithSameLength = addIfNotPresent(
+                                words,
+                                wordLength,
+                                () => new Map(),
+                            );
 
-                        wordsWithSameLength.set(
-                            wordAsString,
-                            word.additionalInfo,
-                        );
+                            wordsWithSameLength.set(
+                                wordAsString,
+                                word.additionalInfo,
+                            );
+                        }
                     });
                     this.logger.info(
                         "List",
@@ -243,7 +262,13 @@ export class ListManager {
             const list = listsForLanguage.get(listIdent.list);
             if (undefined !== list) {
                 if (undefined === length) {
-                    const availableLengths = Array.from(list.keys());
+                    const availableLengths: number[] = Array.from(list.keys())
+                        .map((length) =>
+                            new Array(
+                                (list.get(length) ?? new Map()).size ?? 0,
+                            ).fill(length),
+                        )
+                        .flat();
                     length =
                         availableLengths[
                             Math.floor(Math.random() * availableLengths.length)

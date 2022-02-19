@@ -26,7 +26,7 @@ class Bot {
         this.listManager.load();
 
         this.commandParser.registerGlobalListener(
-            /!jp-wordle/,
+            /!wordle/,
             (channel: Snowflake, user: Snowflake) => this.wakeUp(channel, user),
         );
 
