@@ -16,6 +16,7 @@ export class Basic implements Renderer {
                     width: params.dimensions.imageSize,
                     height: params.dimensions.imageSize,
                     backgroundColor: backgroundColor,
+                    fontColor: "#000000",
                     fontSize: params.dimensions.fontSize,
                     borderSize: params.dimensions.borderSize,
                     borderColor: "#000000",

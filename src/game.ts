@@ -222,7 +222,6 @@ export class Game {
             // this should never happen, but ESLint forces us into the undefined check
             else {
                 const result = Game.generateResult(this.word, guess);
-                this.logger.debug("Result generated..");
                 if (
                     result.every(
                         (charResult) => Result.Correct === charResult.result,
@@ -286,16 +285,8 @@ export class Game {
     }
 
     private static generateResult(word: string, guess: string): CharResult[] {
-        new Logger().debug(
-            "Generating result for word",
-            word,
-            "and guess",
-            guess,
-        );
         const result: CharResult[] = new Array(word.length);
         for (let i = 0; i < word.length; i++) {
-            new Logger().debug("Iteration", i);
-
             const guessedCharacter = guess.charAt(i);
             if (guessedCharacter === word.charAt(i)) {
                 result[i] = {
