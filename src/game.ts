@@ -7,6 +7,7 @@ import { ListIdentifier, ListManager } from "./list_manager";
 import { Basic as Renderer } from "./renderer";
 
 class Options {
+    checkWords = false;
     turnTimeout = 25000;
     lobbyTimeout = 60000;
     multiRound = false;
@@ -213,6 +214,7 @@ export class Game {
             } else if (guess.length !== this.word.length) {
                 // For now, do nothing here.
             } else if (
+                this.options.checkWords &&
                 !this.listManager.checkGlobal(this.options.language, guess)
             ) {
                 this.channel.send(
