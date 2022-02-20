@@ -16,6 +16,7 @@ class Options {
     wordLength?: number;
     maxGuessesFactor? = 4;
     language = "jp";
+    listIdentifier?: ListIdentifier;
 }
 
 enum TimerUsecase {
@@ -35,13 +36,12 @@ export class Game {
     private guessCount = 0;
 
     private players: Snowflake[];
-    private createdPlayer: Snowflake;
+    private owner: Snowflake;
     private playerIndex = 0;
     private currentTimeout: undefined | ReturnType<typeof setTimeout> =
         undefined;
 
     private word?: string = undefined;
-    private currentList?: ListIdentifier = undefined;
 
     constructor(
         player: Snowflake,
@@ -53,10 +53,16 @@ export class Game {
         this.state = State.Setup;
         this.channel = channel;
         this.commandParser = commandParser;
-        this.createdPlayer = player;
-        this.players = [this.createdPlayer];
+        this.owner = player;
+        this.players = [this.owner];
 
         this.listManager = listManager;
+        if (undefined === this.options.listIdentifier) {
+            this.options.listIdentifier =
+                this.listManager.getDefaultListForLanguage(
+                    this.options.language,
+                );
+        }
 
         this.renderer = renderer;
 
@@ -97,9 +103,73 @@ export class Game {
             /(?<guess>\S+)/,
             (_channel, player, guess) => {
                 this.makeGuess(player, guess[0]);
-                return true;
+                return State.Running === this.state;
             },
         );
+
+        commandParser.registerChannelListener(this.channel.id, /!list/, () => {
+            this.printCurrentListInfo();
+            return true;
+        });
+
+        commandParser.registerChannelListener(
+            this.channel.id,
+            /!list (?<language>\w+)\/(?<list>\w+)/,
+            (_channel, player, input) => {
+                if (State.Setup === this.state) {
+                    this.switchToList(player, input[0], input[1]);
+                    return true;
+                }
+                return false;
+            },
+        );
+    }
+
+    private switchToList(
+        player: Snowflake,
+        language: string,
+        list: string,
+    ): void {
+        if (this.owner === player) {
+            // First, check if there actually is at least a single word for this list by querying it..
+            const listIdent = new ListIdentifier(language, list);
+            if (
+                undefined !==
+                this.listManager.randomWord(listIdent, this.options.wordLength)
+            ) {
+                this.channel.send(
+                    `Sucessfully switched to list \`${listIdent.getUserString()}\`.`,
+                );
+                this.options.listIdentifier = listIdent;
+                this.options.language = listIdent.language;
+            } else {
+                this.channel.send(
+                    `Sorry, either \`${listIdent.getUserString()}\` is not a registered list or it has no suitable words.`,
+                );
+            }
+        }
+    }
+
+    private printCurrentListInfo(): void {
+        if (State.Setup === this.state) {
+            let message = "Currently, no specific list is selected.";
+            if (undefined !== this.options.listIdentifier) {
+                message = `Currently, words are chosen from list \`${this.options.listIdentifier.getUserString()}\`.`;
+            }
+            message += ` Use \`list! <language>/<list>\` to switch to another list. The following other lists are available: \`\`\``;
+            this.listManager.getLanguages().forEach((language) => {
+                message += `\n${language}/`;
+                this.listManager
+                    .getListsWithDetails(language)
+                    .forEach((details) => {
+                        message += `\n\t${details.list.list} (${Array.from(
+                            details.listStats.wordsPerLength.values(),
+                        ).reduce((sum, number) => sum + number)} words)`;
+                    });
+            });
+            message += "```";
+            this.channel.send(message);
+        }
     }
 
     getState(): State {
@@ -130,10 +200,10 @@ export class Game {
                     );
                     this.cleanUp();
                 } else {
-                    if (this.createdPlayer === player) {
-                        this.createdPlayer = this.players[0];
+                    if (this.owner === player) {
+                        this.owner = this.players[0];
                         this.channel.send(
-                            `With <@${player}> leaving the lobby, <@${this.createdPlayer}> is now the session owner!`,
+                            `With <@${player}> leaving the lobby, <@${this.owner}> is now the session owner!`,
                         );
                         this.playerIndex %= this.players.length;
                     }
@@ -144,14 +214,14 @@ export class Game {
 
     start(player: Snowflake) {
         if (State.Setup === this.state) {
-            if (player === this.createdPlayer) {
-                if (undefined === this.currentList) {
-                    this.currentList =
+            if (player === this.owner) {
+                if (undefined === this.options.listIdentifier) {
+                    this.options.listIdentifier =
                         this.listManager.getDefaultListForLanguage(
                             this.options.language,
                         );
                 }
-                if (undefined === this.currentList) {
+                if (undefined === this.options.listIdentifier) {
                     this.logger.error(
                         "Could not get default list for language",
                         this.options.language,
@@ -159,7 +229,7 @@ export class Game {
                     );
                 } else {
                     this.word = this.listManager.randomWord(
-                        this.currentList,
+                        this.options.listIdentifier,
                         this.options.wordLength,
                     );
 
@@ -191,7 +261,7 @@ export class Game {
                             "Could not get word with length",
                             this.options.wordLength,
                             "from list",
-                            this.currentList.getUserString(),
+                            this.options.listIdentifier.getUserString(),
                         );
                     }
                 }

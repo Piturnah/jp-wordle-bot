@@ -76,7 +76,7 @@ export class CommandParser {
 
     static try(message: Message, command: Command): boolean {
         const matchResult = message.content.match(command.regEx);
-        if (null !== matchResult) {
+        if (null !== matchResult && matchResult[0] === message.content) {
             if (
                 command.listener(
                     message.channelId,
