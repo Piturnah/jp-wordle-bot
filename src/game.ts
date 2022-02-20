@@ -205,27 +205,42 @@ export class Game {
     }
 
     leave(player: Snowflake): void {
-        if (State.Setup === this.state) {
-            this.startTimer(TimerUsecase.Lobby);
-
-            const index = this.players.indexOf(player);
-            if (-1 !== index) {
-                this.players.splice(index, 1);
-                if (this.players.length === 0) {
-                    this.state = State.Ended;
+        const index = this.players.indexOf(player);
+        if (-1 !== index) {
+            this.players.splice(index, 1);
+            if (this.players.length === 0) {
+                this.state = State.Ended;
+                this.channel.send(
+                    `Game ended as the last player left the session!`,
+                );
+                this.cleanUp();
+            } else {
+                if (this.owner === player) {
+                    this.owner = this.players[0];
                     this.channel.send(
-                        `Game ended as last player left the lobby!`,
+                        `With <@${player}> leaving the lobby, <@${this.owner}> is now the session owner!`,
                     );
-                    this.cleanUp();
-                } else {
-                    if (this.owner === player) {
-                        this.owner = this.players[0];
-                        this.channel.send(
-                            `With <@${player}> leaving the lobby, <@${this.owner}> is now the session owner!`,
-                        );
+                    this.originalOwner = false;
+                }
+
+                if (State.Running === this.state) {
+                    if (index === this.playerIndex) {
+                        // because we already removed the player,
+                        // this.playerIndex is already pointing to the next player
                         this.playerIndex %= this.players.length;
-                        this.originalOwner = false;
+                        this.channel.send(
+                            `<@${
+                                this.players[this.playerIndex]
+                            }>, it's now your turn.`,
+                        );
+                        this.startTimer(TimerUsecase.Turn);
+                    } else if (index < this.playerIndex) {
+                        // to maintain the current player
+                        this.playerIndex--;
                     }
+                } else {
+                    this.playerIndex %= this.players.length;
+                    this.startTimer(TimerUsecase.Lobby);
                 }
             }
         }
