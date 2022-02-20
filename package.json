@@ -1,12 +1,12 @@
 {
-    "name": "jp-wordle",
-    "version": "1.0.0",
-    "description": "",
-    "main": "index.js",
+    "name": "discord-wordle",
+    "version": "0.0.2",
+    "description": "A Discord bot running the popular Wordle game.",
+    "main": "bot.ts",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "tsc && pm2 start ./dist/bot.js",
-        "stop": "pm2 stop bot",
+        "start": "tsc && pm2 start --name \"$npm_package_name\" ./dist/bot.js",
+        "stop": "pm2 stop $npm_package_name",
         "dev": "nodemon -e ts --exec \"npm run start\""
     },
     "keywords": [],
