@@ -5,8 +5,9 @@ import { CommandParser } from "./commands";
 import { CharResult, Result, State } from "./interfaces";
 import { ListIdentifier, ListManager } from "./list_manager";
 import { Basic as Renderer } from "./renderer";
+import { SettingsDb } from "./settings_db";
 
-class Options {
+export class Options {
     checkWords = false;
     turnTimeout = 25000;
     lobbyTimeout = 60000;
@@ -15,7 +16,7 @@ class Options {
     maxRounds? = 0;
     wordLength?: number;
     maxAttempts? = 12;
-    language = "jp";
+    language = "en";
     listIdentifier?: ListIdentifier;
 }
 
@@ -25,6 +26,7 @@ enum TimerUsecase {
 }
 
 export class Game {
+    private readonly settingsDb: SettingsDb;
     private readonly listManager: ListManager;
     private readonly channel: TextChannel;
     private readonly commandParser: CommandParser;
@@ -32,6 +34,7 @@ export class Game {
     private readonly logger = new Logger();
 
     private options = new Options();
+    private originalOwner = true;
     private state: State;
     private guessCount = 0;
 
@@ -49,12 +52,21 @@ export class Game {
         commandParser: CommandParser,
         listManager: ListManager,
         renderer: Renderer,
+        settingsDb: SettingsDb,
     ) {
         this.state = State.Setup;
         this.channel = channel;
         this.commandParser = commandParser;
         this.owner = player;
         this.players = [this.owner];
+
+        this.settingsDb = settingsDb;
+        let loadedSettings = this.settingsDb.load(player);
+        if (undefined === loadedSettings) {
+            loadedSettings = new Options();
+            this.settingsDb.store(player, loadedSettings);
+        }
+        this.options = loadedSettings;
 
         this.listManager = listManager;
         if (undefined === this.options.listIdentifier) {
@@ -139,11 +151,18 @@ export class Game {
                 );
                 this.options.listIdentifier = listIdent;
                 this.options.language = listIdent.language;
+                this.storeSettings();
             } else {
                 this.channel.send(
                     `Sorry, either \`${listIdent.getUserString()}\` is not a registered list or it has no suitable words.`,
                 );
             }
+        }
+    }
+
+    private storeSettings(): void {
+        if (this.originalOwner) {
+            this.settingsDb.store(this.owner, this.options);
         }
     }
 
@@ -203,6 +222,7 @@ export class Game {
                             `With <@${player}> leaving the lobby, <@${this.owner}> is now the session owner!`,
                         );
                         this.playerIndex %= this.players.length;
+                        this.originalOwner = false;
                     }
                 }
             }

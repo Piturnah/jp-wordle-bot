@@ -7,12 +7,14 @@ import { Game } from "./game";
 import { State } from "./interfaces";
 import { ListManager } from "./list_manager";
 import { Basic as Renderer } from "./renderer";
+import { SettingsDb } from "./settings_db";
 
 readEnv();
 
 class Bot {
     private readonly client: Client;
     private readonly logger = new Logger();
+    private readonly globalSettingsDb = new SettingsDb();
 
     private readonly activeGames = new Map<Snowflake, Game>();
     private readonly listManager: ListManager = new ListManager();
@@ -53,6 +55,7 @@ class Bot {
                         this.commandParser,
                         this.listManager,
                         this.renderer,
+                        this.globalSettingsDb,
                     ),
                 );
                 channel.send(
