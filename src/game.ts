@@ -509,7 +509,7 @@ export class Game {
         if (!this.guessesExhausted(this.guessCount++)) {
             this.updatePlayerIndex();
             this.channel.send(
-                `<@${currentPlayer}> took to long to answer! <@${
+                `<@${currentPlayer}> took too long to answer! <@${
                     this.players[this.playerIndex]
                 }> is up next.` + this.remainingGuessesAsString(),
             );
