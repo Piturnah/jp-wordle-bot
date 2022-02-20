@@ -14,7 +14,7 @@ class Options {
     // TODO: This value is currently not used.
     maxRounds? = 0;
     wordLength?: number;
-    maxGuessesFactor? = 4;
+    maxAttempts? = 12;
     language = "jp";
     listIdentifier?: ListIdentifier;
 }
@@ -109,18 +109,15 @@ export class Game {
 
         commandParser.registerChannelListener(this.channel.id, /!list/, () => {
             this.printCurrentListInfo();
-            return true;
+            return State.Setup === this.state;
         });
 
         commandParser.registerChannelListener(
             this.channel.id,
             /!list (?<language>\w+)\/(?<list>\w+)/,
             (_channel, player, input) => {
-                if (State.Setup === this.state) {
-                    this.switchToList(player, input[0], input[1]);
-                    return true;
-                }
-                return false;
+                this.switchToList(player, input[0], input[1]);
+                return State.Setup === this.state;
             },
         );
     }
@@ -130,7 +127,7 @@ export class Game {
         language: string,
         list: string,
     ): void {
-        if (this.owner === player) {
+        if (State.Setup === this.state && this.owner === player) {
             // First, check if there actually is at least a single word for this list by querying it..
             const listIdent = new ListIdentifier(language, list);
             if (
@@ -317,21 +314,35 @@ export class Game {
                                 result,
                                 `Close, <@${player}>! <@${
                                     this.players[this.playerIndex]
-                                }> is up next!`,
+                                }> is up next!` +
+                                    this.remainingGuessesAsString(),
                             );
                         } else {
                             this.feedback(
                                 result,
-                                `Not quite! Try again, <@${player}>!`,
+                                `Not quite! Try again, <@${player}>!` +
+                                    this.remainingGuessesAsString(),
                             );
                         }
                     } else {
-                        this.feedback(result, `Close, <@${player}>!`);
+                        this.feedback(
+                            result,
+                            `Close, <@${player}>!` +
+                                this.remainingGuessesAsString(),
+                        );
                         this.outOfGuesses();
                     }
                 }
             }
         }
+    }
+
+    private remainingGuessesAsString(): string {
+        return undefined !== this.options.maxAttempts
+            ? ` ${
+                  this.options.maxAttempts - (this.guessCount - 1)
+              } guess(es) remaining.`
+            : "";
     }
 
     private outOfGuesses(): void {
@@ -346,8 +357,8 @@ export class Game {
 
     private guessesExhausted(guesses: number): boolean {
         return (
-            undefined !== this.options.maxGuessesFactor &&
-            guesses >= this.options.maxGuessesFactor * this.players.length
+            undefined !== this.options.maxAttempts &&
+            guesses >= Math.ceil(this.options.maxAttempts / this.players.length)
         );
     }
 
@@ -464,7 +475,7 @@ export class Game {
             this.channel.send(
                 `<@${currentPlayer}> took to long to answer! <@${
                     this.players[this.playerIndex]
-                }> is up next.`,
+                }> is up next.` + this.remainingGuessesAsString(),
             );
         } else {
             this.outOfGuesses();
