@@ -8,19 +8,28 @@ import {
 import { CharResult, RenderParameters, Renderer, resolve } from "./interfaces";
 
 export class Basic implements Renderer {
-    private static readonly fontAlias = "customFont";
-    private readonly font?: string;
+    private readonly fontAlias?: string;
     private readonly logger = new Logger();
 
-    constructor() {
-        const fontDir = "./fonts/NotoSansTC-Regular.otf";
-        if (undefined !== fontDir) {
+    constructor(fontPath?: string) {
+        if (undefined !== fontPath) {
+            let fontFamily = fontPath;
+            const lastSlashIndex = fontPath.lastIndexOf("/");
+            if (-1 !== lastSlashIndex) {
+                fontFamily = fontPath.substring(lastSlashIndex + 1);
+            }
+            const lastDot = fontFamily.lastIndexOf(".");
+            if (-1 !== lastDot) {
+                fontFamily = fontFamily.substring(0, lastDot);
+            }
             this.logger.info(
-                "Trying to register custom font specified in .env:",
-                fontDir,
+                "Trying to register custom font",
+                fontPath,
+                "as font family",
+                fontFamily,
             );
-            registerFont(fontDir, { family: Basic.fontAlias });
-            this.font = Basic.fontAlias;
+            registerFont(fontPath, { family: fontFamily });
+            this.fontAlias = fontFamily;
         }
     }
 
@@ -31,7 +40,7 @@ export class Basic implements Renderer {
             const backgroundColor = resolve(result.result, params.colors);
             images.push(
                 new UltimateTextToImage(result.character, {
-                    fontFamily: this.font,
+                    fontFamily: this.fontAlias,
                     valign: "bottom",
                     align: "center",
                     marginBottom: params.dimensions.marginBottom,

@@ -6,6 +6,7 @@ import { CommandParser } from "./commands";
 import { Game } from "./game";
 import { State } from "./interfaces";
 import { ListManager } from "./list_manager";
+import { Basic as Renderer } from "./renderer";
 
 readEnv();
 
@@ -16,9 +17,11 @@ class Bot {
     private readonly activeGames = new Map<Snowflake, Game>();
     private readonly listManager: ListManager = new ListManager();
     private readonly commandParser = new CommandParser();
+    private readonly renderer: Renderer;
 
-    constructor(client: Client) {
+    constructor(client: Client, font?: string) {
         this.client = client;
+        this.renderer = new Renderer(font);
     }
 
     start(token: string | undefined) {
@@ -49,6 +52,7 @@ class Bot {
                         channel,
                         this.commandParser,
                         this.listManager,
+                        this.renderer,
                     ),
                 );
                 channel.send(
@@ -91,6 +95,6 @@ const client = new Client({
     intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
 });
 
-const bot = new Bot(client);
+const bot = new Bot(client, process.env.FONT);
 
 bot.start(process.env.DISCORD_TOKEN);

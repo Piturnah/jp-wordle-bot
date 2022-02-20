@@ -27,7 +27,7 @@ export class Game {
     private readonly listManager: ListManager;
     private readonly channel: TextChannel;
     private readonly commandParser: CommandParser;
-    private readonly renderer = new Renderer();
+    private readonly renderer;
     private readonly logger = new Logger();
 
     private options = new Options();
@@ -48,6 +48,7 @@ export class Game {
         channel: TextChannel,
         commandParser: CommandParser,
         listManager: ListManager,
+        renderer: Renderer,
     ) {
         this.state = State.Setup;
         this.channel = channel;
@@ -56,6 +57,8 @@ export class Game {
         this.players = [this.createdPlayer];
 
         this.listManager = listManager;
+
+        this.renderer = renderer;
 
         this.setupListeners(commandParser);
         this.startTimer(TimerUsecase.Lobby);
