@@ -15,7 +15,7 @@ export class Options {
     // TODO: This value is currently not used.
     maxRounds? = 0;
     wordLength?: number;
-    maxAttempts? = 12;
+    maxAttempts = 12;
     language = "en";
     listIdentifier?: ListIdentifier;
 }
@@ -140,6 +140,7 @@ export class Game {
         list: string,
     ): void {
         if (State.Setup === this.state && this.owner === player) {
+            this.startTimer(TimerUsecase.Lobby);
             // First, check if there actually is at least a single word for this list by querying it..
             const listIdent = new ListIdentifier(language, list);
             if (
@@ -168,6 +169,7 @@ export class Game {
 
     private printCurrentListInfo(): void {
         if (State.Setup === this.state) {
+            this.startTimer(TimerUsecase.Lobby);
             let message = "Currently, no specific list is selected.";
             if (undefined !== this.options.listIdentifier) {
                 message = `Currently, words are chosen from list \`${this.options.listIdentifier.getUserString()}\`.`;
@@ -377,7 +379,6 @@ export class Game {
 
     private guessesExhausted(guesses: number): boolean {
         return (
-            undefined !== this.options.maxAttempts &&
             guesses >= Math.ceil(this.options.maxAttempts / this.players.length)
         );
     }
@@ -475,7 +476,7 @@ export class Game {
 
     private lobbyTimedOut() {
         this.channel.send(
-            "Game has been cancelled due to inactivity.. Restart at any time with '!start.'.",
+            "Game has been cancelled due to inactivity.. Restart at any time with `!wordle`.",
         );
         this.cleanUp();
     }
