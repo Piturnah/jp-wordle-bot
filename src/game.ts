@@ -305,12 +305,15 @@ export class Game {
                 // and then check if the index of the current occurence in the guess already
                 // exceeds the total amount of occurenes in the actual word, and if yes,
                 // also treat this occurence as wrong.
-                const numberOfOccurencesInWord = Game.indicesWith(
-                    word,
-                    guessedCharacter,
-                ).length;
+                const numberOfOccurencesInWordWithoutExactMatches =
+                    Game.indicesWith(word, guessedCharacter).filter(
+                        (index) => guessedCharacter !== guess.charAt(index),
+                    ).length;
                 const guessIndices = Game.indicesWith(guess, guessedCharacter);
-                if (guessIndices.indexOf(i) < numberOfOccurencesInWord) {
+                if (
+                    guessIndices.indexOf(i) <
+                    numberOfOccurencesInWordWithoutExactMatches
+                ) {
                     result[i] = {
                         character: guessedCharacter,
                         result: Result.Moved,
