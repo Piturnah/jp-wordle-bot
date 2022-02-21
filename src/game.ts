@@ -10,6 +10,7 @@ import { SettingsDb } from "./settings_db";
 export class Options {
     checkWords = false;
     turnTimeout = 25000;
+    maxTurnTimeouts = 3;
     lobbyTimeout = 60000;
     multiRound = false;
     // TODO: This value is currently not used.
@@ -43,6 +44,8 @@ export class Game {
     private playerIndex = 0;
     private currentTimeout: undefined | ReturnType<typeof setTimeout> =
         undefined;
+
+    private registeredTimeouts = 0;
 
     private word?: string = undefined;
 
@@ -327,9 +330,8 @@ export class Game {
                 this.channel.send(
                     `Hmmm... I do not know "${guess}". Please try another word..`,
                 );
-            }
-            // this should never happen, but ESLint forces us into the undefined check
-            else {
+            } else {
+                this.registeredTimeouts = 0;
                 const result = Game.generateResult(this.word, guess);
                 if (
                     result.every(
@@ -375,11 +377,9 @@ export class Game {
     }
 
     private remainingGuessesAsString(): string {
-        return undefined !== this.options.maxAttempts
-            ? ` ${
-                  this.options.maxAttempts - (this.guessCount - 1)
-              } guess(es) remaining.`
-            : "";
+        return ` ${
+            this.options.maxAttempts - (this.guessCount - 1)
+        } guess(es) remaining.`;
     }
 
     private outOfGuesses(): void {
@@ -504,17 +504,36 @@ export class Game {
         this.commandParser.removeAllForChannel(this.channel.id);
     }
 
+    private allowedTimeouts(): number {
+        return Math.max(this.players.length, this.options.maxTurnTimeouts);
+    }
+
     private playerTimedOut() {
-        const currentPlayer = this.players[this.playerIndex];
-        if (!this.guessesExhausted(this.guessCount++)) {
-            this.updatePlayerIndex();
-            this.channel.send(
-                `<@${currentPlayer}> took too long to answer! <@${
-                    this.players[this.playerIndex]
-                }> is up next.` + this.remainingGuessesAsString(),
-            );
+        if (++this.registeredTimeouts <= this.allowedTimeouts()) {
+            const currentPlayer = this.players[this.playerIndex];
+            if (!this.guessesExhausted(this.guessCount++)) {
+                this.updatePlayerIndex();
+                if (this.players.length > 1) {
+                    this.channel.send(
+                        `<@${currentPlayer}> took too long to answer! <@${
+                            this.players[this.playerIndex]
+                        }> is up next.` + this.remainingGuessesAsString(),
+                    );
+                } else {
+                    this.channel.send(
+                        `You took too long to answer!` +
+                            this.remainingGuessesAsString(),
+                    );
+                }
+            } else {
+                this.outOfGuesses();
+            }
         } else {
-            this.outOfGuesses();
+            this.feedback(
+                Game.generateResult(this.word ?? "", this.word ?? ""),
+                "Too many timeouts. The session will be aborted. This would have been the correct word. You can always start a new session with `!wordle`.",
+            );
+            this.cleanUp();
         }
     }
 }
