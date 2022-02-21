@@ -1,3 +1,4 @@
+import { MessageAttachment } from "discord.js";
 import { Logger } from "tslog";
 import {
     HorizontalImage,
@@ -33,7 +34,11 @@ export class Basic implements Renderer {
         }
     }
 
-    render(guessResult: CharResult[], parameters?: RenderParameters): Buffer {
+    render(
+        guessResult: CharResult[],
+        fileName?: string,
+        parameters?: RenderParameters,
+    ): MessageAttachment {
         const params = parameters || new RenderParameters();
         const images: UltimateTextToImage[] = [];
         guessResult.forEach((result) => {
@@ -54,11 +59,14 @@ export class Basic implements Renderer {
                 }),
             );
         });
-        return new HorizontalImage(images, {
-            valign: "middle",
-            margin: 0,
-        })
-            .render()
-            .toBuffer();
+        return new MessageAttachment(
+            new HorizontalImage(images, {
+                valign: "middle",
+                margin: 0,
+            })
+                .render()
+                .toBuffer(),
+            fileName ?? "result.jpg",
+        );
     }
 }

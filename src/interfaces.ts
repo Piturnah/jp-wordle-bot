@@ -1,3 +1,5 @@
+import { MessageAttachment } from "discord.js";
+
 export interface CharResult {
     character: string;
     result: Result;
@@ -65,5 +67,9 @@ export function resolve(result: Result, colors: Colors): string {
 }
 
 export interface Renderer {
-    render(guessResult: CharResult[], parameters?: RenderParameters): Buffer;
+    render(
+        guessResult: CharResult[],
+        fileName?: string,
+        parameters?: RenderParameters,
+    ): MessageAttachment;
 }

@@ -58,9 +58,6 @@ class Bot {
                         this.globalSettingsDb,
                     ),
                 );
-                channel.send(
-                    `<@${player}> is starting a new game! Type \`!join\` to join, and type \`!start\` to start! For information on which word list is currently being used, try to type \`!list\`.`,
-                );
             } else {
                 this.logger.error(
                     "Could not find channel for snowflake",
