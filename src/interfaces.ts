@@ -24,22 +24,16 @@ export interface Colors {
 }
 
 export interface RenderDimensions {
-    imageSize: number;
-    marginBottom: number;
     fontSize: number;
     borderSize: number;
 }
 
 export class Small implements RenderDimensions {
-    imageSize = 50;
-    marginBottom = 12;
     fontSize = 40;
     borderSize = 1;
 }
 export class Default implements RenderDimensions {
-    imageSize = 200;
-    marginBottom = 28;
-    fontSize = 180;
+    fontSize = 168;
     borderSize = 2;
 }
 

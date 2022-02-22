@@ -41,22 +41,68 @@ export class Basic implements Renderer {
     ): MessageAttachment {
         const params = parameters || new RenderParameters();
         const images: UltimateTextToImage[] = [];
+
+        const fullString = guessResult
+            .map((result) => result.character)
+            .reduce((nextChar, currentWord) => currentWord + nextChar);
         guessResult.forEach((result) => {
+            // Explanation
+            //
+            // This is an ugly trick to get individual images
+            // that are still aligned correctly vertically
+            // with regards to the entire word.
+            //
+            // First, we render the character on its on,
+            // then we render the character + the entire original string
+            // shifted so far to the right that it is not contained in the image.
+            // We use the the fake image to determine the rendered width of
+            // the character we actually want to print, and that in turn to
+            // make-shift "center" the character in our final character image.
+            const fakeImage = new UltimateTextToImage(
+                " " != result.character ? result.character : "G",
+                {
+                    noAutoWrap: true,
+                    fontFamily: this.fontAlias,
+                    valign: "middle",
+                    align: "center",
+                    fontSize: params.dimensions.fontSize,
+                },
+            );
+
+            fakeImage.render();
+
+            const fakeWord = new UltimateTextToImage("gGyY" + fullString, {
+                noAutoWrap: true,
+                fontFamily: this.fontAlias,
+                valign: "middle",
+                align: "center",
+                fontSize: params.dimensions.fontSize,
+            });
+
+            fakeWord.render();
+
             const backgroundColor = resolve(result.result, params.colors);
             images.push(
-                new UltimateTextToImage(result.character, {
-                    fontFamily: this.fontAlias,
-                    valign: "bottom",
-                    align: "center",
-                    marginBottom: params.dimensions.marginBottom,
-                    width: params.dimensions.imageSize,
-                    height: params.dimensions.imageSize,
-                    backgroundColor: backgroundColor,
-                    fontColor: "#000000",
-                    fontSize: params.dimensions.fontSize,
-                    borderSize: params.dimensions.borderSize,
-                    borderColor: "#000000",
-                }),
+                new UltimateTextToImage(
+                    result.character + "      gGyY" + fullString,
+                    {
+                        noAutoWrap: true,
+                        fontFamily: this.fontAlias,
+                        valign: "middle",
+                        align: "left",
+                        marginLeft: Math.floor(
+                            (fakeWord.height * 1.4 - fakeImage.width) / 2,
+                        ),
+                        marginTop: Math.floor(fakeWord.height * 0.25),
+                        marginBottom: Math.floor(fakeWord.height * 0.15),
+                        width: Math.floor(fakeWord.height * 1.4),
+                        backgroundColor: backgroundColor,
+                        fontColor: "#000000",
+                        fontSize: params.dimensions.fontSize,
+                        borderSize: params.dimensions.borderSize,
+                        borderColor: "#000000",
+                    },
+                ),
             );
         });
         return new MessageAttachment(
