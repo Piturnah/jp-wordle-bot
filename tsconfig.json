@@ -8,6 +8,7 @@
         "outDir": "dist",
         "removeComments": true,
         "downlevelIteration": true,
+        "resolveJsonModule": true,
         "lib": ["ES2021.String"]
     },
     "include": ["src/**/*.ts"],

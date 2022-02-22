@@ -1,5 +1,4 @@
 import {
-    bold,
     codeBlock,
     inlineCode,
     italic,
@@ -16,6 +15,7 @@ import {
 } from "discord.js";
 import { Logger } from "tslog";
 
+import { version } from "../package.json";
 import { CommandParser } from "./commands";
 import { CharResult, Result, State } from "./interfaces";
 import { ListIdentifier, ListManager } from "./list_manager";
@@ -74,7 +74,7 @@ export class Game {
     private readonly channel: TextChannel;
     private readonly commandParser: CommandParser;
     private readonly renderer;
-    private readonly logger = new Logger();
+    private readonly logger: Logger;
     private readonly logo: MessageAttachment;
 
     private options = new Options();
@@ -93,6 +93,7 @@ export class Game {
     private word?: string = undefined;
 
     constructor(
+        logger: Logger,
         player: Snowflake,
         channel: TextChannel,
         commandParser: CommandParser,
@@ -100,6 +101,7 @@ export class Game {
         renderer: Renderer,
         settingsDb: SettingsDb,
     ) {
+        this.logger = logger;
         this.state = State.Setup;
         this.channel = channel;
         this.commandParser = commandParser;
@@ -490,7 +492,7 @@ export class Game {
                 }. Type ${inlineCode("!list")} to find out more.`,
             )
             .setFooter({
-                text: `We are happy to hear your thoughts and feedback. Please refer to the bot's profile to learn more.`,
+                text: `We are happy to hear your thoughts and feedback. Please refer to the bot's profile to learn more. Version: ${version}.`,
             });
     }
 

@@ -72,7 +72,7 @@ function addIfNotPresent<Key, Value>(
     return presentValue;
 }
 export class ListManager {
-    private readonly logger = new Logger();
+    private readonly logger: Logger;
     private settings: Settings;
     private allWords: Map<Language, Set<Word>> = new Map();
     private lists: Map<
@@ -81,7 +81,8 @@ export class ListManager {
     > = new Map();
     private defaultsPerLanguage: Map<Language, List> = new Map();
 
-    constructor(settings: Settings = new Settings()) {
+    constructor(logger: Logger, settings: Settings = new Settings()) {
+        this.logger = logger;
         this.settings = settings;
     }
 

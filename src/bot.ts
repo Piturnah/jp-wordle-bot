@@ -1,7 +1,7 @@
 import { Client, Intents, Message, Snowflake, TextChannel } from "discord.js";
-import { config as readEnv } from "dotenv";
 import { Logger } from "tslog";
 
+import { debug, font, token } from "../config.json";
 import { CommandParser } from "./commands";
 import { Game } from "./game";
 import { State } from "./interfaces";
@@ -9,24 +9,32 @@ import { ListManager } from "./list_manager";
 import { Basic as Renderer } from "./renderer";
 import { SettingsDb } from "./settings_db";
 
-readEnv();
-
 class Bot {
     private readonly client: Client;
     private readonly logger = new Logger();
     private readonly globalSettingsDb = new SettingsDb();
 
     private readonly activeGames = new Map<Snowflake, Game>();
-    private readonly listManager: ListManager = new ListManager();
-    private readonly commandParser = new CommandParser();
+    private readonly listManager: ListManager = new ListManager(
+        this.logger.getChildLogger(),
+    );
+    private readonly commandParser = new CommandParser(
+        this.logger.getChildLogger(),
+    );
     private readonly renderer: Renderer;
 
-    constructor(client: Client, font?: string) {
+    constructor(client: Client, debug = false, font?: string) {
+        this.logger.info("Debug mode is ", debug ? "ON" : "OFF", ".");
+        if (debug) {
+            this.logger.setSettings({ minLevel: "trace" });
+        } else {
+            this.logger.setSettings({ minLevel: "info" });
+        }
         this.client = client;
         this.renderer = new Renderer(font);
     }
 
-    start(token: string | undefined) {
+    start(token: string) {
         this.logger.info("Starting..");
         this.listManager.load();
 
@@ -39,6 +47,7 @@ class Bot {
         client.on("messageCreate", (message: Message) =>
             this.messageCreate(message),
         );
+
         client.login(token);
     }
 
@@ -50,6 +59,7 @@ class Bot {
                 this.activeGames.set(
                     channelId,
                     new Game(
+                        this.logger.getChildLogger(),
                         player,
                         channel,
                         this.commandParser,
@@ -95,6 +105,6 @@ const client = new Client({
     intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
 });
 
-const bot = new Bot(client, process.env.FONT);
+const bot = new Bot(client, debug, font ?? undefined);
 
-bot.start(process.env.DISCORD_TOKEN);
+bot.start(token);

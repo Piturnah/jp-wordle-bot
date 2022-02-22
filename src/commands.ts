@@ -13,10 +13,14 @@ interface Command {
 }
 
 export class CommandParser {
+    private readonly logger: Logger;
     private readonly globalCommands: Command[] = [];
     private readonly perChannelCommands: Map<Snowflake, Command[]> = new Map();
-    private readonly logger = new Logger();
     private thisId?: Snowflake;
+
+    constructor(logger: Logger) {
+        this.logger = logger;
+    }
 
     setThisId(id: Snowflake) {
         this.thisId = id;
