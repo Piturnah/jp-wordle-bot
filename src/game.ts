@@ -332,6 +332,7 @@ export class Game {
                     `${userMention(
                         player,
                     )} has aborted the round early! This would have bee the correct word. Dropping you back into the lobby..`,
+                    false,
                 ).then(() => {
                     return this.dropBackToLobby();
                 });
@@ -599,17 +600,19 @@ export class Game {
     private feedback(
         result: CharResult[],
         customText: string,
+        withAttemptsLeft = true,
     ): Promise<Message> {
         const attachment = this.renderer.render(result, "result.png");
-        return this.sendEmbed(
-            new MessageEmbed()
-                .setColor(Game.colors.normal)
-                .setAuthor({ name: "Wordle" })
-                .setDescription(customText)
-                .setImage("attachment://result.png")
-                .setFooter(this.createAttemptsLeftFooter()),
-            attachment,
-        );
+        const embed = new MessageEmbed()
+            .setColor(Game.colors.normal)
+            .setAuthor({ name: "Wordle" })
+            .setDescription(customText)
+            .setImage("attachment://result.png");
+        if (withAttemptsLeft) {
+            embed.setFooter(this.createAttemptsLeftFooter());
+        }
+
+        return this.sendEmbed(embed, attachment);
     }
 
     private createAttemptsLeftFooter(): EmbedFooterData {
@@ -645,6 +648,7 @@ export class Game {
                 );
             } else {
                 this.registeredTimeouts = 0;
+                this.guessCount++;
                 const result = Game.generateResult(this.word.word, guess);
                 if (
                     result.every(
@@ -656,11 +660,12 @@ export class Game {
                         `Wow, ${userMention(
                             player,
                         )} got it right! Dropping you back to the lobby..`,
+                        false,
                     ).then(() => {
                         this.dropBackToLobby();
                     });
                 } else {
-                    if (!this.guessesExhausted(this.guessCount++)) {
+                    if (!this.guessesExhausted()) {
                         this.updatePlayerIndex();
                         if (this.players.length > 1) {
                             this.feedback(
@@ -691,7 +696,8 @@ export class Game {
         if (undefined !== this.word) {
             this.feedback(
                 Game.generateResult(this.word.word, this.word.word),
-                `... out of guesses! This was the correct word. Dropping you back into the lobby..`,
+                `Out of guesses! This was the correct word. Dropping you back into the lobby.`,
+                false,
             ).then(() => {
                 return this.dropBackToLobby();
             });
@@ -700,10 +706,8 @@ export class Game {
         }
     }
 
-    private guessesExhausted(guesses: number): boolean {
-        return (
-            guesses >= Math.ceil(this.options.maxAttempts / this.players.length)
-        );
+    private guessesExhausted(): boolean {
+        return 0 >= this.options.maxAttempts - this.guessCount;
     }
 
     private dropBackToLobby(): void {
@@ -826,7 +830,8 @@ export class Game {
     private playerTimedOut() {
         if (++this.registeredTimeouts <= this.allowedTimeouts()) {
             const currentPlayer = this.players[this.playerIndex];
-            if (!this.guessesExhausted(this.guessCount++)) {
+            this.guessCount++;
+            if (!this.guessesExhausted()) {
                 this.updatePlayerIndex();
                 if (this.players.length > 1) {
                     this.sendEmbed(
@@ -858,6 +863,7 @@ export class Game {
             this.feedback(
                 Game.generateResult(this.word.word, this.word.word),
                 `Too many consecutive timeouts. You will be returned to the lobby. This would have been the correct word:`,
+                false,
             ).then(() => {
                 this.dropBackToLobby();
             });
