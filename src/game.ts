@@ -191,6 +191,15 @@ export class Game {
 
         commandParser.registerChannelListener(
             this.channel.id,
+            /!abort/,
+            (_channel, player) => {
+                this.abort(player);
+                return true;
+            },
+        );
+
+        commandParser.registerChannelListener(
+            this.channel.id,
             /!start/,
             (_channel, player) => {
                 this.start(player);
@@ -311,6 +320,23 @@ export class Game {
                         listIdent.getUserString(),
                     )} is not a registered list or it has no suitable words.`,
                 );
+            }
+        }
+    }
+
+    private abort(player: Snowflake) {
+        if (State.Running === this.state && this.owner === player) {
+            if (undefined !== this.word) {
+                this.feedback(
+                    Game.generateResult(this.word.word, this.word.word),
+                    `${userMention(
+                        player,
+                    )} has aborted the round early! This would have bee the correct word. Dropping you back into the lobby..`,
+                ).then(() => {
+                    return this.dropBackToLobby();
+                });
+            } else {
+                this.dropBackToLobby();
             }
         }
     }
@@ -590,7 +616,11 @@ export class Game {
         return {
             text: `${
                 this.options.maxAttempts - this.guessCount
-            } attempts left. You may ${inlineCode("!leave")} at any time.`,
+            } attempts left. You may ${inlineCode(
+                "!leave",
+            )} at any time. The owner can also ${inlineCode(
+                "!abort",
+            )} the round early and return to the lobby.`,
         };
     }
 
