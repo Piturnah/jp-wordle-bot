@@ -18,7 +18,12 @@ import { Logger } from "tslog";
 import { version } from "../package.json";
 import { CommandParser } from "./commands";
 import { CharResult, Result, State } from "./interfaces";
-import { ListIdentifier, ListManager } from "./list_manager";
+import {
+    ListIdentifier,
+    ListManager,
+    WordWithDetails,
+    WordsLength,
+} from "./list_manager";
 import { Basic as Renderer } from "./renderer";
 import { SettingsDb } from "./settings_db";
 
@@ -28,12 +33,10 @@ export class Options {
     maxTurnTimeouts = 3;
     lobbyTimeout = 60000;
     multiRound = false;
-    // TODO: This value is currently not used.
-    maxRounds? = 0;
-    wordLength?: number;
     maxAttempts = 12;
     language = "en";
     listIdentifier?: ListIdentifier;
+    wordsLength: WordsLength = new WordsLength(4, 6);
 }
 
 class EmbedColors {
@@ -90,7 +93,7 @@ export class Game {
 
     private registeredTimeouts = 0;
 
-    private word?: string = undefined;
+    private word?: WordWithDetails = undefined;
 
     constructor(
         logger: Logger,
@@ -217,6 +220,64 @@ export class Game {
                 return State.Setup === this.state;
             },
         );
+        commandParser.registerChannelListener(
+            this.channel.id,
+            /!length (?<min>[1-9]\d*)( (?<max>[1-9]\d*))?/,
+            (_channel, player, input) => {
+                this.setWordLength(
+                    player,
+                    parseInt(input[0]),
+                    parseInt(
+                        undefined !== input[1] ? input[1].trim() : input[0],
+                    ),
+                );
+                return State.Setup === this.state;
+            },
+        );
+    }
+
+    private setWordLength(player: Snowflake, min: number, max: number) {
+        if (State.Setup === this.state && player === this.owner) {
+            this.startTimer(TimerUsecase.Lobby);
+            if (undefined !== this.options.listIdentifier) {
+                if (min > max) {
+                    // fancy trick to swap the values without temporary
+                    max = [min, (min = max)][0];
+                }
+                const wordsLength = new WordsLength(min, max);
+                if (
+                    undefined !==
+                    this.listManager.randomWord(
+                        this.options.listIdentifier,
+                        wordsLength,
+                    )
+                ) {
+                    this.options.wordsLength = wordsLength;
+                    this.storeSettings();
+                    this.sendMessage(
+                        MessageType.success,
+                        "Changed",
+                        `Now using words with ${wordsLength.pretty()} from ${inlineCode(
+                            this.options.listIdentifier.getUserString(),
+                        )}.`,
+                    );
+                } else {
+                    this.sendMessage(
+                        MessageType.warning,
+                        "No words",
+                        `There are no words with ${wordsLength.pretty()} in ${inlineCode(
+                            this.options.listIdentifier.getUserString(),
+                        )}. Consider switching to another list or specifying a different length.`,
+                    );
+                }
+            } else {
+                this.sendMessage(
+                    MessageType.warning,
+                    "No list",
+                    "Currently, no list is selected. Consider seleting a list first.",
+                );
+            }
+        }
     }
 
     private switchToList(
@@ -230,7 +291,7 @@ export class Game {
             const listIdent = new ListIdentifier(language, list);
             if (
                 undefined !==
-                this.listManager.randomWord(listIdent, this.options.wordLength)
+                this.listManager.randomWord(listIdent, this.options.wordsLength)
             ) {
                 this.options.listIdentifier = listIdent;
                 this.options.language = listIdent.language;
@@ -265,7 +326,7 @@ export class Game {
             const message =
                 undefined === this.options.listIdentifier
                     ? "Currently, no specific list is selected."
-                    : `Currently, words are chosen at random from ${inlineCode(
+                    : `Currently, words with ${this.options.wordsLength.pretty()} are chosen at random from ${inlineCode(
                           this.options.listIdentifier.getUserString(),
                       )}.`;
 
@@ -275,12 +336,23 @@ export class Game {
                     .setTitle("Words")
                     .setDescription(message)
                     .addField(
-                        "Switching",
+                        "Changing lists",
                         `Use ${inlineCode(
-                            "list! <language>/<list>",
+                            "!list <language>/<list>",
                         )} to switch to another list.`,
                     )
-                    .addField("Lists", this.listInfo(), true),
+                    .addField(
+                        "Changing character count",
+                        `Use ${inlineCode(
+                            "!length <length>",
+                        )} to set a specific word length.\nUse ${inlineCode(
+                            "!length <min> <max>",
+                        )} to set a range of word lengths.`,
+                    )
+                    .addField("Lists", this.listInfo(), true)
+                    .setFooter({
+                        text: "Want to see other languages and/or lists? Feel free to reach out and we can work together to provide more lists. See the bot's description for details.",
+                    }),
             );
             this.startTimer(TimerUsecase.Lobby);
         }
@@ -417,7 +489,7 @@ export class Game {
                 } else {
                     this.word = this.listManager.randomWord(
                         this.options.listIdentifier,
-                        this.options.wordLength,
+                        this.options.wordsLength,
                     );
 
                     if (undefined !== this.word) {
@@ -432,7 +504,9 @@ export class Game {
 
                         this.updatePlayerIndex(this.playerIndex);
 
-                        const emptyArray = new Array(this.word.length).fill({
+                        const emptyArray = new Array(
+                            this.word.word.length,
+                        ).fill({
                             character: " ",
                             result: Result.Wrong,
                         });
@@ -446,7 +520,7 @@ export class Game {
                     } else {
                         this.logger.error(
                             "Could not get word with length",
-                            this.options.wordLength,
+                            this.options.wordsLength,
                             "from list",
                             this.options.listIdentifier.getUserString(),
                         );
@@ -483,13 +557,13 @@ export class Game {
             )
             .addField(
                 "Words",
-                `The bot uses different word lists to generate random words for you to play with. The current list is ${
+                `The bot uses different word lists to generate random words for you to play with.${
                     this.options.listIdentifier
-                        ? inlineCode(
+                        ? ` Currently, words with ${this.options.wordsLength.pretty()} from list ${inlineCode(
                               this.options.listIdentifier.getUserString(),
-                          )
-                        : "not selected"
-                }. Type ${inlineCode("!list")} to find out more.`,
+                          )} are being used.`
+                        : " Currently, no list is selected."
+                } Type ${inlineCode("!list")} to find out more.`,
             )
             .setFooter({
                 text: `We are happy to hear your thoughts and feedback. Please refer to the bot's profile to learn more. Version: ${version}.`,
@@ -528,7 +602,7 @@ export class Game {
         if (undefined !== this.word) {
             if (player !== this.players[this.playerIndex]) {
                 // For now, do nothing here.
-            } else if (guess.length !== this.word.length) {
+            } else if (guess.length !== this.word.word.length) {
                 // For now, do nothing here.
             } else if (
                 this.options.checkWords &&
@@ -541,7 +615,7 @@ export class Game {
                 );
             } else {
                 this.registeredTimeouts = 0;
-                const result = Game.generateResult(this.word, guess);
+                const result = Game.generateResult(this.word.word, guess);
                 if (
                     result.every(
                         (charResult) => Result.Correct === charResult.result,
@@ -586,7 +660,7 @@ export class Game {
     private outOfGuesses(): void {
         if (undefined !== this.word) {
             this.feedback(
-                Game.generateResult(this.word, this.word),
+                Game.generateResult(this.word.word, this.word.word),
                 `... out of guesses! This was the correct word. Dropping you back into the lobby..`,
             ).then(() => {
                 return this.dropBackToLobby();
@@ -750,9 +824,9 @@ export class Game {
             } else {
                 this.outOfGuesses();
             }
-        } else {
+        } else if (undefined !== this.word) {
             this.feedback(
-                Game.generateResult(this.word ?? "", this.word ?? ""),
+                Game.generateResult(this.word.word, this.word.word),
                 `Too many consecutive timeouts. You will be returned to the lobby. This would have been the correct word:`,
             ).then(() => {
                 this.dropBackToLobby();

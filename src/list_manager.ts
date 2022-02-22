@@ -1,3 +1,4 @@
+import { bold } from "@discordjs/builders";
 import * as fs from "fs";
 import { Logger } from "tslog";
 
@@ -13,6 +14,26 @@ export class DebugMode extends Settings {
     debug = true;
 }
 
+export class WordsLength {
+    min = 4;
+    max = 5;
+
+    constructor(min: number, max: number) {
+        this.min = min;
+        this.max = max;
+    }
+
+    pretty(): string {
+        return bold(
+            `${
+                this.min === this.max
+                    ? `${this.min}`
+                    : `${this.min}-${this.max}`
+            } characters`,
+        );
+    }
+}
+
 export interface Meaning {
     language: string;
     definitions: string[];
@@ -20,6 +41,11 @@ export interface Meaning {
 export interface AdditionalInfo {
     alternateSpelling?: string;
     meaning?: Meaning;
+}
+
+export interface WordWithDetails {
+    word: Word;
+    details?: AdditionalInfo;
 }
 
 export type Language = string;
@@ -256,30 +282,37 @@ export class ListManager {
 
     randomWord(
         listIdent: ListIdentifier,
-        length?: WordLength,
-    ): Word | undefined {
+        length: WordsLength,
+    ): WordWithDetails | undefined {
         const listsForLanguage = this.lists.get(listIdent.language);
         if (undefined !== listsForLanguage) {
             const list = listsForLanguage.get(listIdent.list);
             if (undefined !== list) {
-                if (undefined === length) {
-                    const availableLengths: number[] = Array.from(list.keys())
-                        .map((length) =>
-                            new Array(
-                                (list.get(length) ?? new Map()).size ?? 0,
-                            ).fill(length),
-                        )
-                        .flat();
-                    length =
-                        availableLengths[
-                            Math.floor(Math.random() * availableLengths.length)
-                        ];
+                // TODO: Potential performance issue, as we create a pretty big array every time..
+                const wordsWithRequiredLength: WordWithDetails[] = [];
+
+                for (let len = length.min; len <= length.max; ++len) {
+                    const words = list.get(len);
+                    if (undefined !== words) {
+                        wordsWithRequiredLength.push(
+                            ...[...words.entries()].map(
+                                (entry): WordWithDetails => {
+                                    return {
+                                        word: entry[0],
+                                        details: entry[1],
+                                    };
+                                },
+                            ),
+                        );
+                    }
                 }
-                const wordsWithRequiredLength = list.get(length);
-                if (undefined !== wordsWithRequiredLength) {
-                    // TODO: Potential performance issue, as we create a pretty big array every time..
-                    const words = Array.from(wordsWithRequiredLength.keys());
-                    return words[Math.floor(Math.random() * words.length)];
+
+                if (0 < wordsWithRequiredLength.length) {
+                    return wordsWithRequiredLength[
+                        Math.floor(
+                            Math.random() * wordsWithRequiredLength.length,
+                        )
+                    ];
                 }
             }
         }
