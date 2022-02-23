@@ -27,12 +27,11 @@ import {
 import { Basic as Renderer } from "./renderer";
 import { SettingsDb } from "./settings_db";
 
+const MAX_INACTIVE_TIME = 90000;
+
 export class Options {
     checkWords = false;
-    turnTimeout = 25000;
-    maxTurnTimeouts = 3;
-    lobbyTimeout = 60000;
-    multiRound = false;
+    turnTimeout = 45000;
     maxAttempts = 12;
     language = "en";
     listIdentifier?: ListIdentifier;
@@ -64,11 +63,6 @@ enum MessageType {
     success,
 }
 
-enum TimerUsecase {
-    Turn,
-    Lobby,
-}
-
 export class Game {
     private static readonly colors = new EmbedColors();
 
@@ -88,10 +82,8 @@ export class Game {
     private players: Snowflake[];
     private owner: Snowflake;
     private playerIndex = 0;
-    private currentTimeout: undefined | ReturnType<typeof setTimeout> =
-        undefined;
-
-    private registeredTimeouts = 0;
+    private inactiveTimeout: ReturnType<typeof setTimeout>;
+    private turnTimeout?: ReturnType<typeof setTimeout> = undefined;
 
     private word?: WordWithDetails = undefined;
 
@@ -135,7 +127,10 @@ export class Game {
 
         this.sendEmbed(this.lobbyText());
 
-        this.startTimer(TimerUsecase.Lobby);
+        this.inactiveTimeout = setTimeout(
+            () => this.cancelDueToInactivity(),
+            MAX_INACTIVE_TIME,
+        );
     }
 
     private generateLogo(): MessageAttachment {
@@ -247,7 +242,6 @@ export class Game {
 
     private setWordLength(player: Snowflake, min: number, max: number) {
         if (State.Setup === this.state && player === this.owner) {
-            this.startTimer(TimerUsecase.Lobby);
             if (undefined !== this.options.listIdentifier) {
                 if (min > max) {
                     // fancy trick to swap the values without temporary
@@ -286,6 +280,7 @@ export class Game {
                     "Currently, no list is selected. Consider seleting a list first.",
                 );
             }
+            this.resetInactivityTimer();
         }
     }
 
@@ -295,7 +290,6 @@ export class Game {
         list: string,
     ): void {
         if (State.Setup === this.state && this.owner === player) {
-            this.startTimer(TimerUsecase.Lobby);
             // First, check if there actually is at least a single word for this list by querying it..
             const listIdent = new ListIdentifier(language, list);
             if (
@@ -321,6 +315,7 @@ export class Game {
                     )} is not a registered list or it has no suitable words.`,
                 );
             }
+            this.resetInactivityTimer();
         }
     }
 
@@ -328,7 +323,7 @@ export class Game {
         if (State.Running === this.state && this.owner === player) {
             if (undefined !== this.word) {
                 this.feedback(
-                    Game.generateResult(this.word.word, this.word.word),
+                    generateResult(this.word.word, this.word.word),
                     `${userMention(
                         player,
                     )} has aborted the round early! This would have bee the correct word. Dropping you back into the lobby..`,
@@ -339,6 +334,7 @@ export class Game {
             } else {
                 this.dropBackToLobby();
             }
+            this.resetInactivityTimer();
         }
     }
 
@@ -381,7 +377,7 @@ export class Game {
                         text: "Want to see other languages and/or lists? Feel free to reach out and we can work together to provide more lists. See the bot's description for details.",
                     }),
             );
-            this.startTimer(TimerUsecase.Lobby);
+            this.resetInactivityTimer();
         }
     }
 
@@ -413,7 +409,7 @@ export class Game {
                     "Joined",
                     `${userMention(player)} has joined the game.`,
                 );
-                this.startTimer(TimerUsecase.Lobby);
+                this.resetInactivityTimer();
             }
         }
     }
@@ -485,75 +481,71 @@ export class Game {
                                 this.players[this.playerIndex]
                             }>, it's now your turn.`,
                         );
-                        this.startTimer(TimerUsecase.Turn);
+                        this.restartRoundTimer();
                     } else if (index < this.playerIndex) {
                         // to maintain the current player
                         this.playerIndex--;
                     }
                 } else {
                     this.playerIndex %= this.players.length;
-                    this.startTimer(TimerUsecase.Lobby);
                 }
+                this.resetInactivityTimer();
             }
         }
     }
 
     start(player: Snowflake) {
-        if (State.Setup === this.state) {
-            if (player === this.owner) {
-                if (undefined === this.options.listIdentifier) {
-                    this.options.listIdentifier =
-                        this.listManager.getDefaultListForLanguage(
-                            this.options.language,
-                        );
-                }
-                if (undefined === this.options.listIdentifier) {
-                    this.logger.error(
-                        "Could not get default list for language",
+        if (State.Setup === this.state && player === this.owner) {
+            if (undefined === this.options.listIdentifier) {
+                this.options.listIdentifier =
+                    this.listManager.getDefaultListForLanguage(
                         this.options.language,
-                        "!",
                     );
+            }
+            if (undefined === this.options.listIdentifier) {
+                this.logger.error(
+                    "Could not get default list for language",
+                    this.options.language,
+                    "!",
+                );
+            } else {
+                this.word = this.listManager.randomWord(
+                    this.options.listIdentifier,
+                    this.options.wordsLength,
+                );
+
+                if (undefined !== this.word) {
+                    this.logger.debug(
+                        "New game has started in channel",
+                        this.channel.id,
+                        ", word to be guessed is",
+                        this.word,
+                    );
+
+                    this.state = State.Running;
+
+                    const emptyArray = new Array(this.word.word.length).fill({
+                        character: " ",
+                        result: Result.Wrong,
+                    });
+
+                    this.feedback(
+                        emptyArray,
+                        `Can you guess the word? ${userMention(
+                            this.players[this.playerIndex],
+                        )} will be the first to guess.`,
+                    );
+                    this.restartRoundTimer();
                 } else {
-                    this.word = this.listManager.randomWord(
-                        this.options.listIdentifier,
+                    this.logger.error(
+                        "Could not get word with length",
                         this.options.wordsLength,
+                        "from list",
+                        this.options.listIdentifier.getUserString(),
                     );
-
-                    if (undefined !== this.word) {
-                        this.logger.debug(
-                            "New game has started in channel",
-                            this.channel.id,
-                            ", word to be guessed is",
-                            this.word,
-                        );
-
-                        this.state = State.Running;
-
-                        this.updatePlayerIndex(this.playerIndex);
-
-                        const emptyArray = new Array(
-                            this.word.word.length,
-                        ).fill({
-                            character: " ",
-                            result: Result.Wrong,
-                        });
-
-                        this.feedback(
-                            emptyArray,
-                            `Can you guess the word? ${userMention(
-                                this.players[this.playerIndex],
-                            )} will be the first to guess.`,
-                        );
-                    } else {
-                        this.logger.error(
-                            "Could not get word with length",
-                            this.options.wordsLength,
-                            "from list",
-                            this.options.listIdentifier.getUserString(),
-                        );
-                    }
                 }
             }
+            this.resetInactivityTimer();
         }
     }
 
@@ -646,10 +638,10 @@ export class Game {
                     "Unknown",
                     `Hmmm... I do not know "${guess}". Please try another word..`,
                 );
+                this.resetInactivityTimer();
             } else {
-                this.registeredTimeouts = 0;
                 this.guessCount++;
-                const result = Game.generateResult(this.word.word, guess);
+                const result = generateResult(this.word.word, guess);
                 if (
                     result.every(
                         (charResult) => Result.Correct === charResult.result,
@@ -666,7 +658,7 @@ export class Game {
                     });
                 } else {
                     if (!this.guessesExhausted()) {
-                        this.updatePlayerIndex();
+                        this.advancePlayerIndex();
                         if (this.players.length > 1) {
                             this.feedback(
                                 result,
@@ -680,14 +672,15 @@ export class Game {
                                 `Not quite! Try again, ${userMention(player)}!`,
                             );
                         }
+
+                        this.restartRoundTimer();
                     } else {
-                        this.feedback(result, `Close, <@${player}>!`).then(
-                            () => {
-                                this.outOfGuesses();
-                            },
+                        this.feedback(result, `Close, <@${player}>!`).then(() =>
+                            this.outOfGuesses(),
                         );
                     }
                 }
+                this.resetInactivityTimer();
             }
         }
     }
@@ -695,12 +688,10 @@ export class Game {
     private outOfGuesses(): void {
         if (undefined !== this.word) {
             this.feedback(
-                Game.generateResult(this.word.word, this.word.word),
+                generateResult(this.word.word, this.word.word),
                 `Out of guesses! This was the correct word. Dropping you back into the lobby.`,
                 false,
-            ).then(() => {
-                return this.dropBackToLobby();
-            });
+            ).then(() => this.dropBackToLobby());
         } else {
             this.dropBackToLobby();
         }
@@ -712,161 +703,149 @@ export class Game {
 
     private dropBackToLobby(): void {
         // this.playerIndex is purposefully not reset.
+        if (undefined !== this.turnTimeout) {
+            clearTimeout(this.turnTimeout);
+            this.turnTimeout = undefined;
+        }
         this.guessCount = 0;
         this.word = undefined;
         this.state = State.Setup;
 
         this.sendEmbed(this.lobbyText());
-
-        this.startTimer(TimerUsecase.Lobby);
     }
 
-    private static generateResult(word: string, guess: string): CharResult[] {
-        const result: CharResult[] = new Array(word.length);
-        for (let i = 0; i < word.length; i++) {
-            const guessedCharacter = guess.charAt(i);
-            if (guessedCharacter === word.charAt(i)) {
-                result[i] = {
-                    character: guessedCharacter,
-                    result: Result.Correct,
-                };
-            } else {
-                // We only want to highlight a specific character as many times
-                // as it actually occurs in the word-to-be-guessed.
-                // To that end, we compute how many times the characters occur in both words,
-                // and then check if the index of the current occurence in the guess already
-                // exceeds the total amount of occurenes in the actual word, and if yes,
-                // also treat this occurence as wrong.
-                const numberOfOccurencesInWordWithoutExactMatches =
-                    Game.indicesWith(word, guessedCharacter).filter(
-                        (index) => guessedCharacter !== guess.charAt(index),
-                    ).length;
-                const guessIndices = Game.indicesWith(guess, guessedCharacter);
-                if (
-                    guessIndices.indexOf(i) <
-                    numberOfOccurencesInWordWithoutExactMatches
-                ) {
-                    result[i] = {
-                        character: guessedCharacter,
-                        result: Result.Moved,
-                    };
-                } else {
-                    result[i] = {
-                        character: guessedCharacter,
-                        result: Result.Wrong,
-                    };
-                }
-            }
-        }
-        return result;
+    private advancePlayerIndex() {
+        this.playerIndex = (this.playerIndex + 1) % this.players.length;
     }
 
-    private static indicesWith(target: string, character: string) {
-        const indices: number[] = [];
+    private resetInactivityTimer() {
+        this.channel.send("inactive timer reset");
+        clearTimeout(this.inactiveTimeout);
 
-        for (
-            let index = target.indexOf(character);
-            index > -1;
-            index = target.indexOf(character, index + 1) // TODO: Index shift?
-        ) {
-            indices.push(index);
-        }
-
-        return indices;
+        this.inactiveTimeout = setTimeout(
+            () => this.cancelDueToInactivity(),
+            MAX_INACTIVE_TIME,
+        );
     }
 
-    private updatePlayerIndex(index?: number) {
-        if (index !== undefined) {
-            this.playerIndex = index;
-        } else {
-            this.playerIndex = (this.playerIndex + 1) % this.players.length;
-        }
-
-        this.startTimer(TimerUsecase.Turn);
-    }
-
-    startTimer(callback: TimerUsecase) {
-        if (this.currentTimeout !== undefined) {
-            clearTimeout(this.currentTimeout);
-        }
-
-        switch (callback) {
-            case TimerUsecase.Turn:
-                this.currentTimeout = setTimeout(() => {
-                    this.playerTimedOut();
-                }, this.options.turnTimeout);
-                break;
-            case TimerUsecase.Lobby:
-                this.currentTimeout = setTimeout(() => {
-                    this.lobbyTimedOut();
-                }, this.options.lobbyTimeout);
-                break;
-        }
-    }
-
-    private lobbyTimedOut() {
+    private cancelDueToInactivity() {
         this.sendMessage(
             MessageType.warning,
             "Timeout",
-            `Game has been cancelled due to inactivity. You may start a new session at any time by invoking ${inlineCode(
+            `Session has been cancelled due to inactivity. You may start a new session at any time by invoking ${inlineCode(
                 "!wordle",
             )}.`,
         );
         this.cleanUp();
     }
 
+    private restartRoundTimer() {
+        if (this.turnTimeout !== undefined) {
+            clearTimeout(this.turnTimeout);
+        }
+
+        this.turnTimeout = setTimeout(
+            () => this.playerTimedOut(),
+            this.options.turnTimeout,
+        );
+    }
+
     private cleanUp() {
-        if (this.currentTimeout !== undefined) {
-            clearTimeout(this.currentTimeout);
+        clearTimeout(this.inactiveTimeout);
+        if (this.turnTimeout !== undefined) {
+            clearTimeout(this.turnTimeout);
         }
         this.state = State.Ended;
         this.commandParser.removeAllForChannel(this.channel.id);
     }
 
-    private allowedTimeouts(): number {
-        return Math.max(this.players.length, this.options.maxTurnTimeouts);
-    }
-
     private playerTimedOut() {
-        if (++this.registeredTimeouts <= this.allowedTimeouts()) {
-            const currentPlayer = this.players[this.playerIndex];
-            this.guessCount++;
-            if (!this.guessesExhausted()) {
-                this.updatePlayerIndex();
-                if (this.players.length > 1) {
-                    this.sendEmbed(
-                        this.createBasicMessage(
-                            MessageType.warning,
-                            "Timeout",
-                            `${userMention(
-                                currentPlayer,
-                            )} took too long to answer! ${userMention(
-                                this.players[this.playerIndex],
-                            )} is up next.`,
-                        ).setFooter(this.createAttemptsLeftFooter()),
-                    );
-                } else {
-                    this.sendEmbed(
-                        this.createBasicMessage(
-                            MessageType.warning,
-                            "Timeout",
-                            `${userMention(
-                                currentPlayer,
-                            )}, you took too long to answer and lost an attempt!`,
-                        ).setFooter(this.createAttemptsLeftFooter()),
-                    );
-                }
+        const currentPlayer = this.players[this.playerIndex];
+        this.guessCount++;
+        if (!this.guessesExhausted()) {
+            this.advancePlayerIndex();
+            if (this.players.length > 1) {
+                this.sendEmbed(
+                    this.createBasicMessage(
+                        MessageType.warning,
+                        "Timeout",
+                        `${userMention(
+                            currentPlayer,
+                        )} took too long to answer! ${userMention(
+                            this.players[this.playerIndex],
+                        )} is up next.`,
+                    ).setFooter(this.createAttemptsLeftFooter()),
+                );
             } else {
-                this.outOfGuesses();
+                this.sendEmbed(
+                    this.createBasicMessage(
+                        MessageType.warning,
+                        "Timeout",
+                        `${userMention(
+                            currentPlayer,
+                        )}, you took too long to answer and lost an attempt!`,
+                    ).setFooter(this.createAttemptsLeftFooter()),
+                );
             }
-        } else if (undefined !== this.word) {
-            this.feedback(
-                Game.generateResult(this.word.word, this.word.word),
-                `Too many consecutive timeouts. You will be returned to the lobby. This would have been the correct word:`,
-                false,
-            ).then(() => {
-                this.dropBackToLobby();
-            });
+            this.restartRoundTimer();
+        } else {
+            this.outOfGuesses();
         }
     }
+}
+
+function generateResult(word: string, guess: string): CharResult[] {
+    const result: CharResult[] = new Array(word.length);
+    for (let i = 0; i < word.length; i++) {
+        const guessedCharacter = guess.charAt(i);
+        if (guessedCharacter === word.charAt(i)) {
+            result[i] = {
+                character: guessedCharacter,
+                result: Result.Correct,
+            };
+        } else {
+            // We only want to highlight a specific character as many times
+            // as it actually occurs in the word-to-be-guessed.
+            // To that end, we compute how many times the characters occur in both words,
+            // and then check if the index of the current occurence in the guess already
+            // exceeds the total amount of occurenes in the actual word, and if yes,
+            // also treat this occurence as wrong.
+            const numberOfOccurencesInWordWithoutExactMatches = indicesWith(
+                word,
+                guessedCharacter,
+            ).filter(
+                (index) => guessedCharacter !== guess.charAt(index),
+            ).length;
+            const guessIndices = indicesWith(guess, guessedCharacter);
+            if (
+                guessIndices.indexOf(i) <
+                numberOfOccurencesInWordWithoutExactMatches
+            ) {
+                result[i] = {
+                    character: guessedCharacter,
+                    result: Result.Moved,
+                };
+            } else {
+                result[i] = {
+                    character: guessedCharacter,
+                    result: Result.Wrong,
+                };
+            }
+        }
+    }
+    return result;
+}
+
+function indicesWith(target: string, character: string) {
+    const indices: number[] = [];
+
+    for (
+        let index = target.indexOf(character);
+        index > -1;
+        index = target.indexOf(character, index + 1) // TODO: Index shift?
+    ) {
+        indices.push(index);
+    }
+
+    return indices;
 }
