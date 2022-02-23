@@ -1,21 +1,6 @@
-import {
-    codeBlock,
-    inlineCode,
-    italic,
-    userMention,
-} from "@discordjs/builders";
-import {
-    ColorResolvable,
-    EmbedFooterData,
-    Message,
-    MessageAttachment,
-    MessageEmbed,
-    Snowflake,
-    TextChannel,
-} from "discord.js";
+import { ColorResolvable, Snowflake, TextChannel } from "discord.js";
 import { Logger } from "tslog";
 
-import { version } from "../package.json";
 import { CommandParser } from "./commands";
 import { CharResult, Result, State } from "./interfaces";
 import {
@@ -24,6 +9,7 @@ import {
     WordWithDetails,
     WordsLength,
 } from "./list_manager";
+import { Messages, RevealReason } from "./messages";
 import { Basic as Renderer } from "./renderer";
 import { SettingsDb } from "./settings_db";
 
@@ -38,41 +24,19 @@ export class Options {
     wordsLength: WordsLength = new WordsLength(4, 6);
 }
 
-class EmbedColors {
-    normal: ColorResolvable = "#520711";
-    game: ColorResolvable = "#FFFFFF";
-    warning: ColorResolvable = "#d6d600";
-    success: ColorResolvable = "#05eb42";
-
-    resolve(type: MessageType): ColorResolvable {
-        switch (type) {
-            case MessageType.warning:
-                return this.warning;
-            case MessageType.success:
-                return this.success;
-            case MessageType.normal:
-            default:
-                return this.normal;
-        }
-    }
-}
-
-enum MessageType {
+export enum MessageType {
     normal,
     warning,
     success,
 }
 
 export class Game {
-    private static readonly colors = new EmbedColors();
-
     private readonly settingsDb: SettingsDb;
     private readonly listManager: ListManager;
-    private readonly channel: TextChannel;
     private readonly commandParser: CommandParser;
-    private readonly renderer;
     private readonly logger: Logger;
-    private readonly logo: MessageAttachment;
+    private readonly channelId: Snowflake;
+    private readonly messages: Messages;
 
     private options = new Options();
     private originalOwner = true;
@@ -98,7 +62,7 @@ export class Game {
     ) {
         this.logger = logger;
         this.state = State.Setup;
-        this.channel = channel;
+        this.channelId = channel.id;
         this.commandParser = commandParser;
         this.owner = player;
         this.players = [this.owner];
@@ -119,13 +83,11 @@ export class Game {
                 );
         }
 
-        this.renderer = renderer;
-
-        this.logo = this.generateLogo();
+        this.messages = new Messages(renderer, channel);
 
         this.setupListeners(commandParser);
 
-        this.sendEmbed(this.lobbyText());
+        this.messages.lobbyText(this.owner, this.options);
 
         this.inactiveTimeout = setTimeout(
             () => this.cancelDueToInactivity(),
@@ -133,41 +95,9 @@ export class Game {
         );
     }
 
-    private generateLogo(): MessageAttachment {
-        const array: CharResult[] = [];
-
-        const wordle = "wordle";
-        for (let i = 0; i < wordle.length; ++i) {
-            const value = Math.floor(Math.random() * 3);
-            switch (value) {
-                case 0:
-                    array.push({
-                        character: wordle.charAt(i),
-                        result: Result.Correct,
-                    });
-                    break;
-                case 1:
-                    array.push({
-                        character: wordle.charAt(i),
-                        result: Result.Moved,
-                    });
-                    break;
-                case 2:
-                default:
-                    array.push({
-                        character: wordle.charAt(i),
-                        result: Result.Wrong,
-                    });
-                    break;
-            }
-        }
-
-        return this.renderer.render(array, "logo.jpg");
-    }
-
     private setupListeners(commandParser: CommandParser): void {
         commandParser.registerChannelListener(
-            this.channel.id,
+            this.channelId,
             /!join/,
             (_channel, player) => {
                 this.join(player);
@@ -176,7 +106,7 @@ export class Game {
         );
 
         commandParser.registerChannelListener(
-            this.channel.id,
+            this.channelId,
             /!leave/,
             (_channel, player) => {
                 this.leave(player);
@@ -185,16 +115,16 @@ export class Game {
         );
 
         commandParser.registerChannelListener(
-            this.channel.id,
-            /!abort/,
+            this.channelId,
+            /!reveal/,
             (_channel, player) => {
-                this.abort(player);
+                this.reveal(player);
                 return true;
             },
         );
 
         commandParser.registerChannelListener(
-            this.channel.id,
+            this.channelId,
             /!start/,
             (_channel, player) => {
                 this.start(player);
@@ -203,7 +133,7 @@ export class Game {
         );
 
         commandParser.registerChannelListener(
-            this.channel.id,
+            this.channelId,
             /(?<guess>\S+)/,
             (_channel, player, guess) => {
                 this.makeGuess(player, guess[0]);
@@ -211,13 +141,13 @@ export class Game {
             },
         );
 
-        commandParser.registerChannelListener(this.channel.id, /!list/, () => {
+        commandParser.registerChannelListener(this.channelId, /!list/, () => {
             this.printCurrentListInfo();
             return State.Setup === this.state;
         });
 
         commandParser.registerChannelListener(
-            this.channel.id,
+            this.channelId,
             /!list (?<language>\w+)\/(?<list>\w+)/,
             (_channel, player, input) => {
                 this.switchToList(player, input[0], input[1]);
@@ -225,7 +155,7 @@ export class Game {
             },
         );
         commandParser.registerChannelListener(
-            this.channel.id,
+            this.channelId,
             /!length (?<min>[1-9]\d*)( (?<max>[1-9]\d*))?/,
             (_channel, player, input) => {
                 this.setWordLength(
@@ -257,28 +187,18 @@ export class Game {
                 ) {
                     this.options.wordsLength = wordsLength;
                     this.storeSettings();
-                    this.sendMessage(
-                        MessageType.success,
-                        "Changed",
-                        `Now using words with ${wordsLength.pretty()} from ${inlineCode(
-                            this.options.listIdentifier.getUserString(),
-                        )}.`,
+                    this.messages.wordSourceChanged(
+                        wordsLength,
+                        this.options.listIdentifier,
                     );
                 } else {
-                    this.sendMessage(
-                        MessageType.warning,
-                        "No words",
-                        `There are no words with ${wordsLength.pretty()} in ${inlineCode(
-                            this.options.listIdentifier.getUserString(),
-                        )}. Consider switching to another list or specifying a different length.`,
+                    this.messages.wordSourceChangeFailed(
+                        this.options.listIdentifier,
+                        this.options.wordsLength,
                     );
                 }
             } else {
-                this.sendMessage(
-                    MessageType.warning,
-                    "No list",
-                    "Currently, no list is selected. Consider seleting a list first.",
-                );
+                this.messages.noList();
             }
             this.resetInactivityTimer();
         }
@@ -299,38 +219,28 @@ export class Game {
                 this.options.listIdentifier = listIdent;
                 this.options.language = listIdent.language;
                 this.storeSettings();
-                this.sendMessage(
-                    MessageType.success,
-                    "Switched",
-                    `Sucessfully switched to list ${inlineCode(
-                        listIdent.getUserString(),
-                    )}.`,
+                this.messages.wordSourceChanged(
+                    this.options.wordsLength,
+                    listIdent,
                 );
             } else {
-                this.sendMessage(
-                    MessageType.warning,
-                    "Not found / not applicable",
-                    `Sorry, either ${inlineCode(
-                        listIdent.getUserString(),
-                    )} is not a registered list or it has no suitable words.`,
+                this.messages.wordSourceChangeFailed(
+                    listIdent,
+                    this.options.wordsLength,
                 );
             }
             this.resetInactivityTimer();
         }
     }
 
-    private abort(player: Snowflake) {
+    private reveal(player: Snowflake) {
         if (State.Running === this.state && this.owner === player) {
             if (undefined !== this.word) {
-                this.feedback(
-                    generateResult(this.word.word, this.word.word),
-                    `${userMention(
-                        player,
-                    )} has aborted the round early! This would have bee the correct word. Dropping you back into the lobby..`,
-                    false,
-                ).then(() => {
-                    return this.dropBackToLobby();
-                });
+                this.messages
+                    .reveal(this.word, RevealReason.Aborted)
+                    .then(() => {
+                        return this.dropBackToLobby();
+                    });
             } else {
                 this.dropBackToLobby();
             }
@@ -346,54 +256,13 @@ export class Game {
 
     private printCurrentListInfo(): void {
         if (State.Setup === this.state) {
-            const message =
-                undefined === this.options.listIdentifier
-                    ? "Currently, no specific list is selected."
-                    : `Currently, words with ${this.options.wordsLength.pretty()} are chosen at random from ${inlineCode(
-                          this.options.listIdentifier.getUserString(),
-                      )}.`;
-
-            this.sendEmbed(
-                new MessageEmbed()
-                    .setColor(Game.colors.normal)
-                    .setTitle("Words")
-                    .setDescription(message)
-                    .addField(
-                        "Changing lists",
-                        `Use ${inlineCode(
-                            "!list <language>/<list>",
-                        )} to switch to another list.`,
-                    )
-                    .addField(
-                        "Changing character count",
-                        `Use ${inlineCode(
-                            "!length <length>",
-                        )} to set a specific word length.\nUse ${inlineCode(
-                            "!length <min> <max>",
-                        )} to set a range of word lengths.`,
-                    )
-                    .addField("Lists", this.listInfo(), true)
-                    .setFooter({
-                        text: "Want to see other languages and/or lists? Feel free to reach out and we can work together to provide more lists. See the bot's description for details.",
-                    }),
+            this.messages.listInfo(
+                this.listManager,
+                this.options.listIdentifier,
+                this.options.wordsLength,
             );
             this.resetInactivityTimer();
         }
-    }
-
-    private listInfo(): string {
-        let message = "";
-        this.listManager.getLanguages().forEach((language) => {
-            message += `\n${language}/`;
-            this.listManager
-                .getListsWithDetails(language)
-                .forEach((details) => {
-                    message += `\n\t${details.list.list} (${Array.from(
-                        details.listStats.wordsPerLength.values(),
-                    ).reduce((sum, number) => sum + number)} words)`;
-                });
-        });
-        return codeBlock(message);
     }
 
     getState(): State {
@@ -404,47 +273,10 @@ export class Game {
         if (State.Setup === this.state) {
             if (this.players.indexOf(player) < 0) {
                 this.players.push(player);
-                this.sendMessage(
-                    MessageType.normal,
-                    "Joined",
-                    `${userMention(player)} has joined the game.`,
-                );
+                this.messages.joined(player);
                 this.resetInactivityTimer();
             }
         }
-    }
-
-    private sendMessage(
-        type: MessageType,
-        title: string,
-        message: string,
-    ): Promise<Message> {
-        return this.sendEmbed(this.createBasicMessage(type, title, message));
-    }
-
-    private createBasicMessage(
-        type: MessageType,
-        title: string,
-        message: string,
-    ): MessageEmbed {
-        return new MessageEmbed()
-            .setColor(Game.colors.resolve(type))
-            .setTitle(title)
-            .setDescription(message);
-    }
-
-    private sendEmbed(
-        embed: MessageEmbed,
-        attachment?: MessageAttachment,
-    ): Promise<Message> {
-        embed.setThumbnail("attachment://logo.jpg");
-        return this.channel.send({
-            embeds: [embed],
-            files:
-                undefined !== attachment
-                    ? [this.logo, attachment]
-                    : [this.logo],
-        });
     }
 
     leave(player: Snowflake): void {
@@ -452,20 +284,12 @@ export class Game {
         if (-1 !== index) {
             this.players.splice(index, 1);
             if (this.players.length === 0) {
-                this.sendMessage(
-                    MessageType.warning,
-                    "Ended",
-                    `Game ended as the last player left the session!`,
-                );
+                this.messages.noPlayersLeft();
                 this.cleanUp();
             } else {
                 if (this.owner === player) {
                     this.owner = this.players[0];
-                    this.sendMessage(
-                        MessageType.normal,
-                        "Owner",
-                        `With <@${player}> leaving the lobby, <@${this.owner}> is now the session owner!`,
-                    );
+                    this.messages.ownerChanged(player, this.owner);
                     this.originalOwner = false;
                 }
 
@@ -474,12 +298,8 @@ export class Game {
                         // because we already removed the player,
                         // this.playerIndex is already pointing to the next player
                         this.playerIndex %= this.players.length;
-                        this.sendMessage(
-                            MessageType.normal,
-                            "Turn",
-                            `<@${
-                                this.players[this.playerIndex]
-                            }>, it's now your turn.`,
+                        this.messages.promptPlayerTurn(
+                            this.players[this.playerIndex],
                         );
                         this.restartRoundTimer();
                     } else if (index < this.playerIndex) {
@@ -517,24 +337,19 @@ export class Game {
                 if (undefined !== this.word) {
                     this.logger.debug(
                         "New game has started in channel",
-                        this.channel.id,
+                        this.channelId,
                         ", word to be guessed is",
                         this.word,
                     );
 
                     this.state = State.Running;
 
-                    const emptyArray = new Array(this.word.word.length).fill({
-                        character: " ",
-                        result: Result.Wrong,
+                    this.messages.gameStarted(this.word.word.length, {
+                        nextPlayer: this.players[this.playerIndex],
+                        guessCount: this.guessCount,
+                        maxGuessCount: this.options.maxAttempts,
                     });
 
-                    this.feedback(
-                        emptyArray,
-                        `Can you guess the word? ${userMention(
-                            this.players[this.playerIndex],
-                        )} will be the first to guess.`,
-                    );
                     this.restartRoundTimer();
                 } else {
                     this.logger.error(
@@ -547,76 +362,6 @@ export class Game {
             }
             this.resetInactivityTimer();
         }
-    }
-
-    private lobbyText(): MessageEmbed {
-        return new MessageEmbed()
-            .setColor(Game.colors.normal)
-            .setTitle("Lobby")
-            .setDescription(
-                `Welcome to Wordle. This session is currently owned by ${userMention(
-                    this.owner,
-                )}.`,
-            )
-            .addField(
-                "Starting",
-                `The owner (${userMention(this.owner)}) may ${inlineCode(
-                    "!start",
-                )} the game at any time.`,
-            )
-            .addField(
-                "Joining",
-                `Players may ${inlineCode("!join")} while in lobby mode.`,
-            )
-            .addField(
-                "Leaving",
-                `Players may ${inlineCode("!leave")} at any time, ${italic(
-                    "even while a game is ongoing",
-                )}.`,
-            )
-            .addField(
-                "Words",
-                `The bot uses different word lists to generate random words for you to play with.${
-                    this.options.listIdentifier
-                        ? ` Currently, words with ${this.options.wordsLength.pretty()} from list ${inlineCode(
-                              this.options.listIdentifier.getUserString(),
-                          )} are being used.`
-                        : " Currently, no list is selected."
-                } Type ${inlineCode("!list")} to find out more.`,
-            )
-            .setFooter({
-                text: `We are happy to hear your thoughts and feedback. Please refer to the bot's profile to learn more. Version: ${version}.`,
-            });
-    }
-
-    private feedback(
-        result: CharResult[],
-        customText: string,
-        withAttemptsLeft = true,
-    ): Promise<Message> {
-        const attachment = this.renderer.render(result, "result.png");
-        const embed = new MessageEmbed()
-            .setColor(Game.colors.normal)
-            .setAuthor({ name: "Wordle" })
-            .setDescription(customText)
-            .setImage("attachment://result.png");
-        if (withAttemptsLeft) {
-            embed.setFooter(this.createAttemptsLeftFooter());
-        }
-
-        return this.sendEmbed(embed, attachment);
-    }
-
-    private createAttemptsLeftFooter(): EmbedFooterData {
-        return {
-            text: `${
-                this.options.maxAttempts - this.guessCount
-            } attempts left. You may ${inlineCode(
-                "!leave",
-            )} at any time. The owner can also ${inlineCode(
-                "!abort",
-            )} the round early and return to the lobby.`,
-        };
     }
 
     nextGuessExpectedFrom(): Snowflake {
@@ -633,11 +378,7 @@ export class Game {
                 this.options.checkWords &&
                 !this.listManager.checkGlobal(this.options.language, guess)
             ) {
-                this.sendMessage(
-                    MessageType.warning,
-                    "Unknown",
-                    `Hmmm... I do not know "${guess}". Please try another word..`,
-                );
+                this.messages.unknownWord(guess);
                 this.resetInactivityTimer();
             } else {
                 this.guessCount++;
@@ -647,37 +388,34 @@ export class Game {
                         (charResult) => Result.Correct === charResult.result,
                     )
                 ) {
-                    this.feedback(
-                        result,
-                        `Wow, ${userMention(
-                            player,
-                        )} got it right! Dropping you back to the lobby..`,
-                        false,
-                    ).then(() => {
+                    this.messages.guessedCorrectly(result, player).then(() => {
                         this.dropBackToLobby();
                     });
                 } else {
                     if (!this.guessesExhausted()) {
                         this.advancePlayerIndex();
                         if (this.players.length > 1) {
-                            this.feedback(
-                                result,
-                                `Close, ${userMention(player)}! ${userMention(
-                                    this.players[this.playerIndex],
-                                )} is up next!`,
-                            );
+                            this.messages.feedback(player, result, {
+                                nextPlayer: this.players[this.playerIndex],
+                                guessCount: this.guessCount,
+                                maxGuessCount: this.options.maxAttempts,
+                            });
                         } else {
-                            this.feedback(
-                                result,
-                                `Not quite! Try again, ${userMention(player)}!`,
-                            );
+                            this.messages.feedback(player, result, {
+                                nextPlayer: this.players[this.playerIndex],
+                                guessCount: this.guessCount,
+                                maxGuessCount: this.options.maxAttempts,
+                            });
                         }
 
                         this.restartRoundTimer();
                     } else {
-                        this.feedback(result, `Close, <@${player}>!`).then(() =>
-                            this.outOfGuesses(),
-                        );
+                        this.messages
+                            .feedback(player, result, {
+                                guessCount: this.guessCount,
+                                maxGuessCount: this.options.maxAttempts,
+                            })
+                            .then(() => this.outOfGuesses());
                     }
                 }
                 this.resetInactivityTimer();
@@ -687,11 +425,9 @@ export class Game {
 
     private outOfGuesses(): void {
         if (undefined !== this.word) {
-            this.feedback(
-                generateResult(this.word.word, this.word.word),
-                `Out of guesses! This was the correct word. Dropping you back into the lobby.`,
-                false,
-            ).then(() => this.dropBackToLobby());
+            this.messages
+                .reveal(this.word, RevealReason.GuessesExhausted)
+                .then(() => this.dropBackToLobby());
         } else {
             this.dropBackToLobby();
         }
@@ -711,7 +447,7 @@ export class Game {
         this.word = undefined;
         this.state = State.Setup;
 
-        this.sendEmbed(this.lobbyText());
+        this.messages.lobbyText(this.owner, this.options);
     }
 
     private advancePlayerIndex() {
@@ -719,7 +455,6 @@ export class Game {
     }
 
     private resetInactivityTimer() {
-        this.channel.send("inactive timer reset");
         clearTimeout(this.inactiveTimeout);
 
         this.inactiveTimeout = setTimeout(
@@ -729,13 +464,7 @@ export class Game {
     }
 
     private cancelDueToInactivity() {
-        this.sendMessage(
-            MessageType.warning,
-            "Timeout",
-            `Session has been cancelled due to inactivity. You may start a new session at any time by invoking ${inlineCode(
-                "!wordle",
-            )}.`,
-        );
+        this.messages.timeout();
         this.cleanUp();
     }
 
@@ -756,7 +485,7 @@ export class Game {
             clearTimeout(this.turnTimeout);
         }
         this.state = State.Ended;
-        this.commandParser.removeAllForChannel(this.channel.id);
+        this.commandParser.removeAllForChannel(this.channelId);
     }
 
     private playerTimedOut() {
@@ -765,27 +494,16 @@ export class Game {
         if (!this.guessesExhausted()) {
             this.advancePlayerIndex();
             if (this.players.length > 1) {
-                this.sendEmbed(
-                    this.createBasicMessage(
-                        MessageType.warning,
-                        "Timeout",
-                        `${userMention(
-                            currentPlayer,
-                        )} took too long to answer! ${userMention(
-                            this.players[this.playerIndex],
-                        )} is up next.`,
-                    ).setFooter(this.createAttemptsLeftFooter()),
-                );
+                this.messages.turnTimeout(currentPlayer, {
+                    nextPlayer: this.players[this.playerIndex],
+                    guessCount: this.guessCount,
+                    maxGuessCount: this.options.maxAttempts,
+                });
             } else {
-                this.sendEmbed(
-                    this.createBasicMessage(
-                        MessageType.warning,
-                        "Timeout",
-                        `${userMention(
-                            currentPlayer,
-                        )}, you took too long to answer and lost an attempt!`,
-                    ).setFooter(this.createAttemptsLeftFooter()),
-                );
+                this.messages.turnTimeout(currentPlayer, {
+                    guessCount: this.guessCount,
+                    maxGuessCount: this.options.maxAttempts,
+                });
             }
             this.restartRoundTimer();
         } else {
@@ -794,7 +512,7 @@ export class Game {
     }
 }
 
-function generateResult(word: string, guess: string): CharResult[] {
+export function generateResult(word: string, guess: string): CharResult[] {
     const result: CharResult[] = new Array(word.length);
     for (let i = 0; i < word.length; i++) {
         const guessedCharacter = guess.charAt(i);
