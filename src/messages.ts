@@ -16,7 +16,7 @@ import {
 } from "discord.js";
 
 import { version } from "../package.json";
-import { MessageType, Options, generateResult } from "./game";
+import { MessageType, Mode, Options, generateResult } from "./game";
 import { CharResult, Result } from "./interfaces";
 import {
     ListIdentifier,
@@ -73,6 +73,28 @@ export class Messages {
             "No list",
             "Currently, no list is selected. Consider seleting a list first.",
         );
+    }
+
+    modeChanged(mode: Mode): Promise<Message> {
+        const message = `Game has been switched to ${inlineCode(
+            mode,
+        )} mode. ${this.modeExplanation(mode)}`;
+        return this.sendMessage(MessageType.normal, "Mode", message);
+    }
+
+    private modeExplanation(mode: Mode) {
+        switch (mode) {
+            case Mode.Turns:
+                return `Players will have to ${inlineCode(
+                    "!join",
+                )} to participate. The game itself takes place in turns, and the bot will indicate who's turn it is. There is a time limit on each player's turn.`;
+            case Mode.Free:
+                return `Any present user may guess the word, regardless of if they ${inlineCode(
+                    "!join",
+                )}ed during lobby stage or not. There are no turns and no turn timer.`;
+            default:
+                return "";
+        }
     }
 
     wordSourceChanged(
@@ -208,6 +230,15 @@ export class Messages {
                 `Can you guess the word? ${userMention(
                     extras.nextPlayer,
                 )} will be the first to guess.`,
+                this.createAttemptsLeftFooter(
+                    extras.guessCount,
+                    extras.maxGuessCount,
+                ),
+            );
+        } else {
+            this.feedbackInternal(
+                emptyArray,
+                `Can someone guess the word?`,
                 this.createAttemptsLeftFooter(
                     extras.guessCount,
                     extras.maxGuessCount,
@@ -394,7 +425,7 @@ export class Messages {
                 extras.nextPlayer,
             )} will be the next to guess.`;
         } else {
-            text += `Try again.`;
+            text += `Feel free to try again.`;
         }
 
         if (undefined !== extras) {
@@ -419,17 +450,27 @@ export class Messages {
                 .setDescription(
                     `Welcome to Wordle. This session is currently owned by ${userMention(
                         owner,
-                    )}.`,
+                    )}, who may ${inlineCode("!start")} the game at any time.`,
                 )
                 .addField(
-                    "Starting",
-                    `The owner (${userMention(owner)}) may ${inlineCode(
-                        "!start",
-                    )} the game at any time.`,
+                    "Mode",
+                    `The game is ${inlineCode(
+                        options.mode,
+                    )} mode right now. ${this.modeExplanation(
+                        options.mode,
+                    )}\nThe owner may switch modes using ${inlineCode(
+                        "!mode <mode>",
+                    )}, where ${inlineCode("<mode>")} is one of ${inlineCode(
+                        "turns",
+                    )} or ${inlineCode("free")}.`,
                 )
                 .addField(
                     "Joining",
-                    `Players may ${inlineCode("!join")} while in lobby mode.`,
+                    `Players may ${inlineCode(
+                        "!join",
+                    )} while in lobby mode. This is not relevant in ${inlineCode(
+                        Mode.Free,
+                    )} mode.`,
                 )
                 .addField(
                     "Leaving",

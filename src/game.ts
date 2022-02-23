@@ -15,9 +15,15 @@ import { SettingsDb } from "./settings_db";
 
 const MAX_INACTIVE_TIME = 90000;
 
+export enum Mode {
+    Turns = "turns",
+    Free = "free",
+}
+
 export class Options {
+    mode = Mode.Turns;
     checkWords = false;
-    turnTimeout = 45000;
+    turnTimeout = 42000;
     maxAttempts = 12;
     language = "en";
     listIdentifier?: ListIdentifier;
@@ -95,156 +101,238 @@ export class Game {
         );
     }
 
+    private ifAllowed(
+        player: Snowflake,
+        states: State[],
+        players: Snowflake[],
+        then: () => void,
+    ) {
+        if (
+            states.indexOf(this.state) > -1 &&
+            (players.length === 0 || players.indexOf(player) > -1)
+        ) {
+            // it's important if unintuitive to reset the timer beforehand,
+            // as then() might actually cause the session to end..
+            this.resetInactivityTimer();
+            then();
+            return true;
+        }
+        return false;
+    }
+
     private setupListeners(commandParser: CommandParser): void {
         commandParser.registerChannelListener(
             this.channelId,
             /!join/,
-            (_channel, player) => {
-                this.join(player);
-                return true;
-            },
+            (_channel, player) =>
+                this.ifAllowed(
+                    //
+                    player,
+                    [State.Setup],
+                    [],
+                    () => this.join(player),
+                ),
         );
 
         commandParser.registerChannelListener(
             this.channelId,
             /!leave/,
-            (_channel, player) => {
-                this.leave(player);
-                return true;
-            },
+            (_channel, player) =>
+                this.ifAllowed(
+                    //
+                    player,
+                    [State.Setup, State.Running],
+                    [],
+                    () => this.leave(player),
+                ),
         );
 
         commandParser.registerChannelListener(
             this.channelId,
             /!reveal/,
-            (_channel, player) => {
-                this.reveal(player);
-                return true;
-            },
+            (_channel, player) =>
+                this.ifAllowed(
+                    //
+                    player,
+                    [State.Running],
+                    [this.owner],
+                    () => this.reveal(),
+                ),
         );
 
         commandParser.registerChannelListener(
             this.channelId,
             /!start/,
-            (_channel, player) => {
-                this.start(player);
-                return true;
-            },
+            (_channel, player) =>
+                this.ifAllowed(
+                    //
+                    player,
+                    [State.Setup],
+                    [this.owner],
+                    () => this.start(),
+                ),
         );
 
         commandParser.registerChannelListener(
             this.channelId,
             /(?<guess>\S+)/,
-            (_channel, player, guess) => {
-                this.makeGuess(player, guess[0]);
-                return State.Running === this.state;
-            },
+            (_channel, player, guess) =>
+                this.ifAllowed(
+                    player,
+                    [State.Running],
+                    Mode.Turns === this.options.mode
+                        ? [this.players[this.playerIndex]]
+                        : [],
+                    () => this.makeGuess(player, guess[0]),
+                ),
         );
 
-        commandParser.registerChannelListener(this.channelId, /!list/, () => {
-            this.printCurrentListInfo();
-            return State.Setup === this.state;
-        });
+        commandParser.registerChannelListener(
+            this.channelId,
+            /!list/,
+            (_channel, player) =>
+                this.ifAllowed(
+                    //
+                    player,
+                    [State.Setup],
+                    [this.owner],
+                    () => this.printCurrentListInfo(),
+                ),
+        );
 
         commandParser.registerChannelListener(
             this.channelId,
             /!list (?<language>\w+)\/(?<list>\w+)/,
-            (_channel, player, input) => {
-                this.switchToList(player, input[0], input[1]);
-                return State.Setup === this.state;
-            },
+            (_channel, player, input) =>
+                this.ifAllowed(
+                    //
+                    player,
+                    [State.Setup],
+                    [this.owner],
+                    () => this.switchToList(input[0], input[1]),
+                ),
         );
+
         commandParser.registerChannelListener(
             this.channelId,
             /!length (?<min>[1-9]\d*)( (?<max>[1-9]\d*))?/,
-            (_channel, player, input) => {
-                this.setWordLength(
+            (_channel, player, input) =>
+                this.ifAllowed(
+                    //
                     player,
-                    parseInt(input[0]),
-                    parseInt(
-                        undefined !== input[1] ? input[1].trim() : input[0],
-                    ),
-                );
-                return State.Setup === this.state;
-            },
+                    [State.Setup],
+                    [this.owner],
+                    () =>
+                        this.setWordLength(
+                            parseInt(input[0]),
+                            parseInt(
+                                undefined !== input[1]
+                                    ? input[1].trim()
+                                    : input[0],
+                            ),
+                        ),
+                ),
+        );
+
+        commandParser.registerChannelListener(
+            this.channelId,
+            /!mode (?<mode>turns|free)/,
+            (_channel, player, input) =>
+                this.ifAllowed(
+                    //
+                    player,
+                    [State.Setup],
+                    [this.owner],
+                    () => this.setMode(input[0]),
+                ),
         );
     }
 
-    private setWordLength(player: Snowflake, min: number, max: number) {
-        if (State.Setup === this.state && player === this.owner) {
-            if (undefined !== this.options.listIdentifier) {
-                if (min > max) {
-                    // fancy trick to swap the values without temporary
-                    max = [min, (min = max)][0];
-                }
-                const wordsLength = new WordsLength(min, max);
-                if (
-                    undefined !==
-                    this.listManager.randomWord(
-                        this.options.listIdentifier,
-                        wordsLength,
-                    )
-                ) {
-                    this.options.wordsLength = wordsLength;
-                    this.storeSettings();
-                    this.messages.wordSourceChanged(
-                        wordsLength,
-                        this.options.listIdentifier,
-                    );
-                } else {
-                    this.messages.wordSourceChangeFailed(
-                        this.options.listIdentifier,
-                        this.options.wordsLength,
-                    );
-                }
-            } else {
-                this.messages.noList();
-            }
-            this.resetInactivityTimer();
+    private setMode(modeAsString: string) {
+        const prevMode = this.options.mode;
+        let newMode = prevMode;
+        switch (modeAsString) {
+            case Mode.Turns:
+                newMode = Mode.Turns;
+                break;
+            case Mode.Free:
+                newMode = Mode.Free;
+                break;
+            default:
+                this.logger.error(
+                    "User managed to enter unknown mode string:",
+                    modeAsString,
+                );
+                break;
+        }
+
+        if (prevMode !== newMode) {
+            this.options.mode = newMode;
+            this.messages.modeChanged(newMode);
+            this.storeSettings();
         }
     }
 
-    private switchToList(
-        player: Snowflake,
-        language: string,
-        list: string,
-    ): void {
-        if (State.Setup === this.state && this.owner === player) {
-            // First, check if there actually is at least a single word for this list by querying it..
-            const listIdent = new ListIdentifier(language, list);
+    private setWordLength(min: number, max: number) {
+        if (undefined !== this.options.listIdentifier) {
+            if (min > max) {
+                // fancy trick to swap the values without temporary
+                max = [min, (min = max)][0];
+            }
+            const wordsLength = new WordsLength(min, max);
             if (
                 undefined !==
-                this.listManager.randomWord(listIdent, this.options.wordsLength)
+                this.listManager.randomWord(
+                    this.options.listIdentifier,
+                    wordsLength,
+                )
             ) {
-                this.options.listIdentifier = listIdent;
-                this.options.language = listIdent.language;
+                this.options.wordsLength = wordsLength;
                 this.storeSettings();
                 this.messages.wordSourceChanged(
-                    this.options.wordsLength,
-                    listIdent,
+                    wordsLength,
+                    this.options.listIdentifier,
                 );
             } else {
                 this.messages.wordSourceChangeFailed(
-                    listIdent,
+                    this.options.listIdentifier,
                     this.options.wordsLength,
                 );
             }
-            this.resetInactivityTimer();
+        } else {
+            this.messages.noList();
         }
     }
 
-    private reveal(player: Snowflake) {
-        if (State.Running === this.state && this.owner === player) {
-            if (undefined !== this.word) {
-                this.messages
-                    .reveal(this.word, RevealReason.Aborted)
-                    .then(() => {
-                        return this.dropBackToLobby();
-                    });
-            } else {
-                this.dropBackToLobby();
-            }
-            this.resetInactivityTimer();
+    private switchToList(language: string, list: string): void {
+        // First, check if there actually is at least a single word for this list by querying it..
+        const listIdent = new ListIdentifier(language, list);
+        if (
+            undefined !==
+            this.listManager.randomWord(listIdent, this.options.wordsLength)
+        ) {
+            this.options.listIdentifier = listIdent;
+            this.options.language = listIdent.language;
+            this.storeSettings();
+            this.messages.wordSourceChanged(
+                this.options.wordsLength,
+                listIdent,
+            );
+        } else {
+            this.messages.wordSourceChangeFailed(
+                listIdent,
+                this.options.wordsLength,
+            );
+        }
+    }
+
+    private reveal() {
+        if (undefined !== this.word) {
+            this.messages.reveal(this.word, RevealReason.Aborted).then(() => {
+                return this.returnToLobby();
+            });
+        } else {
+            this.returnToLobby();
         }
     }
 
@@ -255,14 +343,11 @@ export class Game {
     }
 
     private printCurrentListInfo(): void {
-        if (State.Setup === this.state) {
-            this.messages.listInfo(
-                this.listManager,
-                this.options.listIdentifier,
-                this.options.wordsLength,
-            );
-            this.resetInactivityTimer();
-        }
+        this.messages.listInfo(
+            this.listManager,
+            this.options.listIdentifier,
+            this.options.wordsLength,
+        );
     }
 
     getState(): State {
@@ -270,12 +355,9 @@ export class Game {
     }
 
     join(player: Snowflake): void {
-        if (State.Setup === this.state) {
-            if (this.players.indexOf(player) < 0) {
-                this.players.push(player);
-                this.messages.joined(player);
-                this.resetInactivityTimer();
-            }
+        if (this.players.indexOf(player) < 0) {
+            this.players.push(player);
+            this.messages.joined(player);
         }
     }
 
@@ -293,7 +375,10 @@ export class Game {
                     this.originalOwner = false;
                 }
 
-                if (State.Running === this.state) {
+                if (
+                    State.Running === this.state &&
+                    Mode.Turns === this.options.mode
+                ) {
                     if (index === this.playerIndex) {
                         // because we already removed the player,
                         // this.playerIndex is already pointing to the next player
@@ -309,41 +394,40 @@ export class Game {
                 } else {
                     this.playerIndex %= this.players.length;
                 }
-                this.resetInactivityTimer();
             }
         }
     }
 
-    start(player: Snowflake) {
-        if (State.Setup === this.state && player === this.owner) {
-            if (undefined === this.options.listIdentifier) {
-                this.options.listIdentifier =
-                    this.listManager.getDefaultListForLanguage(
-                        this.options.language,
-                    );
-            }
-            if (undefined === this.options.listIdentifier) {
-                this.logger.error(
-                    "Could not get default list for language",
+    start() {
+        if (undefined === this.options.listIdentifier) {
+            this.options.listIdentifier =
+                this.listManager.getDefaultListForLanguage(
                     this.options.language,
-                    "!",
                 );
-            } else {
-                this.word = this.listManager.randomWord(
-                    this.options.listIdentifier,
-                    this.options.wordsLength,
+        }
+        if (undefined === this.options.listIdentifier) {
+            this.logger.error(
+                "Could not get default list for language",
+                this.options.language,
+                "!",
+            );
+        } else {
+            this.word = this.listManager.randomWord(
+                this.options.listIdentifier,
+                this.options.wordsLength,
+            );
+
+            if (undefined !== this.word) {
+                this.logger.debug(
+                    "New game has started in channel",
+                    this.channelId,
+                    ", word to be guessed is",
+                    this.word,
                 );
 
-                if (undefined !== this.word) {
-                    this.logger.debug(
-                        "New game has started in channel",
-                        this.channelId,
-                        ", word to be guessed is",
-                        this.word,
-                    );
+                this.state = State.Running;
 
-                    this.state = State.Running;
-
+                if (Mode.Turns === this.options.mode) {
                     this.messages.gameStarted(this.word.word.length, {
                         nextPlayer: this.players[this.playerIndex],
                         guessCount: this.guessCount,
@@ -352,15 +436,19 @@ export class Game {
 
                     this.restartRoundTimer();
                 } else {
-                    this.logger.error(
-                        "Could not get word with length",
-                        this.options.wordsLength,
-                        "from list",
-                        this.options.listIdentifier.getUserString(),
-                    );
+                    this.messages.gameStarted(this.word.word.length, {
+                        guessCount: this.guessCount,
+                        maxGuessCount: this.options.maxAttempts,
+                    });
                 }
+            } else {
+                this.logger.error(
+                    "Could not get word with length",
+                    this.options.wordsLength,
+                    "from list",
+                    this.options.listIdentifier.getUserString(),
+                );
             }
-            this.resetInactivityTimer();
         }
     }
 
@@ -370,16 +458,13 @@ export class Game {
 
     makeGuess(player: Snowflake, guess: string): void {
         if (undefined !== this.word) {
-            if (player !== this.players[this.playerIndex]) {
-                // For now, do nothing here.
-            } else if (guess.length !== this.word.word.length) {
+            if (guess.length !== this.word.word.length) {
                 // For now, do nothing here.
             } else if (
                 this.options.checkWords &&
                 !this.listManager.checkGlobal(this.options.language, guess)
             ) {
                 this.messages.unknownWord(guess);
-                this.resetInactivityTimer();
             } else {
                 this.guessCount++;
                 const result = generateResult(this.word.word, guess);
@@ -389,26 +474,31 @@ export class Game {
                     )
                 ) {
                     this.messages.guessedCorrectly(result, player).then(() => {
-                        this.dropBackToLobby();
+                        this.returnToLobby();
                     });
                 } else {
                     if (!this.guessesExhausted()) {
-                        this.advancePlayerIndex();
-                        if (this.players.length > 1) {
+                        if (Mode.Turns === this.options.mode) {
+                            this.advancePlayerIndex();
+                            if (this.players.length > 1) {
+                                this.messages.feedback(player, result, {
+                                    nextPlayer: this.players[this.playerIndex],
+                                    guessCount: this.guessCount,
+                                    maxGuessCount: this.options.maxAttempts,
+                                });
+                            } else {
+                                this.messages.feedback(player, result, {
+                                    guessCount: this.guessCount,
+                                    maxGuessCount: this.options.maxAttempts,
+                                });
+                            }
+                            this.restartRoundTimer();
+                        } else if (Mode.Free === this.options.mode) {
                             this.messages.feedback(player, result, {
-                                nextPlayer: this.players[this.playerIndex],
-                                guessCount: this.guessCount,
-                                maxGuessCount: this.options.maxAttempts,
-                            });
-                        } else {
-                            this.messages.feedback(player, result, {
-                                nextPlayer: this.players[this.playerIndex],
                                 guessCount: this.guessCount,
                                 maxGuessCount: this.options.maxAttempts,
                             });
                         }
-
-                        this.restartRoundTimer();
                     } else {
                         this.messages
                             .feedback(player, result, {
@@ -418,7 +508,6 @@ export class Game {
                             .then(() => this.outOfGuesses());
                     }
                 }
-                this.resetInactivityTimer();
             }
         }
     }
@@ -427,9 +516,9 @@ export class Game {
         if (undefined !== this.word) {
             this.messages
                 .reveal(this.word, RevealReason.GuessesExhausted)
-                .then(() => this.dropBackToLobby());
+                .then(() => this.returnToLobby());
         } else {
-            this.dropBackToLobby();
+            this.returnToLobby();
         }
     }
 
@@ -437,7 +526,7 @@ export class Game {
         return 0 >= this.options.maxAttempts - this.guessCount;
     }
 
-    private dropBackToLobby(): void {
+    private returnToLobby(): void {
         // this.playerIndex is purposefully not reset.
         if (undefined !== this.turnTimeout) {
             clearTimeout(this.turnTimeout);
@@ -489,25 +578,29 @@ export class Game {
     }
 
     private playerTimedOut() {
-        const currentPlayer = this.players[this.playerIndex];
-        this.guessCount++;
-        if (!this.guessesExhausted()) {
-            this.advancePlayerIndex();
-            if (this.players.length > 1) {
-                this.messages.turnTimeout(currentPlayer, {
-                    nextPlayer: this.players[this.playerIndex],
-                    guessCount: this.guessCount,
-                    maxGuessCount: this.options.maxAttempts,
-                });
+        // in theory, this method should not be triggered while in Mode.Free,
+        // but just to make sure
+        if (Mode.Turns === this.options.mode) {
+            const currentPlayer = this.players[this.playerIndex];
+            this.guessCount++;
+            if (!this.guessesExhausted()) {
+                this.advancePlayerIndex();
+                if (this.players.length > 1) {
+                    this.messages.turnTimeout(currentPlayer, {
+                        nextPlayer: this.players[this.playerIndex],
+                        guessCount: this.guessCount,
+                        maxGuessCount: this.options.maxAttempts,
+                    });
+                } else {
+                    this.messages.turnTimeout(currentPlayer, {
+                        guessCount: this.guessCount,
+                        maxGuessCount: this.options.maxAttempts,
+                    });
+                }
+                this.restartRoundTimer();
             } else {
-                this.messages.turnTimeout(currentPlayer, {
-                    guessCount: this.guessCount,
-                    maxGuessCount: this.options.maxAttempts,
-                });
+                this.outOfGuesses();
             }
-            this.restartRoundTimer();
-        } else {
-            this.outOfGuesses();
         }
     }
 }
