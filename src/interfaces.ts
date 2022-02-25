@@ -29,11 +29,11 @@ export interface RenderDimensions {
 }
 
 export class Small implements RenderDimensions {
-    fontSize = 40;
+    fontSize = 60;
     borderSize = 1;
 }
 export class Default implements RenderDimensions {
-    fontSize = 168;
+    fontSize = 120;
     borderSize = 2;
 }
 
