@@ -16,13 +16,13 @@ import {
 } from "discord.js";
 
 import { version } from "../package.json";
-import { MessageType, Mode, Options, generateResult } from "./game";
+import { Mode, Options, generateResult } from "./game";
 import { CharResult, Result } from "./interfaces";
 import {
+    LengthRange,
     ListIdentifier,
     ListManager,
     WordWithDetails,
-    WordsLength,
 } from "./list_manager";
 import { Basic as Renderer } from "./renderer";
 
@@ -54,7 +54,24 @@ export interface FeedbackExtras {
     maxGuessCount?: number;
     nextPlayer?: Snowflake;
 }
+
+export enum MessageType {
+    normal,
+    warning,
+    success,
+}
 export class Messages {
+    maxGuessesChanged(guesses?: number): Promise<Message> {
+        return this.sendMessage(
+            MessageType.normal,
+            "Guesses",
+            undefined !== guesses
+                ? `Now allowing up to ${inlineCode(
+                      "" + guesses,
+                  )} guesses before revealing the word.`
+                : `Now allowing an unlimited number of guesses.`,
+        );
+    }
     private static readonly colors = new EmbedColors();
 
     private readonly renderer: Renderer;
@@ -98,15 +115,15 @@ export class Messages {
     }
 
     wordSourceChanged(
-        wordsLength: WordsLength,
+        wordsLength: LengthRange,
         listIdentifier: ListIdentifier,
     ): Promise<Message> {
         return this.sendMessage(
             MessageType.success,
             "Changed",
-            `Now using words with ${wordsLength.pretty()} from ${inlineCode(
-                listIdentifier.getUserString(),
-            )}.`,
+            `Now using words with ${inlineCode(
+                wordsLength.toString(),
+            )} characters from ${inlineCode(listIdentifier.getUserString())}.`,
         );
     }
 
@@ -148,26 +165,30 @@ export class Messages {
 
     wordSourceChangeFailed(
         listIdent: ListIdentifier,
-        wordsLength: WordsLength,
+        wordsLength: LengthRange,
     ) {
         this.sendMessage(
             MessageType.warning,
             "Not found / not applicable",
             `Sorry, either ${inlineCode(
                 listIdent.getUserString(),
-            )} is not a registered list or it has no words with ${wordsLength.pretty()}.`,
+            )} is not a registered list or it has no words with ${inlineCode(
+                wordsLength.toString(),
+            )} characters.`,
         );
     }
 
     listInfo(
         listManager: ListManager,
         listIdentifier: ListIdentifier | undefined,
-        wordsLength: WordsLength,
+        wordsLength: LengthRange,
     ) {
         const message =
             undefined === listIdentifier
                 ? "Currently, no specific list is selected."
-                : `Currently, words with ${wordsLength.pretty()} are chosen at random from ${inlineCode(
+                : `Currently, words with ${inlineCode(
+                      wordsLength.toString(),
+                  )} characters are chosen at random from ${inlineCode(
                       listIdentifier.getUserString(),
                   )}.`;
 
@@ -482,11 +503,25 @@ export class Messages {
                     "Words",
                     `The bot uses different word lists to generate random words for you to play with.${
                         options.listIdentifier
-                            ? ` Currently, words with ${options.wordsLength.pretty()} from list ${inlineCode(
+                            ? ` Currently, words with ${inlineCode(
+                                  options.lengthRange.toString(),
+                              )} characters from list ${inlineCode(
                                   options.listIdentifier.getUserString(),
                               )} are being used.`
                             : " Currently, no list is selected."
                     } Type ${inlineCode("!list")} to find out more.`,
+                )
+                .addField(
+                    "Guesses",
+                    `Currently, players are allowed to make ${
+                        undefined !== options.maxAttempts
+                            ? `at most ${inlineCode("" + options.maxAttempts)}`
+                            : "arbitrarily many"
+                    } guesses. The owner may set a specific number of guesses with ${inlineCode(
+                        "!guesses <number>",
+                    )} or allow unlimited guesses with ${inlineCode(
+                        "!guesses unlimited",
+                    )}.`,
                 )
                 .setFooter({
                     text: `We are happy to hear your thoughts and feedback. Please refer to the bot's profile to learn more. Version: ${version}.`,
@@ -502,7 +537,7 @@ export class Messages {
             return {
                 text: `${
                     maxAttempts - guessCount
-                } attempts left. You may ${inlineCode(
+                } guesses left. You may ${inlineCode(
                     "!leave",
                 )} at any time. The owner can also ${inlineCode(
                     "!reveal",

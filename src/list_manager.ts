@@ -14,7 +14,7 @@ export class DebugMode extends Settings {
     debug = true;
 }
 
-export class WordsLength {
+export class LengthRange {
     min = 4;
     max = 5;
 
@@ -23,14 +23,10 @@ export class WordsLength {
         this.max = max;
     }
 
-    pretty(): string {
-        return bold(
-            `${
-                this.min === this.max
-                    ? `${this.min}`
-                    : `${this.min}-${this.max}`
-            } characters`,
-        );
+    toString(): string {
+        return this.min === this.max
+            ? `${this.min}`
+            : `${this.min}-${this.max}`;
     }
 }
 
@@ -282,7 +278,7 @@ export class ListManager {
 
     randomWord(
         listIdent: ListIdentifier,
-        length: WordsLength,
+        length: LengthRange,
     ): WordWithDetails | undefined {
         const listsForLanguage = this.lists.get(listIdent.language);
         if (undefined !== listsForLanguage) {

@@ -4,7 +4,7 @@ import { Logger } from "tslog";
 export type Listener = (
     channel: Snowflake,
     user: Snowflake,
-    matchedString: string[],
+    matchedGroups: { [key: string]: string },
 ) => boolean;
 
 interface Command {
@@ -51,7 +51,7 @@ export class CommandParser {
         if (this.thisId !== message.author.id) {
             let matched = false;
             for (const command of this.globalCommands) {
-                matched = CommandParser.try(message, command);
+                matched = tryMatch(message, command);
                 if (matched) {
                     break;
                 }
@@ -62,7 +62,7 @@ export class CommandParser {
                 );
                 if (undefined !== channelSpecificCommands) {
                     for (const command of channelSpecificCommands) {
-                        if (CommandParser.try(message, command)) {
+                        if (tryMatch(message, command)) {
                             matched = true;
                             break;
                         }
@@ -77,20 +77,20 @@ export class CommandParser {
             }
         }
     }
+}
 
-    static try(message: Message, command: Command): boolean {
-        const matchResult = message.content.match(command.regEx);
-        if (null !== matchResult && matchResult[0] === message.content) {
-            if (
-                command.listener(
-                    message.channelId,
-                    message.author.id,
-                    matchResult.slice(1),
-                )
-            ) {
-                return true;
-            }
+function tryMatch(message: Message, command: Command): boolean {
+    const matchResult = command.regEx.exec(message.content);
+    if (null !== matchResult && matchResult[0] === message.content) {
+        if (
+            command.listener(
+                message.channelId,
+                message.author.id,
+                matchResult.groups ?? {},
+            )
+        ) {
+            return true;
         }
-        return false;
     }
+    return false;
 }

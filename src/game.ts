@@ -1,14 +1,14 @@
-import { ColorResolvable, Snowflake, TextChannel } from "discord.js";
+import { Snowflake, TextChannel } from "discord.js";
 import { Logger } from "tslog";
 
 import { CommandParser } from "./commands";
 import { CharResult, Result, State } from "./interfaces";
 import {
+    LengthRange,
     ListIdentifier,
     ListManager,
     WordWithDetails,
-    WordsLength,
-} from "./list_manager";
+} from "./list_manager.js";
 import { Messages, RevealReason } from "./messages";
 import { Basic as Renderer } from "./renderer";
 import { SettingsDb } from "./settings_db";
@@ -24,16 +24,10 @@ export class Options {
     mode = Mode.Turns;
     checkWords = false;
     turnTimeout = 42000;
-    maxAttempts = 12;
+    maxAttempts? = 12;
     language = "en";
     listIdentifier?: ListIdentifier;
-    wordsLength: WordsLength = new WordsLength(4, 6);
-}
-
-export enum MessageType {
-    normal,
-    warning,
-    success,
+    lengthRange: LengthRange = new LengthRange(4, 6);
 }
 
 export class Game {
@@ -176,14 +170,14 @@ export class Game {
         commandParser.registerChannelListener(
             this.channelId,
             /(?<guess>\S+)/,
-            (_channel, player, guess) =>
+            (_channel, player, input) =>
                 this.ifAllowed(
                     player,
                     [State.Running],
                     Mode.Turns === this.options.mode
                         ? [this.players[this.playerIndex]]
                         : [],
-                    () => this.makeGuess(player, guess[0]),
+                    () => this.makeGuess(player, input.guess),
                 ),
         );
 
@@ -209,7 +203,7 @@ export class Game {
                     player,
                     [State.Setup],
                     [this.owner],
-                    () => this.switchToList(input[0], input[1]),
+                    () => this.switchToList(input.language, input.list),
                 ),
         );
 
@@ -224,11 +218,11 @@ export class Game {
                     [this.owner],
                     () =>
                         this.setWordLength(
-                            parseInt(input[0]),
+                            parseInt(input.min),
                             parseInt(
-                                undefined !== input[1]
-                                    ? input[1].trim()
-                                    : input[0],
+                                undefined !== input.max
+                                    ? input.max.trim()
+                                    : input.min,
                             ),
                         ),
                 ),
@@ -243,9 +237,36 @@ export class Game {
                     player,
                     [State.Setup],
                     [this.owner],
-                    () => this.setMode(input[0]),
+                    () => this.setMode(input.mode),
                 ),
         );
+
+        commandParser.registerChannelListener(
+            this.channelId,
+            /!guesses ((?<guessCount>[1-9]\d*)|(?<unlimited>unlimited))/,
+            (_channel, player, input) =>
+                this.ifAllowed(
+                    //
+                    player,
+                    [State.Setup],
+                    [this.owner],
+                    () =>
+                        this.setMaxGuesses(
+                            undefined !== input.guessCount
+                                ? parseInt(input.guessCount)
+                                : undefined,
+                        ),
+                ),
+        );
+    }
+
+    private setMaxGuesses(guesses?: number) {
+        const previousGuessCount = this.options.maxAttempts;
+        this.options.maxAttempts = guesses;
+        this.messages.maxGuessesChanged(guesses);
+        if (previousGuessCount !== guesses) {
+            this.storeSettings();
+        }
     }
 
     private setMode(modeAsString: string) {
@@ -279,7 +300,7 @@ export class Game {
                 // fancy trick to swap the values without temporary
                 max = [min, (min = max)][0];
             }
-            const wordsLength = new WordsLength(min, max);
+            const wordsLength = new LengthRange(min, max);
             if (
                 undefined !==
                 this.listManager.randomWord(
@@ -287,7 +308,7 @@ export class Game {
                     wordsLength,
                 )
             ) {
-                this.options.wordsLength = wordsLength;
+                this.options.lengthRange = wordsLength;
                 this.storeSettings();
                 this.messages.wordSourceChanged(
                     wordsLength,
@@ -296,7 +317,7 @@ export class Game {
             } else {
                 this.messages.wordSourceChangeFailed(
                     this.options.listIdentifier,
-                    this.options.wordsLength,
+                    this.options.lengthRange,
                 );
             }
         } else {
@@ -309,19 +330,19 @@ export class Game {
         const listIdent = new ListIdentifier(language, list);
         if (
             undefined !==
-            this.listManager.randomWord(listIdent, this.options.wordsLength)
+            this.listManager.randomWord(listIdent, this.options.lengthRange)
         ) {
             this.options.listIdentifier = listIdent;
             this.options.language = listIdent.language;
             this.storeSettings();
             this.messages.wordSourceChanged(
-                this.options.wordsLength,
+                this.options.lengthRange,
                 listIdent,
             );
         } else {
             this.messages.wordSourceChangeFailed(
                 listIdent,
-                this.options.wordsLength,
+                this.options.lengthRange,
             );
         }
     }
@@ -346,7 +367,7 @@ export class Game {
         this.messages.listInfo(
             this.listManager,
             this.options.listIdentifier,
-            this.options.wordsLength,
+            this.options.lengthRange,
         );
     }
 
@@ -414,7 +435,7 @@ export class Game {
         } else {
             this.word = this.listManager.randomWord(
                 this.options.listIdentifier,
-                this.options.wordsLength,
+                this.options.lengthRange,
             );
 
             if (undefined !== this.word) {
@@ -444,7 +465,7 @@ export class Game {
             } else {
                 this.logger.error(
                     "Could not get word with length",
-                    this.options.wordsLength,
+                    this.options.lengthRange,
                     "from list",
                     this.options.listIdentifier.getUserString(),
                 );
@@ -523,7 +544,10 @@ export class Game {
     }
 
     private guessesExhausted(): boolean {
-        return 0 >= this.options.maxAttempts - this.guessCount;
+        return (
+            undefined !== this.options.maxAttempts &&
+            0 >= this.options.maxAttempts - this.guessCount
+        );
     }
 
     private returnToLobby(): void {
