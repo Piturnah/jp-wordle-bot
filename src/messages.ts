@@ -475,15 +475,17 @@ export class Messages {
                 )
                 .addField(
                     "Mode",
-                    `The game is ${inlineCode(
+                    `The game is in ${inlineCode(
                         options.mode,
                     )} mode right now. ${this.modeExplanation(
                         options.mode,
                     )}\nThe owner may switch modes using ${inlineCode(
                         "!mode <mode>",
-                    )}, where ${inlineCode("<mode>")} is one of ${inlineCode(
-                        "turns",
-                    )} or ${inlineCode("free")}.`,
+                    )}, where ${inlineCode(
+                        "<mode>",
+                    )} is one of either ${inlineCode("turns")} or ${inlineCode(
+                        "free",
+                    )}.`,
                 )
                 .addField(
                     "Joining",
@@ -495,9 +497,7 @@ export class Messages {
                 )
                 .addField(
                     "Leaving",
-                    `Players may ${inlineCode("!leave")} at any time, ${italic(
-                        "even while a game is ongoing",
-                    )}.`,
+                    `Players may ${inlineCode("!leave")} at any time.`,
                 )
                 .addField(
                     "Words",
