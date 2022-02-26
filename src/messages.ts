@@ -1,7 +1,6 @@
 import {
     codeBlock,
     inlineCode,
-    italic,
     underscore,
     userMention,
 } from "@discordjs/builders";
@@ -12,7 +11,7 @@ import {
     MessageAttachment,
     MessageEmbed,
     Snowflake,
-    TextChannel,
+    TextBasedChannel,
 } from "discord.js";
 
 import { version } from "../package.json";
@@ -61,6 +60,18 @@ export enum MessageType {
     success,
 }
 export class Messages {
+    private static readonly colors = new EmbedColors();
+
+    private readonly renderer: Renderer;
+    private readonly channel: TextBasedChannel;
+    private readonly logo: MessageAttachment;
+
+    constructor(renderer: Renderer, channel: TextBasedChannel) {
+        this.renderer = renderer;
+        this.channel = channel;
+        this.logo = this.generateLogo();
+    }
+
     maxGuessesChanged(guesses?: number): Promise<Message> {
         return this.sendMessage(
             MessageType.normal,
@@ -72,18 +83,6 @@ export class Messages {
                 : `Now allowing an unlimited number of guesses.`,
         );
     }
-    private static readonly colors = new EmbedColors();
-
-    private readonly renderer: Renderer;
-    private readonly channel: TextChannel;
-    private readonly logo: MessageAttachment;
-
-    constructor(renderer: Renderer, channel: TextChannel) {
-        this.renderer = renderer;
-        this.channel = channel;
-        this.logo = this.generateLogo();
-    }
-
     noList(): Promise<Message> {
         return this.sendMessage(
             MessageType.warning,

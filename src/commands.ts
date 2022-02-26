@@ -1,15 +1,20 @@
-import { Message, Snowflake } from "discord.js";
+import { Message, Snowflake, TextBasedChannel } from "discord.js";
 import { Logger } from "tslog";
 
-export type Listener = (
-    channel: Snowflake,
+export type ChannelListener = (
+    user: Snowflake,
+    matchedGroups: { [key: string]: string },
+) => boolean;
+
+export type GlobalListener = (
+    channel: TextBasedChannel,
     user: Snowflake,
     matchedGroups: { [key: string]: string },
 ) => boolean;
 
 interface Command {
     regEx: RegExp;
-    listener: Listener;
+    listener: GlobalListener;
 }
 
 export class CommandParser {
@@ -26,21 +31,24 @@ export class CommandParser {
         this.thisId = id;
     }
 
-    registerGlobalListener(regEx: RegExp, listener: Listener) {
+    registerGlobalListener(regEx: RegExp, listener: GlobalListener) {
         this.globalCommands.push({ regEx: regEx, listener: listener });
     }
 
     registerChannelListener(
         channel: Snowflake,
         regEx: RegExp,
-        listener: Listener,
+        listener: ChannelListener,
     ) {
         let commands = this.perChannelCommands.get(channel);
         if (undefined === commands) {
             commands = [];
             this.perChannelCommands.set(channel, commands);
         }
-        commands.push({ regEx: regEx, listener: listener });
+        commands.push({
+            regEx: regEx,
+            listener: (_channel, user, matches) => listener(user, matches),
+        });
     }
 
     removeAllForChannel(channel: Snowflake): void {
@@ -84,7 +92,7 @@ function tryMatch(message: Message, command: Command): boolean {
     if (null !== matchResult && matchResult[0] === message.content) {
         if (
             command.listener(
-                message.channelId,
+                message.channel,
                 message.author.id,
                 matchResult.groups ?? {},
             )

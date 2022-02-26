@@ -1,4 +1,11 @@
-import { Client, Intents, Message, Snowflake, TextChannel } from "discord.js";
+import {
+    Client,
+    Intents,
+    Message,
+    Snowflake,
+    TextBasedChannel,
+    TextChannel,
+} from "discord.js";
 import { Logger } from "tslog";
 
 import { debug, font, token } from "../config.json";
@@ -38,9 +45,8 @@ class Bot {
         this.logger.info("Starting..");
         this.listManager.load();
 
-        this.commandParser.registerGlobalListener(
-            /!wordle/,
-            (channel: Snowflake, user: Snowflake) => this.wakeUp(channel, user),
+        this.commandParser.registerGlobalListener(/!wordle/, (channel, user) =>
+            this.wakeUp(channel, user),
         );
 
         client.once("ready", () => this.ready());
@@ -51,32 +57,26 @@ class Bot {
         client.login(token);
     }
 
-    private wakeUp(channelId: Snowflake, player: Snowflake): boolean {
-        const game = this.activeGames.get(channelId);
+    private wakeUp(channel: TextBasedChannel, player: Snowflake): boolean {
+        const game = this.activeGames.get(channel.id);
         if (undefined === game || State.Ended === game.getState()) {
-            const channel = this.resolveChannel(channelId);
-            if (undefined !== channel) {
-                this.activeGames.set(
-                    channelId,
-                    new Game(
-                        this.logger.getChildLogger(),
-                        player,
-                        channel,
-                        this.commandParser,
-                        this.listManager,
-                        this.renderer,
-                        this.globalSettingsDb,
-                    ),
-                );
-            } else {
-                this.logger.error(
-                    "Could not find channel for snowflake",
-                    channelId,
-                    "!",
-                );
-            }
+            this.activeGames.set(
+                channel.id,
+                new Game(
+                    this.logger.getChildLogger(),
+                    player,
+                    channel,
+                    this.commandParser,
+                    this.listManager,
+                    this.renderer,
+                    this.globalSettingsDb,
+                ),
+            );
+
+            return true;
+        } else {
+            return false;
         }
-        return true;
     }
 
     private ready() {
@@ -90,19 +90,17 @@ class Bot {
     private messageCreate(message: Message) {
         this.commandParser.messageReceived(message);
     }
-
-    private resolveChannel(id: Snowflake): TextChannel | undefined {
-        const channel = this.client.channels.cache.get(id);
-        if (undefined !== channel) {
-            return channel as TextChannel;
-        }
-        return undefined;
-    }
 }
 
 // https://discord.com/developers/docs/topics/gateway#gateway-intents
 const client = new Client({
-    intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
+    intents: [
+        Intents.FLAGS.GUILDS,
+        Intents.FLAGS.GUILD_MESSAGES,
+        Intents.FLAGS.DIRECT_MESSAGES,
+    ],
+    // required to receive direct messages, see https://github.com/discordjs/discord.js/issues/5516
+    partials: ["CHANNEL"],
 });
 
 const bot = new Bot(client, debug, font ?? undefined);

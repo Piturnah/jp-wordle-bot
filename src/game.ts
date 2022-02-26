@@ -1,4 +1,4 @@
-import { Snowflake, TextChannel } from "discord.js";
+import { Snowflake, TextBasedChannel } from "discord.js";
 import { Logger } from "tslog";
 
 import { CommandParser } from "./commands";
@@ -54,7 +54,7 @@ export class Game {
     constructor(
         logger: Logger,
         player: Snowflake,
-        channel: TextChannel,
+        channel: TextBasedChannel,
         commandParser: CommandParser,
         listManager: ListManager,
         renderer: Renderer,
@@ -118,7 +118,7 @@ export class Game {
         commandParser.registerChannelListener(
             this.channelId,
             /!join/,
-            (_channel, player) =>
+            (player) =>
                 this.ifAllowed(
                     //
                     player,
@@ -131,7 +131,7 @@ export class Game {
         commandParser.registerChannelListener(
             this.channelId,
             /!leave/,
-            (_channel, player) =>
+            (player) =>
                 this.ifAllowed(
                     //
                     player,
@@ -144,7 +144,7 @@ export class Game {
         commandParser.registerChannelListener(
             this.channelId,
             /!reveal/,
-            (_channel, player) =>
+            (player) =>
                 this.ifAllowed(
                     //
                     player,
@@ -157,7 +157,7 @@ export class Game {
         commandParser.registerChannelListener(
             this.channelId,
             /!start/,
-            (_channel, player) =>
+            (player) =>
                 this.ifAllowed(
                     //
                     player,
@@ -170,7 +170,7 @@ export class Game {
         commandParser.registerChannelListener(
             this.channelId,
             /(?<guess>\S+)/,
-            (_channel, player, input) =>
+            (player, input) =>
                 this.ifAllowed(
                     player,
                     [State.Running],
@@ -184,7 +184,7 @@ export class Game {
         commandParser.registerChannelListener(
             this.channelId,
             /!list/,
-            (_channel, player) =>
+            (player) =>
                 this.ifAllowed(
                     //
                     player,
@@ -197,7 +197,7 @@ export class Game {
         commandParser.registerChannelListener(
             this.channelId,
             /!list (?<language>\w+)\/(?<list>\w+)/,
-            (_channel, player, input) =>
+            (player, input) =>
                 this.ifAllowed(
                     //
                     player,
@@ -210,7 +210,7 @@ export class Game {
         commandParser.registerChannelListener(
             this.channelId,
             /!length (?<min>[1-9]\d*)( (?<max>[1-9]\d*))?/,
-            (_channel, player, input) =>
+            (player, input) =>
                 this.ifAllowed(
                     //
                     player,
@@ -231,7 +231,7 @@ export class Game {
         commandParser.registerChannelListener(
             this.channelId,
             /!mode (?<mode>turns|free)/,
-            (_channel, player, input) =>
+            (player, input) =>
                 this.ifAllowed(
                     //
                     player,
@@ -244,7 +244,7 @@ export class Game {
         commandParser.registerChannelListener(
             this.channelId,
             /!guesses ((?<guessCount>[1-9]\d*)|(?<unlimited>unlimited))/,
-            (_channel, player, input) =>
+            (player, input) =>
                 this.ifAllowed(
                     //
                     player,
