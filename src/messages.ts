@@ -76,6 +76,10 @@ export class Messages {
         this.logo = this.generateLogo();
     }
 
+    copyToOtherChannel(channel: TextBasedChannel): Messages {
+        return { ...this, channel };
+    }
+
     maxGuessesChanged(guesses?: number): Promise<Message> {
         return this.sendMessage(
             MessageType.normal,

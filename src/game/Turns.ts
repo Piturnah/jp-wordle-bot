@@ -15,7 +15,7 @@ export class Turns extends Game {
         );
 
         this.params.messages.gameStarted(this.params.word.word.length, {
-            nextPlayer: this.params.players[this.playerIndex],
+            nextPlayer: this.params.players[this.playerIndex].id,
             guessCount: this.guesses,
             maxGuessCount: this.params.options.maxAttempts,
         });
@@ -28,7 +28,7 @@ export class Turns extends Game {
 
         if (this.params.players.length > 1) {
             this.params.messages.feedback(player, result, {
-                nextPlayer: this.params.players[this.playerIndex],
+                nextPlayer: this.params.players[this.playerIndex].id,
                 guessCount: this.guesses,
                 maxGuessCount: this.params.options.maxAttempts,
             });
@@ -52,12 +52,12 @@ export class Turns extends Game {
         }
     }
 
-    protected playersAllowedToGuess(): string[] {
+    protected playersAllowedToGuess(): string[] | "all" {
         return [this.nextGuessExpectedFrom()];
     }
 
     nextGuessExpectedFrom(): Snowflake {
-        return this.params.players[this.playerIndex];
+        return this.params.players[this.playerIndex].id;
     }
 
     protected left(index: number): void {
@@ -66,7 +66,7 @@ export class Turns extends Game {
             // this.playerIndex is already pointing to the next player
             this.playerIndex %= this.params.players.length;
             this.params.messages.promptPlayerTurn(
-                this.params.players[this.playerIndex],
+                this.params.players[this.playerIndex].id,
             );
             this.restartRoundTimer();
         } else if (index < this.playerIndex) {
@@ -88,13 +88,13 @@ export class Turns extends Game {
     }
 
     private playerTimedOut() {
-        const currentPlayer = this.params.players[this.playerIndex];
+        const currentPlayer = this.params.players[this.playerIndex].id;
         this.guesses++;
         if (!this.guessesExhausted()) {
             this.advancePlayerIndex();
             if (this.params.players.length > 1) {
                 this.params.messages.turnTimeout(currentPlayer, {
-                    nextPlayer: this.params.players[this.playerIndex],
+                    nextPlayer: this.params.players[this.playerIndex].id,
                     guessCount: this.guesses,
                     maxGuessCount: this.params.options.maxAttempts,
                 });

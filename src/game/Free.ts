@@ -1,5 +1,5 @@
-import { Game, GameParams } from "./Game";
 import { CharResult } from "../interfaces";
+import { Game, GameParams } from "./Game";
 
 export class Free extends Game {
     constructor(params: GameParams) {
@@ -11,8 +11,8 @@ export class Free extends Game {
         });
     }
 
-    protected playersAllowedToGuess(): string[] {
-        return [];
+    protected playersAllowedToGuess(): string[] | "all" {
+        return "all";
     }
 
     protected left() {

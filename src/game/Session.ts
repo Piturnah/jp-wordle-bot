@@ -1,4 +1,4 @@
-import { Snowflake, TextBasedChannel } from "discord.js";
+import { Snowflake, TextBasedChannel, User } from "discord.js";
 import { Logger } from "tslog";
 
 import { CommandParser, ListenerId } from "../commands";
@@ -32,12 +32,12 @@ export class Session extends WithInactivityTimeout {
     private originalOwner = true;
     private state: "lobby" | Game | "ended" = "lobby";
 
-    private players: Snowflake[];
+    private players: User[];
     private owner: Snowflake;
 
     constructor(
         logger: Logger,
-        player: Snowflake,
+        owner: User,
         channel: TextBasedChannel,
         commandParser: CommandParser,
         listManager: ListManager,
@@ -48,14 +48,13 @@ export class Session extends WithInactivityTimeout {
         this.logger = logger;
         this.channelId = channel.id;
         this.commandParser = commandParser;
-        this.owner = player;
-        this.players = [this.owner];
+        this.owner = owner.id;
+        this.players = [owner];
 
         this.settingsDb = settingsDb;
-        let loadedSettings = this.settingsDb.load(player);
+        let loadedSettings = this.settingsDb.load(owner.id);
         if (undefined === loadedSettings) {
             loadedSettings = new Options();
-            this.settingsDb.store(player, loadedSettings);
         }
         this.options = loadedSettings;
 
@@ -100,7 +99,7 @@ export class Session extends WithInactivityTimeout {
                 listener: (player) =>
                     this.ifAllowed(
                         //
-                        player,
+                        player.id,
                         [],
                         () => this.join(player),
                     ),
@@ -112,9 +111,9 @@ export class Session extends WithInactivityTimeout {
                 listener: (player) =>
                     this.ifAllowed(
                         //
-                        player,
+                        player.id,
                         [],
-                        () => this.leave(player),
+                        () => this.leave(player.id),
                     ),
             }),
 
@@ -124,7 +123,7 @@ export class Session extends WithInactivityTimeout {
                 listener: (player) =>
                     this.ifAllowed(
                         //
-                        player,
+                        player.id,
                         [this.owner],
                         () => this.start(),
                     ),
@@ -136,7 +135,7 @@ export class Session extends WithInactivityTimeout {
                 listener: (player) =>
                     this.ifAllowed(
                         //
-                        player,
+                        player.id,
                         [this.owner],
                         () => this.printCurrentListInfo(),
                     ),
@@ -148,7 +147,7 @@ export class Session extends WithInactivityTimeout {
                 listener: (player, input) =>
                     this.ifAllowed(
                         //
-                        player,
+                        player.id,
                         [this.owner],
                         () => this.switchToList(input.language, input.list),
                     ),
@@ -160,7 +159,7 @@ export class Session extends WithInactivityTimeout {
                 listener: (player, input) =>
                     this.ifAllowed(
                         //
-                        player,
+                        player.id,
                         [this.owner],
                         () =>
                             this.setWordLength(
@@ -180,7 +179,7 @@ export class Session extends WithInactivityTimeout {
                 listener: (player, input) =>
                     this.ifAllowed(
                         //
-                        player,
+                        player.id,
                         [this.owner],
                         () => this.setMode(input.mode),
                     ),
@@ -192,7 +191,7 @@ export class Session extends WithInactivityTimeout {
                 listener: (player, input) =>
                     this.ifAllowed(
                         //
-                        player,
+                        player.id,
                         [this.owner],
                         () =>
                             this.setMaxGuesses(
@@ -310,15 +309,21 @@ export class Session extends WithInactivityTimeout {
         return this.state;
     }
 
-    join(player: Snowflake): void {
-        if (this.players.indexOf(player) < 0) {
+    join(player: User): void {
+        if (
+            this.players.findIndex(
+                (presentPlayer) => presentPlayer.id === player.id,
+            ) < 0
+        ) {
             this.players.push(player);
-            this.messages.joined(player);
+            this.messages.joined(player.id);
         }
     }
 
     leave(player: Snowflake): number | "notFound" | "empty" {
-        const index = this.players.indexOf(player);
+        const index = this.players.findIndex(
+            (presentPlayer) => presentPlayer.id === player,
+        );
         if (-1 !== index) {
             this.players.splice(index, 1);
             if (this.players.length === 0) {
@@ -327,7 +332,7 @@ export class Session extends WithInactivityTimeout {
                 return "empty";
             } else {
                 if (this.owner === player) {
-                    this.owner = this.players[0];
+                    this.owner = this.players[0].id;
                     this.messages.ownerChanged(player, this.owner);
                     this.originalOwner = false;
                 }

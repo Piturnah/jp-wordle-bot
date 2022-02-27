@@ -1,4 +1,4 @@
-import { Snowflake } from "discord.js";
+import { Snowflake, TextBasedChannel, User } from "discord.js";
 
 import { CommandParser, ListenerId } from "../commands";
 import { CharResult, Result } from "../interfaces";
@@ -12,7 +12,8 @@ export type GameResult =
     | "correct"
     | "guessesExhausted"
     | "revealed"
-    | "noPlayersLeft";
+    | "noPlayersLeft"
+    | "couldNotCreateChannels";
 
 export function generateResult(word: string, guess: string): CharResult[] {
     const result: CharResult[] = new Array(word.length);
@@ -75,11 +76,11 @@ export interface GameParams {
     readonly commandParser: CommandParser;
     readonly listManager: ListManager;
     readonly messages: Messages;
-    readonly channelId: Snowflake;
+    readonly channel: TextBasedChannel;
     readonly options: Options;
     readonly whenOver: () => void;
     readonly leave: (player: Snowflake) => number | "empty" | "notFound";
-    players: Snowflake[];
+    readonly players: User[];
     readonly owner: () => Snowflake;
 }
 
@@ -96,11 +97,14 @@ export abstract class Game extends WithInactivityTimeout {
         this.listeners = this.setupListeners(this.params.commandParser);
     }
 
-    private ifAllowed(player: Snowflake, then: () => void) {
-        const allowedPlayers = this.playersAllowedToGuess();
+    private ifAllowed(
+        player: Snowflake,
+        allowedPlayers: Snowflake[] | "all",
+        then: () => void,
+    ) {
         if (
             undefined === this.ended &&
-            (allowedPlayers.length === 0 || allowedPlayers.indexOf(player) > -1)
+            ("all" === allowedPlayers || allowedPlayers.indexOf(player) > -1)
         ) {
             // it's important if unintuitive to reset the timer beforehand,
             // as then() might actually cause the session to end..
@@ -114,33 +118,37 @@ export abstract class Game extends WithInactivityTimeout {
     private setupListeners(commandParser: CommandParser): ListenerId[] {
         return [
             commandParser.register({
-                channel: this.params.channelId,
+                channel: this.params.channel.id,
                 regEx: /!leave/,
                 listener: (player) =>
                     this.ifAllowed(
                         //
-                        player,
-                        () => this.leave(player),
+                        player.id,
+                        "all",
+                        () => this.leave(player.id),
                     ),
             }),
 
             commandParser.register({
-                channel: this.params.channelId,
+                channel: this.params.channel.id,
                 regEx: /!reveal/,
                 listener: (player) =>
                     this.ifAllowed(
                         //
-                        player,
+                        player.id,
+                        [this.params.owner()],
                         () => this.reveal(),
                     ),
             }),
 
             commandParser.register({
-                channel: this.params.channelId,
+                channel: this.params.channel.id,
                 regEx: /(?<guess>\S+)/,
                 listener: (player, input) =>
-                    this.ifAllowed(player, () =>
-                        this.makeGuess(player, input.guess),
+                    this.ifAllowed(
+                        player.id,
+                        this.playersAllowedToGuess(),
+                        () => this.makeGuess(player.id, input.guess),
                     ),
             }),
         ];
@@ -169,7 +177,7 @@ export abstract class Game extends WithInactivityTimeout {
                 .then(() => this.endedWith("noPlayersLeft"))
                 .catch(() => this.endedWith("noPlayersLeft"));
         } else {
-            this.left(result);
+            this.left(result, player);
         }
     }
 
@@ -235,15 +243,15 @@ export abstract class Game extends WithInactivityTimeout {
 
     abstract cleanUpInternal(): void;
 
-    private cleanUp() {
+    cleanUp() {
         this.stopInactivityTimer();
         this.params.commandParser.remove(...this.listeners);
         this.cleanUpInternal();
     }
 
-    protected abstract playersAllowedToGuess(): Snowflake[];
+    protected abstract playersAllowedToGuess(): Snowflake[] | "all";
 
-    protected abstract left(index: number): void;
+    protected abstract left(index: number, player: Snowflake): void;
 
     protected endedWith(result: GameResult) {
         this.ended = result;

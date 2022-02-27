@@ -1,4 +1,4 @@
-import { Message, Snowflake, TextBasedChannel } from "discord.js";
+import { Message, Snowflake, TextBasedChannel, User } from "discord.js";
 import { Logger } from "tslog";
 
 export interface ListenerId {
@@ -9,7 +9,7 @@ export interface ListenerId {
 type LocalListenerId = number;
 
 export type Listener = (
-    user: Snowflake,
+    user: User,
     matchedGroups: { [key: string]: string },
     channel: TextBasedChannel,
 ) => boolean;
@@ -168,7 +168,7 @@ function tryMatch(message: Message, command: Command): boolean {
     if (null !== matchResult && matchResult[0] === message.content) {
         if (
             command.listener(
-                message.author.id,
+                message.author,
                 matchResult.groups ?? {},
                 message.channel,
             )
