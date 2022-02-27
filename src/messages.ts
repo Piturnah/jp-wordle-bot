@@ -15,7 +15,9 @@ import {
 } from "discord.js";
 
 import { version } from "../package.json";
-import { Mode, Options, generateResult } from "./game";
+import { generateResult } from "./game/Game";
+import { Options } from "./game/Options";
+import { Mode } from "./game/Session";
 import { CharResult, Result } from "./interfaces";
 import {
     LengthRange,
@@ -44,8 +46,10 @@ export class EmbedColors {
     }
 }
 export enum RevealReason {
-    Aborted,
+    Revealed,
     GuessesExhausted,
+    Inactivity,
+    NoPlayersLeft,
 }
 
 export interface FeedbackExtras {
@@ -133,7 +137,7 @@ export class Messages {
                 ? word.details.alternateSpelling
                 : word.word;
         switch (reason) {
-            case RevealReason.Aborted:
+            case RevealReason.Revealed:
                 return this.feedbackInternal(
                     generateResult(word.word, word.word),
                     `The round has been aborted early. The correct word was ${underscore(
@@ -147,6 +151,22 @@ export class Messages {
                         wordOrAlternative,
                     )}.`,
                 );
+            case RevealReason.Inactivity: {
+                return this.feedbackInternal(
+                    generateResult(word.word, word.word),
+                    `Time since last guess exceeded threshold, so the round will be aborted. The word was ${underscore(
+                        wordOrAlternative,
+                    )}.`,
+                );
+            }
+            case RevealReason.NoPlayersLeft: {
+                return this.feedbackInternal(
+                    generateResult(word.word, word.word),
+                    `No players left, so the session will be aborted. The word was ${underscore(
+                        wordOrAlternative,
+                    )}.`,
+                );
+            }
         }
     }
 

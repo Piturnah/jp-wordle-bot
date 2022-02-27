@@ -168,9 +168,9 @@ function tryMatch(message: Message, command: Command): boolean {
     if (null !== matchResult && matchResult[0] === message.content) {
         if (
             command.listener(
-                message.channel,
                 message.author.id,
                 matchResult.groups ?? {},
+                message.channel,
             )
         ) {
             return true;

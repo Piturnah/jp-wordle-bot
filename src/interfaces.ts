@@ -11,12 +11,6 @@ export enum Result {
     Correct,
 }
 
-export enum State {
-    Setup,
-    Running,
-    Ended,
-}
-
 export interface Colors {
     wrong: string;
     right: string;

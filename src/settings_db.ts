@@ -1,6 +1,6 @@
 import { Snowflake } from "discord.js";
 
-import { Options } from "./game";
+import { Options } from "./game/Options";
 
 // For now, this class does not do anything particularly..
 // Later, we could think about adding persistence methods

@@ -4,14 +4,12 @@ import {
     Message,
     Snowflake,
     TextBasedChannel,
-    TextChannel,
 } from "discord.js";
 import { Logger } from "tslog";
 
 import { debug, font, token } from "../config.json";
 import { CommandParser } from "./commands";
-import { Session } from "./game";
-import { State } from "./interfaces";
+import { Session } from "./game/Session";
 import { ListManager } from "./list_manager";
 import { Basic as Renderer } from "./renderer";
 import { SettingsDb } from "./settings_db";
@@ -45,9 +43,10 @@ class Bot {
         this.logger.info("Starting..");
         this.listManager.load();
 
-        this.commandParser.registerGlobalListener(/!wordle/, (channel, user) =>
-            this.wakeUp(channel, user),
-        );
+        this.commandParser.register({
+            regEx: /!wordle/,
+            listener: (user, _input, channel) => this.wakeUp(channel, user),
+        });
 
         client.once("ready", () => this.ready());
         client.on("messageCreate", (message: Message) =>
@@ -59,7 +58,7 @@ class Bot {
 
     private wakeUp(channel: TextBasedChannel, player: Snowflake): boolean {
         const game = this.activeGames.get(channel.id);
-        if (undefined === game || State.Ended === game.getState()) {
+        if (undefined === game || "ended" === game.getState()) {
             this.activeGames.set(
                 channel.id,
                 new Session(
