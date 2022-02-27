@@ -10,7 +10,7 @@ import { Logger } from "tslog";
 
 import { debug, font, token } from "../config.json";
 import { CommandParser } from "./commands";
-import { Game } from "./game";
+import { Session } from "./game";
 import { State } from "./interfaces";
 import { ListManager } from "./list_manager";
 import { Basic as Renderer } from "./renderer";
@@ -21,7 +21,7 @@ class Bot {
     private readonly logger = new Logger();
     private readonly globalSettingsDb = new SettingsDb();
 
-    private readonly activeGames = new Map<Snowflake, Game>();
+    private readonly activeGames = new Map<Snowflake, Session>();
     private readonly listManager: ListManager = new ListManager(
         this.logger.getChildLogger(),
     );
@@ -62,7 +62,7 @@ class Bot {
         if (undefined === game || State.Ended === game.getState()) {
             this.activeGames.set(
                 channel.id,
-                new Game(
+                new Session(
                     this.logger.getChildLogger(),
                     player,
                     channel,

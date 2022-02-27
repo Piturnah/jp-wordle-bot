@@ -1,7 +1,7 @@
-import { Snowflake, TextBasedChannel } from "discord.js";
+import { Message, Snowflake, TextBasedChannel } from "discord.js";
 import { Logger } from "tslog";
 
-import { CommandParser } from "./commands";
+import { CommandParser, ListenerId } from "./commands";
 import { CharResult, Result, State } from "./interfaces";
 import {
     LengthRange,
@@ -30,13 +30,38 @@ export class Options {
     lengthRange: LengthRange = new LengthRange(4, 6);
 }
 
-export class Game {
+abstract class WithInactivityTimeout {
+    private inactiveTimeout: ReturnType<typeof setTimeout>;
+
+    constructor() {
+        this.inactiveTimeout = this.set();
+    }
+
+    protected restartInactivityTimer() {
+        clearTimeout(this.inactiveTimeout);
+
+        this.inactiveTimeout = this.set();
+    }
+
+    private set(): ReturnType<typeof setTimeout> {
+        return setTimeout(() => this.inactivityTimeout(), MAX_INACTIVE_TIME);
+    }
+
+    protected stopInactivityTimer() {
+        clearTimeout(this.inactiveTimeout);
+    }
+
+    protected abstract inactivityTimeout(): void;
+}
+
+export class Session extends WithInactivityTimeout {
     private readonly settingsDb: SettingsDb;
     private readonly listManager: ListManager;
     private readonly commandParser: CommandParser;
     private readonly logger: Logger;
     private readonly channelId: Snowflake;
     private readonly messages: Messages;
+    private readonly listeners: ListenerId[];
 
     private options = new Options();
     private originalOwner = true;
@@ -46,7 +71,6 @@ export class Game {
     private players: Snowflake[];
     private owner: Snowflake;
     private playerIndex = 0;
-    private inactiveTimeout: ReturnType<typeof setTimeout>;
     private turnTimeout?: ReturnType<typeof setTimeout> = undefined;
 
     private word?: WordWithDetails = undefined;
@@ -60,6 +84,7 @@ export class Game {
         renderer: Renderer,
         settingsDb: SettingsDb,
     ) {
+        super();
         this.logger = logger;
         this.state = State.Setup;
         this.channelId = channel.id;
@@ -85,14 +110,9 @@ export class Game {
 
         this.messages = new Messages(renderer, channel);
 
-        this.setupListeners(commandParser);
+        this.listeners = this.setupListeners(commandParser);
 
         this.messages.lobbyText(this.owner, this.options);
-
-        this.inactiveTimeout = setTimeout(
-            () => this.cancelDueToInactivity(),
-            MAX_INACTIVE_TIME,
-        );
     }
 
     private ifAllowed(
@@ -107,157 +127,132 @@ export class Game {
         ) {
             // it's important if unintuitive to reset the timer beforehand,
             // as then() might actually cause the session to end..
-            this.resetInactivityTimer();
+            this.restartInactivityTimer();
             then();
             return true;
         }
         return false;
     }
 
-    private setupListeners(commandParser: CommandParser): void {
-        commandParser.registerChannelListener(
-            this.channelId,
-            /!join/,
-            (player) =>
-                this.ifAllowed(
-                    //
-                    player,
-                    [State.Setup],
-                    [],
-                    () => this.join(player),
-                ),
-        );
+    private setupListeners(commandParser: CommandParser): ListenerId[] {
+        return [
+            commandParser.register({
+                channel: this.channelId,
+                regEx: /!join/,
+                listener: (player) =>
+                    this.ifAllowed(
+                        //
+                        player,
+                        [State.Setup],
+                        [],
+                        () => this.join(player),
+                    ),
+            }),
 
-        commandParser.registerChannelListener(
-            this.channelId,
-            /!leave/,
-            (player) =>
-                this.ifAllowed(
-                    //
-                    player,
-                    [State.Setup, State.Running],
-                    [],
-                    () => this.leave(player),
-                ),
-        );
+            commandParser.register({
+                channel: this.channelId,
+                regEx: /!leave/,
+                listener: (player) =>
+                    this.ifAllowed(
+                        //
+                        player,
+                        [State.Setup], // the Game class has to manage the !leave command while it is active
+                        [],
+                        () => this.leave(player),
+                    ),
+            }),
 
-        commandParser.registerChannelListener(
-            this.channelId,
-            /!reveal/,
-            (player) =>
-                this.ifAllowed(
-                    //
-                    player,
-                    [State.Running],
-                    [this.owner],
-                    () => this.reveal(),
-                ),
-        );
+            commandParser.register({
+                channel: this.channelId,
+                regEx: /!start/,
+                listener: (player) =>
+                    this.ifAllowed(
+                        //
+                        player,
+                        [State.Setup],
+                        [this.owner],
+                        () => this.start(),
+                    ),
+            }),
 
-        commandParser.registerChannelListener(
-            this.channelId,
-            /!start/,
-            (player) =>
-                this.ifAllowed(
-                    //
-                    player,
-                    [State.Setup],
-                    [this.owner],
-                    () => this.start(),
-                ),
-        );
+            commandParser.register({
+                channel: this.channelId,
+                regEx: /!list/,
+                listener: (player) =>
+                    this.ifAllowed(
+                        //
+                        player,
+                        [State.Setup],
+                        [this.owner],
+                        () => this.printCurrentListInfo(),
+                    ),
+            }),
 
-        commandParser.registerChannelListener(
-            this.channelId,
-            /(?<guess>\S+)/,
-            (player, input) =>
-                this.ifAllowed(
-                    player,
-                    [State.Running],
-                    Mode.Turns === this.options.mode
-                        ? [this.players[this.playerIndex]]
-                        : [],
-                    () => this.makeGuess(player, input.guess),
-                ),
-        );
+            commandParser.register({
+                channel: this.channelId,
+                regEx: /!list (?<language>\w+)\/(?<list>\w+)/,
+                listener: (player, input) =>
+                    this.ifAllowed(
+                        //
+                        player,
+                        [State.Setup],
+                        [this.owner],
+                        () => this.switchToList(input.language, input.list),
+                    ),
+            }),
 
-        commandParser.registerChannelListener(
-            this.channelId,
-            /!list/,
-            (player) =>
-                this.ifAllowed(
-                    //
-                    player,
-                    [State.Setup],
-                    [this.owner],
-                    () => this.printCurrentListInfo(),
-                ),
-        );
-
-        commandParser.registerChannelListener(
-            this.channelId,
-            /!list (?<language>\w+)\/(?<list>\w+)/,
-            (player, input) =>
-                this.ifAllowed(
-                    //
-                    player,
-                    [State.Setup],
-                    [this.owner],
-                    () => this.switchToList(input.language, input.list),
-                ),
-        );
-
-        commandParser.registerChannelListener(
-            this.channelId,
-            /!length (?<min>[1-9]\d*)( (?<max>[1-9]\d*))?/,
-            (player, input) =>
-                this.ifAllowed(
-                    //
-                    player,
-                    [State.Setup],
-                    [this.owner],
-                    () =>
-                        this.setWordLength(
-                            parseInt(input.min),
-                            parseInt(
-                                undefined !== input.max
-                                    ? input.max.trim()
-                                    : input.min,
+            commandParser.register({
+                channel: this.channelId,
+                regEx: /!length (?<min>[1-9]\d*)( (?<max>[1-9]\d*))?/,
+                listener: (player, input) =>
+                    this.ifAllowed(
+                        //
+                        player,
+                        [State.Setup],
+                        [this.owner],
+                        () =>
+                            this.setWordLength(
+                                parseInt(input.min),
+                                parseInt(
+                                    undefined !== input.max
+                                        ? input.max.trim()
+                                        : input.min,
+                                ),
                             ),
-                        ),
-                ),
-        );
+                    ),
+            }),
 
-        commandParser.registerChannelListener(
-            this.channelId,
-            /!mode (?<mode>turns|free)/,
-            (player, input) =>
-                this.ifAllowed(
-                    //
-                    player,
-                    [State.Setup],
-                    [this.owner],
-                    () => this.setMode(input.mode),
-                ),
-        );
+            commandParser.register({
+                channel: this.channelId,
+                regEx: /!mode (?<mode>turns|free)/,
+                listener: (player, input) =>
+                    this.ifAllowed(
+                        //
+                        player,
+                        [State.Setup],
+                        [this.owner],
+                        () => this.setMode(input.mode),
+                    ),
+            }),
 
-        commandParser.registerChannelListener(
-            this.channelId,
-            /!guesses ((?<guessCount>[1-9]\d*)|(?<unlimited>unlimited))/,
-            (player, input) =>
-                this.ifAllowed(
-                    //
-                    player,
-                    [State.Setup],
-                    [this.owner],
-                    () =>
-                        this.setMaxGuesses(
-                            undefined !== input.guessCount
-                                ? parseInt(input.guessCount)
-                                : undefined,
-                        ),
-                ),
-        );
+            commandParser.register({
+                channel: this.channelId,
+                regEx: /!guesses ((?<guessCount>[1-9]\d*)|(?<unlimited>unlimited))/,
+                listener: (player, input) =>
+                    this.ifAllowed(
+                        //
+                        player,
+                        [State.Setup],
+                        [this.owner],
+                        () =>
+                            this.setMaxGuesses(
+                                undefined !== input.guessCount
+                                    ? parseInt(input.guessCount)
+                                    : undefined,
+                            ),
+                    ),
+            }),
+        ];
     }
 
     private setMaxGuesses(guesses?: number) {
@@ -344,16 +339,6 @@ export class Game {
                 listIdent,
                 this.options.lengthRange,
             );
-        }
-    }
-
-    private reveal() {
-        if (undefined !== this.word) {
-            this.messages.reveal(this.word, RevealReason.Aborted).then(() => {
-                return this.returnToLobby();
-            });
-        } else {
-            this.returnToLobby();
         }
     }
 
@@ -477,79 +462,6 @@ export class Game {
         return this.players[this.playerIndex];
     }
 
-    makeGuess(player: Snowflake, guess: string): void {
-        if (undefined !== this.word) {
-            if (guess.length !== this.word.word.length) {
-                // For now, do nothing here.
-            } else if (
-                this.options.checkWords &&
-                !this.listManager.checkGlobal(this.options.language, guess)
-            ) {
-                this.messages.unknownWord(guess);
-            } else {
-                this.guessCount++;
-                const result = generateResult(this.word.word, guess);
-                if (
-                    result.every(
-                        (charResult) => Result.Correct === charResult.result,
-                    )
-                ) {
-                    this.messages.guessedCorrectly(result, player).then(() => {
-                        this.returnToLobby();
-                    });
-                } else {
-                    if (!this.guessesExhausted()) {
-                        if (Mode.Turns === this.options.mode) {
-                            this.advancePlayerIndex();
-                            if (this.players.length > 1) {
-                                this.messages.feedback(player, result, {
-                                    nextPlayer: this.players[this.playerIndex],
-                                    guessCount: this.guessCount,
-                                    maxGuessCount: this.options.maxAttempts,
-                                });
-                            } else {
-                                this.messages.feedback(player, result, {
-                                    guessCount: this.guessCount,
-                                    maxGuessCount: this.options.maxAttempts,
-                                });
-                            }
-                            this.restartRoundTimer();
-                        } else if (Mode.Free === this.options.mode) {
-                            this.messages.feedback(player, result, {
-                                guessCount: this.guessCount,
-                                maxGuessCount: this.options.maxAttempts,
-                            });
-                        }
-                    } else {
-                        this.messages
-                            .feedback(player, result, {
-                                guessCount: this.guessCount,
-                                maxGuessCount: this.options.maxAttempts,
-                            })
-                            .then(() => this.outOfGuesses());
-                    }
-                }
-            }
-        }
-    }
-
-    private outOfGuesses(): void {
-        if (undefined !== this.word) {
-            this.messages
-                .reveal(this.word, RevealReason.GuessesExhausted)
-                .then(() => this.returnToLobby());
-        } else {
-            this.returnToLobby();
-        }
-    }
-
-    private guessesExhausted(): boolean {
-        return (
-            undefined !== this.options.maxAttempts &&
-            0 >= this.options.maxAttempts - this.guessCount
-        );
-    }
-
     private returnToLobby(): void {
         // this.playerIndex is purposefully not reset.
         if (undefined !== this.turnTimeout) {
@@ -567,16 +479,7 @@ export class Game {
         this.playerIndex = (this.playerIndex + 1) % this.players.length;
     }
 
-    private resetInactivityTimer() {
-        clearTimeout(this.inactiveTimeout);
-
-        this.inactiveTimeout = setTimeout(
-            () => this.cancelDueToInactivity(),
-            MAX_INACTIVE_TIME,
-        );
-    }
-
-    private cancelDueToInactivity() {
+    protected inactivityTimeout(): void {
         this.messages.timeout();
         this.cleanUp();
     }
@@ -593,12 +496,12 @@ export class Game {
     }
 
     private cleanUp() {
-        clearTimeout(this.inactiveTimeout);
+        this.stopInactivityTimer();
         if (this.turnTimeout !== undefined) {
             clearTimeout(this.turnTimeout);
         }
         this.state = State.Ended;
-        this.commandParser.removeAllForChannel(this.channelId);
+        this.commandParser.remove(...this.listeners);
     }
 
     private playerTimedOut() {
@@ -626,6 +529,253 @@ export class Game {
                 this.outOfGuesses();
             }
         }
+    }
+}
+
+type Result =
+    | "timeOut"
+    | "correct"
+    | "guessesExhausted"
+    | "revealed"
+    | "noPlayersLeft";
+
+interface GameParams {
+    readonly word: WordWithDetails;
+    readonly commandParser: CommandParser;
+    readonly listManager: ListManager;
+    readonly messages: Messages;
+    readonly channelId: Snowflake;
+    readonly options: Options;
+    readonly whenOver: () => void;
+    readonly leave: (player: Snowflake) => number | "empty" | "notFound";
+    players: Snowflake[];
+    readonly owner: Snowflake;
+}
+
+abstract class Game extends WithInactivityTimeout {
+    private ended?: Result = undefined;
+
+    private readonly params: GameParams;
+
+    protected guesses = 0;
+
+    constructor(params: GameParams) {
+        super();
+        this.params = params;
+    }
+
+    private ifAllowed(player: Snowflake, then: () => void) {
+        const allowedPlayers = this.playersAllowedToGuess();
+        if (
+            undefined === this.ended &&
+            (allowedPlayers.length === 0 || allowedPlayers.indexOf(player) > -1)
+        ) {
+            // it's important if unintuitive to reset the timer beforehand,
+            // as then() might actually cause the session to end..
+            this.restartInactivityTimer();
+            then();
+            return true;
+        }
+        return false;
+    }
+
+    private setupListeners(commandParser: CommandParser): ListenerId[] {
+        return [
+            commandParser.register({
+                channel: this.params.channelId,
+                regEx: /!leave/,
+                listener: (player) =>
+                    this.ifAllowed(
+                        //
+                        player,
+                        () => this.leave(player),
+                    ),
+            }),
+
+            commandParser.register({
+                channel: this.params.channelId,
+                regEx: /!reveal/,
+                listener: (player) =>
+                    this.ifAllowed(
+                        //
+                        player,
+                        () => this.reveal(),
+                    ),
+            }),
+
+            commandParser.register({
+                channel: this.params.channelId,
+                regEx: /(?<guess>\S+)/,
+                listener: (player, input) =>
+                    this.ifAllowed(player, () =>
+                        this.makeGuess(player, input.guess),
+                    ),
+            }),
+        ];
+    }
+
+    private outOfGuesses(): void {
+        this.params.messages
+            .reveal(this.params.word, RevealReason.GuessesExhausted)
+            .then(() => this.endedWith("guessesExhausted"));
+    }
+
+    private guessesExhausted(): boolean {
+        return (
+            undefined !== this.params.options.maxAttempts &&
+            0 >= this.params.options.maxAttempts - this.guesses
+        );
+    }
+
+    leave(player: Snowflake): void {
+        const result = this.params.leave(player);
+	if ("")
+        if (-1 !== index) {
+            this.params.players.splice(index, 1);
+            if (this.params.players.length === 0) {
+                this.params.messages.noPlayersLeft();
+                this.endedWith("noPlayersLeft");
+            } else {
+                if (this.params.owner === player) {
+                    this.params.owner = this.players[0];
+                    this.params.messages.ownerChanged(player, this.owner);
+                    this.originalOwner = false;
+                }
+
+                if (
+                    State.Running === this.state &&
+                    Mode.Turns === this.options.mode
+                ) {
+                    if (index === this.playerIndex) {
+                        // because we already removed the player,
+                        // this.playerIndex is already pointing to the next player
+                        this.playerIndex %= this.players.length;
+                        this.messages.promptPlayerTurn(
+                            this.players[this.playerIndex],
+                        );
+                        this.restartRoundTimer();
+                    } else if (index < this.playerIndex) {
+                        // to maintain the current player
+                        this.playerIndex--;
+                    }
+                } else {
+                    this.playerIndex %= this.players.length;
+                }
+            }
+        }
+    }
+    makeGuess(player: Snowflake, guess: string): void {
+        if (guess.length !== this.params.word.word.length) {
+            // For now, do nothing here.
+        } else if (
+            this.params.options.checkWords &&
+            !this.params.listManager.checkGlobal(
+                this.params.options.language,
+                guess,
+            )
+        ) {
+            this.params.messages.unknownWord(guess);
+        } else {
+            this.guesses++;
+            const result = generateResult(this.params.word.word, guess);
+            if (
+                result.every(
+                    (charResult) => Result.Correct === charResult.result,
+                )
+            ) {
+                this.params.messages
+                    .guessedCorrectly(result, player)
+                    .then(() => this.endedWith("correct"));
+            } else {
+                if (!this.guessesExhausted()) {
+                    this.incorrectGuessMade(player, result);
+                    // if (Mode.Turns === this.options.mode) {
+                    //     this.advancePlayerIndex();
+                    //     if (this.players.length > 1) {
+                    //         this.messages.feedback(player, result, {
+                    //             nextPlayer: this.players[this.playerIndex],
+                    //             guessCount: this.guessCount,
+                    //             maxGuessCount: this.options.maxAttempts,
+                    //         });
+                    //     } else {
+                    //         this.messages.feedback(player, result, {
+                    //             guessCount: this.guessCount,
+                    //             maxGuessCount: this.options.maxAttempts,
+                    //         });
+                    //     }
+                    //     this.restartRoundTimer();
+                    // } else if (Mode.Free === this.options.mode) {
+                    //     this.messages.feedback(player, result, {
+                    //         guessCount: this.guessCount,
+                    //         maxGuessCount: this.options.maxAttempts,
+                    //     });
+                    // }
+                } else {
+                    this.params.messages
+                        .feedback(player, result, {
+                            guessCount: this.guesses,
+                            maxGuessCount: this.params.options.maxAttempts,
+                        })
+                        .then(() => this.outOfGuesses());
+                }
+            }
+        }
+    }
+
+    private reveal() {
+        this.params.messages
+            .reveal(this.params.word, RevealReason.Aborted)
+            .then(() => this.endedWith("revealed"));
+    }
+
+    abstract incorrectGuessMade(player: Snowflake, result: CharResult[]): void;
+
+    protected inactivityTimeout() {
+        this.cleanUp();
+
+        // TODO: Message to send..
+
+        this.endedWith("timeOut");
+    }
+
+    abstract cleanUpInternal(): void;
+
+    private cleanUp() {
+        this.cleanUpInternal();
+    }
+
+    protected abstract playersAllowedToGuess(): Snowflake[];
+
+    protected abstract left(index: number): void;
+
+    protected endedWith(result: Result) {
+        this.ended = result;
+        this.cleanUp();
+        this.params.whenOver();
+    }
+}
+
+interface FreeParams extends GameParams {}
+
+class Free extends Game {
+    constructor(params: FreeParams) {
+        super(params);
+    }
+
+    protected playersAllowedToGuess(): string[] {
+        return [];
+    }
+
+    protected left() {
+        // no additional steps required..
+    }
+
+    incorrectGuessMade(player: string, result: CharResult[]): void {
+        throw new Error("Method not implemented.");
+    }
+
+    cleanUpInternal(): void {
+        throw new Error("Method not implemented.");
     }
 }
 
