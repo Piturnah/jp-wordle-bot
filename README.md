@@ -32,4 +32,4 @@ The bot reads its configuration values from a `config.json` file in the root dir
 -   `FONT` (OPTIONAL, `string`): Path to a `.otf` font file that the bot should use to render the guesses. The renderering framework uses Arial by default, which does not support some specific characters, like Japanese hiragana and katakana. Our deployed version uses [Google Noto](https://fonts.google.com/noto) at the moment.
 -   `debug` (REQUIRED, `boolean`): At the moment, this only controls the log level.
 
-An example configuration is available as `config_template.json`, but please not that you will have to at least add your token before starting the application.
+An example configuration is available as `config_template.json`, but please note that you will have to at least add your bot token before starting the application.
