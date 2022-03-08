@@ -21,7 +21,7 @@ export enum Mode {
 }
 
 export class Options {
-    mode = Mode.Turns;
+    mode = Mode.Free;
     checkWords = false;
     turnTimeout = 42000;
     maxAttempts? = 12;
