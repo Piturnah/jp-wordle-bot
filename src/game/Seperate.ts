@@ -6,22 +6,32 @@ import { Game, GameParams } from "./Game";
 
 export class Seperate extends Game {
     private games: Map<Snowflake, Free> = new Map();
-    private failedChannels = 0;
+    private pendingPromises: Map<Snowflake, Promise<void>> = new Set();
+    private notStartedGames: Set<Snowflake> = new Set();
+
+    private usersLeftViaChannel: Set<Snowflake> = new Set();
+    private usersLeftViaDm: Set<Snowflake> = new Set();
 
     constructor(params: GameParams) {
         super(params);
 
         params.players.forEach((player) =>
-            player
-                .createDM()
-                .then((dmChannel) => this.onChannelCreated(player, dmChannel))
-                .catch(() => this.couldNotCreateDmForPlayer(player)),
+            this.pendingPromises.set(
+                player.id,
+                player
+                    .createDM()
+                    .then((dmChannel) =>
+                        this.onChannelCreated(player, dmChannel),
+                    )
+                    .catch(() => this.couldNotCreateDmForPlayer(player)),
+            ),
         );
 
         this.stopInactivityTimer();
     }
 
     private onChannelCreated(player: User, channel: DMChannel) {
+        this.pendingPromises.delete(player.id);
         this.games.set(
             player.id,
             new Free({
@@ -29,26 +39,29 @@ export class Seperate extends Game {
                 players: [player],
                 owner: () => player.id,
                 messages: this.params.messages.copyToOtherChannel(channel),
-                whenOver: (game) => this.recordResult(player, game),
+                whenOver: () => this.checkCompletion(),
                 leave: () => {
+                    this.usersLeftViaDm.add(player.id);
                     this.leave(player.id);
+
                     // TODO
                     return "empty";
                 },
-            }),:
+            }),
         );
     }
 
     private couldNotCreateDmForPlayer(player: User) {
+        this.pendingPromises.delete(player.id);
+        this.notStartedGames.add(player.id);
         // TODO: Message
-        this.failedChannels++;
 
-        if (++this.failedChannels === this.params.players.length) {
+        if (this.notStartedGames.size === this.params.players.length) {
             this.endedWith("couldNotCreateChannels");
         }
     }
 
-    private recordResult(player: User, game: Game) {
+    private checkCompletion() {
         // TODO
     }
 
@@ -65,6 +78,14 @@ export class Seperate extends Game {
     }
 
     protected left(index: number, player: Snowflake): void {
-	    if 
+        if (this.pendingPromises.has(player)) {
+            this.usersLeftViaChannel.add(player);
+        } else if (!this.usersLeftViaDm.has(player)) {
+            this.usersLeftViaChannel.add(player);
+            const game = this.games.get(player);
+            if (undefined !== game) {
+                game.endedWith("noPlayersLeft");
+            }
+        }
     }
 }
