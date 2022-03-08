@@ -4,7 +4,6 @@ import {
     Message,
     Snowflake,
     TextBasedChannel,
-    TextChannel,
 } from "discord.js";
 import { Logger } from "tslog";
 
@@ -30,6 +29,8 @@ class Bot {
     );
     private readonly renderer: Renderer;
 
+    private statusUpdateTimer?: ReturnType<typeof setTimeout> = undefined;
+
     constructor(client: Client, debug = false, font?: string) {
         this.logger.info("Debug mode is ", debug ? "ON" : "OFF", ".");
         if (debug) {
@@ -54,7 +55,26 @@ class Bot {
             this.messageCreate(message),
         );
 
-        client.login(token);
+        client.login(token).then(() => this.updateStatus());
+    }
+
+    private updateStatus() {
+        if (client.user) {
+            this.logger.info(
+                "Currently active in",
+                client.guilds.cache.size,
+                "servers",
+            );
+            client.user.setActivity(
+                `!wordle in ${client.guilds.cache.size} servers.`,
+            );
+        }
+
+        if (undefined != this.statusUpdateTimer) {
+            clearTimeout(this.statusUpdateTimer);
+        }
+
+        this.statusUpdateTimer = setTimeout(() => this.updateStatus(), 3600000);
     }
 
     private wakeUp(channel: TextBasedChannel, player: Snowflake): boolean {
