@@ -4,6 +4,8 @@ import {
     Message,
     Snowflake,
     TextBasedChannel,
+    TextChannel,
+    ThreadManager,
 } from "discord.js";
 import { Logger } from "tslog";
 
@@ -78,7 +80,10 @@ class Bot {
         this.statusUpdateTimer = setTimeout(() => this.updateStatus(), 3600000);
     }
 
-    private wakeUp(channel: TextBasedChannel, player: Snowflake): boolean {
+    private async wakeUp(
+        channel: TextBasedChannel,
+        player: Snowflake,
+    ): Promise<boolean> {
         let sessionOptions = new Options();
         let loadedOptions = this.globalSettingsDb.load(player);
         if (undefined === loadedOptions) {
@@ -86,25 +91,19 @@ class Bot {
             this.globalSettingsDb.store(player, loadedOptions);
         }
 
-        const game = this.activeGames.get(channel.id);
-        if (undefined === game || State.Ended === game.getState()) {
-            this.activeGames.set(
-                channel.id,
-                new Game(
-                    this.logger.getChildLogger(),
-                    player,
-                    channel,
-                    this.commandParser,
-                    this.listManager,
-                    this.renderer,
-                    this.globalSettingsDb,
-                    loadedOptions,
-                ),
-            );
-
-            return true;
+        if (loadedOptions.useThreads && channel.type === "GUILD_TEXT") {
+            return await (channel as TextChannel).threads
+                .create({
+                    name: `Wordle Game ${
+                        (channel as TextChannel).threads.cache.size + 1
+                    }`,
+                })
+                .then((thread) =>
+                    this.createGame(thread, player, loadedOptions!),
+                )
+                .catch((e) => this.createGame(channel, player, loadedOptions!));
         } else {
-            return false;
+            return this.createGame(channel, player, loadedOptions!);
         }
     }
 
@@ -118,6 +117,33 @@ class Bot {
     }
     private messageCreate(message: Message) {
         this.commandParser.messageReceived(message);
+    }
+
+    createGame(
+        channel: TextBasedChannel,
+        player: Snowflake,
+        options: Options,
+    ): boolean {
+        const game = this.activeGames.get(channel.id);
+        if (undefined === game || State.Ended === game.getState()) {
+            this.activeGames.set(
+                channel.id,
+                new Game(
+                    this.logger.getChildLogger(),
+                    player,
+                    channel,
+                    this.commandParser,
+                    this.listManager,
+                    this.renderer,
+                    this.globalSettingsDb,
+                    options,
+                ),
+            );
+
+            return true;
+        } else {
+            return false;
+        }
     }
 }
 

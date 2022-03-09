@@ -10,7 +10,7 @@ export type GlobalListener = (
     channel: TextBasedChannel,
     user: Snowflake,
     matchedGroups: { [key: string]: string },
-) => boolean;
+) => boolean | Promise<boolean>;
 
 interface Command {
     regEx: RegExp;
