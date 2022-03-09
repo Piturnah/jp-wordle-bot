@@ -207,6 +207,19 @@ export class Game {
 
         commandParser.registerChannelListener(
             this.channelId,
+            /!threads/,
+            (player, input) =>
+                this.ifAllowed(
+                    //
+                    player,
+                    [State.Setup],
+                    [this.owner],
+                    () => this.switchUseThreads(),
+                ),
+        );
+
+        commandParser.registerChannelListener(
+            this.channelId,
             /!length (?<min>[1-9]\d*)( (?<max>[1-9]\d*))?/,
             (player, input) =>
                 this.ifAllowed(
@@ -343,6 +356,12 @@ export class Game {
                 this.options.lengthRange,
             );
         }
+    }
+
+    private switchUseThreads() {
+        this.options.useThreads = !this.options.useThreads;
+        this.storeSettings;
+        this.messages.useThreadsChanged(this.options.useThreads);
     }
 
     private reveal() {

@@ -126,6 +126,14 @@ export class Messages {
         );
     }
 
+    useThreadsChanged(newValue: boolean): Promise<Message> {
+        return this.sendMessage(
+            MessageType.success,
+            "Changed",
+            `Using threads setting set to \`${newValue}\`.`,
+        );
+    }
+
     reveal(word: WordWithDetails, reason: RevealReason): Promise<Message> {
         const wordOrAlternative =
             undefined !== word.details &&
@@ -520,6 +528,16 @@ export class Messages {
                         "!guesses <number>",
                     )} or allow unlimited guesses with ${inlineCode(
                         "!guesses unlimited",
+                    )}.`,
+                )
+                .addField(
+                    "Threads",
+                    `Currently, new sessions will be created ${
+                        options.useThreads
+                            ? "in a new, dedicated thread"
+                            : "in the current channel"
+                    }. This behaviour can be toggled with the command ${inlineCode(
+                        "!threads",
                     )}.`,
                 )
                 .setFooter({
