@@ -9,7 +9,7 @@ import { Logger } from "tslog";
 
 import { debug, font, token } from "../config.json";
 import { CommandParser } from "./commands";
-import { Game } from "./game";
+import { Game, Options } from "./game";
 import { State } from "./interfaces";
 import { ListManager } from "./list_manager";
 import { Basic as Renderer } from "./renderer";
@@ -19,6 +19,7 @@ class Bot {
     private readonly client: Client;
     private readonly logger = new Logger();
     private readonly globalSettingsDb = new SettingsDb();
+    private readonly defaultOptions = new Options();
 
     private readonly activeGames = new Map<Snowflake, Game>();
     private readonly listManager: ListManager = new ListManager(
@@ -78,6 +79,13 @@ class Bot {
     }
 
     private wakeUp(channel: TextBasedChannel, player: Snowflake): boolean {
+        let sessionOptions = new Options();
+        let loadedOptions = this.globalSettingsDb.load(player);
+        if (undefined === loadedOptions) {
+            loadedOptions = new Options();
+            this.globalSettingsDb.store(player, loadedOptions);
+        }
+
         const game = this.activeGames.get(channel.id);
         if (undefined === game || State.Ended === game.getState()) {
             this.activeGames.set(
@@ -90,6 +98,7 @@ class Bot {
                     this.listManager,
                     this.renderer,
                     this.globalSettingsDb,
+                    loadedOptions,
                 ),
             );
 

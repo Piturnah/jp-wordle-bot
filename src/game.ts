@@ -28,6 +28,7 @@ export class Options {
     language = "en";
     listIdentifier?: ListIdentifier;
     lengthRange: LengthRange = new LengthRange(4, 6);
+    useThreads = true;
 }
 
 export class Game {
@@ -38,7 +39,7 @@ export class Game {
     private readonly channelId: Snowflake;
     private readonly messages: Messages;
 
-    private options = new Options();
+    private options: Options;
     private originalOwner = true;
     private state: State;
     private guessCount = 0;
@@ -59,6 +60,7 @@ export class Game {
         listManager: ListManager,
         renderer: Renderer,
         settingsDb: SettingsDb,
+        options: Options,
     ) {
         this.logger = logger;
         this.state = State.Setup;
@@ -68,12 +70,8 @@ export class Game {
         this.players = [this.owner];
 
         this.settingsDb = settingsDb;
-        let loadedSettings = this.settingsDb.load(player);
-        if (undefined === loadedSettings) {
-            loadedSettings = new Options();
-            this.settingsDb.store(player, loadedSettings);
-        }
-        this.options = loadedSettings;
+
+        this.options = options;
 
         this.listManager = listManager;
         if (undefined === this.options.listIdentifier) {
