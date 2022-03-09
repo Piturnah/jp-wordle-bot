@@ -12,6 +12,7 @@ import {
 import { Messages, RevealReason } from "./messages";
 import { Basic as Renderer } from "./renderer";
 import { SettingsDb } from "./settings_db";
+import { StatsTracker } from "./stats_tracker";
 
 const MAX_INACTIVE_TIME = 90000;
 
@@ -37,6 +38,7 @@ export class Game {
     private readonly logger: Logger;
     private readonly channelId: Snowflake;
     private readonly messages: Messages;
+    private readonly statsTracker: StatsTracker;
 
     private options = new Options();
     private originalOwner = true;
