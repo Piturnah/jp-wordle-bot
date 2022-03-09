@@ -5,7 +5,6 @@ import {
     Snowflake,
     TextBasedChannel,
     TextChannel,
-    ThreadManager,
 } from "discord.js";
 import { Logger } from "tslog";
 
@@ -21,7 +20,6 @@ class Bot {
     private readonly client: Client;
     private readonly logger = new Logger();
     private readonly globalSettingsDb = new SettingsDb();
-    private readonly defaultOptions = new Options();
 
     private readonly activeGames = new Map<Snowflake, Game>();
     private readonly listManager: ListManager = new ListManager(
@@ -84,7 +82,6 @@ class Bot {
         channel: TextBasedChannel,
         player: Snowflake,
     ): Promise<boolean> {
-        let sessionOptions = new Options();
         let loadedOptions = this.globalSettingsDb.load(player);
         if (undefined === loadedOptions) {
             loadedOptions = new Options();
@@ -92,18 +89,22 @@ class Bot {
         }
 
         if (loadedOptions.useThreads && channel.type === "GUILD_TEXT") {
-            return await (channel as TextChannel).threads
-                .create({
-                    name: `Wordle Game ${
-                        (channel as TextChannel).threads.cache.size + 1
-                    }`,
-                })
-                .then((thread) =>
-                    this.createGame(thread, player, loadedOptions!),
-                )
-                .catch((e) => this.createGame(channel, player, loadedOptions!));
+            const textChannel = channel as TextChannel;
+            try {
+                const thread = await textChannel.threads.create({
+                    name: `Wordle Game ${textChannel.threads.cache.size + 1}`,
+                });
+                return this.createGame(thread, player, loadedOptions);
+            } catch (_e) {
+                this.logger.warn(
+                    "Could not create thread for channel",
+                    textChannel.name,
+                    ", falling back to normal channel-based game.",
+                );
+                return this.createGame(channel, player, loadedOptions);
+            }
         } else {
-            return this.createGame(channel, player, loadedOptions!);
+            return this.createGame(channel, player, loadedOptions);
         }
     }
 
