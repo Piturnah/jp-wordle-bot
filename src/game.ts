@@ -13,7 +13,7 @@ import { Messages, RevealReason } from "./messages";
 import { Basic as Renderer } from "./renderer";
 import { SettingsDb } from "./settings_db";
 
-const MAX_INACTIVE_TIME = 90000;
+const MAX_INACTIVE_TIME = 180000;
 
 export enum Mode {
     Turns = "turns",
@@ -23,11 +23,11 @@ export enum Mode {
 export class Options {
     mode = Mode.Free;
     checkWords = false;
-    turnTimeout = 42000;
+    turnTimeout = 60000;
     maxAttempts? = 12;
     language = "en";
     listIdentifier?: ListIdentifier;
-    lengthRange: LengthRange = new LengthRange(4, 6);
+    lengthRange: LengthRange = new LengthRange(4, 5);
     useThreads = false;
 }
 
