@@ -91,11 +91,20 @@ class Bot {
         if (loadedOptions.useThreads && channel.type === "GUILD_TEXT") {
             const textChannel = channel as TextChannel;
             try {
+                let gameTitle = "Wordle";
+                const user = this.client.users.resolve(player);
+                if (user && undefined !== user.username) {
+                    gameTitle += ` (${user.username})`;
+                }
+
                 const thread = await textChannel.threads.create({
-                    name: `Wordle Game ${textChannel.threads.cache.size + 1}`,
+                    name: gameTitle,
                     // this only allows specific values, 60 is the smallest one..
+                    // reason we set it: if we do not actually have permissions to archive the thread,
+                    // this at least makes it disappear reasonably quickly
                     autoArchiveDuration: 60,
                 });
+                await thread.members.add(player);
                 return this.createGame(thread, player, loadedOptions);
             } catch (_e) {
                 this.logger.warn(
@@ -105,8 +114,12 @@ class Bot {
                 );
                 return this.createGame(channel, player, loadedOptions);
             }
-        } else {
+        } else if (!channel.isThread()) {
+            // forbid this for threads, once they are archived, they should be left archived
+            // and users should just create new threads
             return this.createGame(channel, player, loadedOptions);
+        } else {
+            return false;
         }
     }
 
