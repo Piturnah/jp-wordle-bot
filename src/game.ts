@@ -1,4 +1,9 @@
-import { Snowflake, TextBasedChannel, ThreadChannel } from "discord.js";
+import {
+    Snowflake,
+    TextBasedChannel,
+    TextChannel,
+    ThreadChannel,
+} from "discord.js";
 import { Logger } from "tslog";
 
 import { CommandParser } from "./commands";
@@ -61,13 +66,14 @@ export class Game {
         renderer: Renderer,
         settingsDb: SettingsDb,
         options: Options,
+        players: Snowflake[] = [player],
     ) {
         this.logger = logger;
         this.state = State.Setup;
         this.channel = channel;
         this.commandParser = commandParser;
         this.owner = player;
-        this.players = [this.owner];
+        this.players = players;
 
         this.settingsDb = settingsDb;
 
@@ -362,10 +368,54 @@ export class Game {
         }
     }
 
-    private switchUseThreads() {
+    private async switchUseThreads() {
         this.options.useThreads = !this.options.useThreads;
-        this.storeSettings;
-        this.messages.useThreadsChanged(this.options.useThreads);
+        this.storeSettings();
+        if (this.options.useThreads && this.channel.type === "GUILD_TEXT") {
+            const textChannel = this.channel as TextChannel;
+            try {
+                let gameTitle = "Wordle";
+                const user = textChannel.members.get(this.owner);
+                if (user && undefined !== user.displayName) {
+                    gameTitle += ` (${user.displayName})`;
+                }
+
+                const thread = await textChannel.threads.create({
+                    name: gameTitle,
+                    // this only allows specific values, 60 is the smallest one..
+                    // reason we set it: if we do not actually have permissions to archive the thread,
+                    // this at least makes it disappear reasonably quickly
+                    autoArchiveDuration: 60,
+                });
+                this.players.forEach(async (player) => {
+                    await thread.members.add(player);
+                });
+
+                new Game(
+                    this.logger.getChildLogger(),
+                    this.owner,
+                    thread,
+                    this.commandParser,
+                    this.listManager,
+                    this.messages.getRenderer(),
+                    this.settingsDb,
+                    this.options,
+                    this.players,
+                );
+                await this.messages.spawnedThread(gameTitle);
+                this.cleanUp();
+            } catch (e) {
+                this.logger.warn(
+                    "Could not create thread for channel",
+                    textChannel.name,
+                    ", skipping escalation",
+                    e,
+                );
+                this.messages.couldNotUseThreads();
+            }
+        } else {
+            this.messages.useThreadsChanged(this.options.useThreads);
+        }
     }
 
     private reveal() {

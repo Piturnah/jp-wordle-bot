@@ -76,6 +76,28 @@ export class Messages {
         this.logger = logger;
     }
 
+    getRenderer(): Renderer {
+        return this.renderer;
+    }
+
+    spawnedThread(threadName: string) {
+        return this.sendMessage(
+            MessageType.normal,
+            "Thread Created",
+            "Please go to the newly created thread " +
+                threadName +
+                " to continue the game.",
+        );
+    }
+
+    couldNotUseThreads() {
+        return this.sendMessage(
+            MessageType.warning,
+            "Thread Not Created",
+            "The bot was unable to create a new thread for this game. This probably means the bot does not have sufficient permissions. Please ask your server admin to give the bot appropriate permissions and re-try.",
+        );
+    }
+
     maxGuessesChanged(guesses?: number): Promise<Message> {
         return this.sendMessage(
             MessageType.normal,
@@ -87,6 +109,7 @@ export class Messages {
                 : `Now allowing an unlimited number of guesses.`,
         );
     }
+
     noList(): Promise<Message> {
         return this.sendMessage(
             MessageType.warning,
@@ -136,9 +159,9 @@ export class Messages {
             "Threads",
             newValue
                 ? `Attempting to create new threads for each session. ${bold(
-                      "Note:",
-                  )} This change will only take effect when you start the next session. If the bot does not have permissions to create and manage threads, it will fall back to spawning the game in the current channel.`
-                : "Now spawning games in the current channel.",
+                      "Note: This setting has no immediate effect when you are already in a thread.",
+                  )}`
+                : "Now spawning games in the current channel. Existing games in threads will continue until they end naturally.",
         );
     }
 

@@ -92,9 +92,9 @@ class Bot {
             const textChannel = channel as TextChannel;
             try {
                 let gameTitle = "Wordle";
-                const user = this.client.users.resolve(player);
-                if (user && undefined !== user.username) {
-                    gameTitle += ` (${user.username})`;
+                const user = textChannel.members.get(player);
+                if (user && undefined !== user.displayName) {
+                    gameTitle += ` (${user.displayName})`;
                 }
 
                 const thread = await textChannel.threads.create({
