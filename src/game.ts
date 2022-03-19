@@ -81,7 +81,11 @@ export class Game {
                 );
         }
 
-        this.messages = new Messages(renderer, channel);
+        this.messages = new Messages(
+            renderer,
+            channel,
+            this.logger.getChildLogger(),
+        );
 
         this.setupListeners(commandParser);
 

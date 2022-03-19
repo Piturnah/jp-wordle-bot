@@ -13,6 +13,7 @@ import {
     Snowflake,
     TextBasedChannel,
 } from "discord.js";
+import { Logger } from "tslog";
 
 import { version } from "../package.json";
 import { Mode, Options, generateResult } from "./game";
@@ -65,11 +66,13 @@ export class Messages {
     private readonly renderer: Renderer;
     private readonly channel: TextBasedChannel;
     private readonly logo: MessageAttachment;
+    private readonly logger: Logger;
 
-    constructor(renderer: Renderer, channel: TextBasedChannel) {
+    constructor(renderer: Renderer, channel: TextBasedChannel, logger: Logger) {
         this.renderer = renderer;
         this.channel = channel;
         this.logo = this.generateLogo();
+        this.logger = logger;
     }
 
     maxGuessesChanged(guesses?: number): Promise<Message> {
@@ -415,13 +418,21 @@ export class Messages {
         attachment?: MessageAttachment,
     ): Promise<Message> {
         embed.setThumbnail("attachment://logo.jpg");
-        return this.channel.send({
-            embeds: [embed],
-            files:
-                undefined !== attachment
-                    ? [this.logo, attachment]
-                    : [this.logo],
-        });
+        return this.channel
+            .send({
+                embeds: [embed],
+                files:
+                    undefined !== attachment
+                        ? [this.logo, attachment]
+                        : [this.logo],
+            })
+            .catch((e) => {
+                this.logger.warn(
+                    "Could not create message in channel with id",
+                    this.channel.id,
+                );
+                return e;
+            });
     }
 
     private feedbackInternal(
