@@ -93,6 +93,8 @@ class Bot {
             try {
                 const thread = await textChannel.threads.create({
                     name: `Wordle Game ${textChannel.threads.cache.size + 1}`,
+                    // this only allows specific values, 60 is the smallest one..
+                    autoArchiveDuration: 60,
                 });
                 return this.createGame(thread, player, loadedOptions);
             } catch (_e) {

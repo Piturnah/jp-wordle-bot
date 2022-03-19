@@ -1,4 +1,4 @@
-import { Snowflake, TextBasedChannel } from "discord.js";
+import { Snowflake, TextBasedChannel, ThreadChannel } from "discord.js";
 import { Logger } from "tslog";
 
 import { CommandParser } from "./commands";
@@ -36,7 +36,7 @@ export class Game {
     private readonly listManager: ListManager;
     private readonly commandParser: CommandParser;
     private readonly logger: Logger;
-    private readonly channelId: Snowflake;
+    private readonly channel: TextBasedChannel;
     private readonly messages: Messages;
 
     private options: Options;
@@ -64,7 +64,7 @@ export class Game {
     ) {
         this.logger = logger;
         this.state = State.Setup;
-        this.channelId = channel.id;
+        this.channel = channel;
         this.commandParser = commandParser;
         this.owner = player;
         this.players = [this.owner];
@@ -118,7 +118,7 @@ export class Game {
 
     private setupListeners(commandParser: CommandParser): void {
         commandParser.registerChannelListener(
-            this.channelId,
+            this.channel.id,
             /!join/,
             (player) =>
                 this.ifAllowed(
@@ -131,7 +131,7 @@ export class Game {
         );
 
         commandParser.registerChannelListener(
-            this.channelId,
+            this.channel.id,
             /!leave/,
             (player) =>
                 this.ifAllowed(
@@ -144,7 +144,7 @@ export class Game {
         );
 
         commandParser.registerChannelListener(
-            this.channelId,
+            this.channel.id,
             /!reveal/,
             (player) =>
                 this.ifAllowed(
@@ -157,7 +157,7 @@ export class Game {
         );
 
         commandParser.registerChannelListener(
-            this.channelId,
+            this.channel.id,
             /!start/,
             (player) =>
                 this.ifAllowed(
@@ -170,7 +170,7 @@ export class Game {
         );
 
         commandParser.registerChannelListener(
-            this.channelId,
+            this.channel.id,
             /(?<guess>\S+)/,
             (player, input) =>
                 this.ifAllowed(
@@ -184,7 +184,7 @@ export class Game {
         );
 
         commandParser.registerChannelListener(
-            this.channelId,
+            this.channel.id,
             /!list/,
             (player) =>
                 this.ifAllowed(
@@ -197,7 +197,7 @@ export class Game {
         );
 
         commandParser.registerChannelListener(
-            this.channelId,
+            this.channel.id,
             /!list (?<language>\w+)\/(?<list>\w+)/,
             (player, input) =>
                 this.ifAllowed(
@@ -210,9 +210,9 @@ export class Game {
         );
 
         commandParser.registerChannelListener(
-            this.channelId,
+            this.channel.id,
             /!threads/,
-            (player, input) =>
+            (player) =>
                 this.ifAllowed(
                     //
                     player,
@@ -223,7 +223,7 @@ export class Game {
         );
 
         commandParser.registerChannelListener(
-            this.channelId,
+            this.channel.id,
             /!length (?<min>[1-9]\d*)( (?<max>[1-9]\d*))?/,
             (player, input) =>
                 this.ifAllowed(
@@ -244,7 +244,7 @@ export class Game {
         );
 
         commandParser.registerChannelListener(
-            this.channelId,
+            this.channel.id,
             /!mode (?<mode>turns|free)/,
             (player, input) =>
                 this.ifAllowed(
@@ -257,7 +257,7 @@ export class Game {
         );
 
         commandParser.registerChannelListener(
-            this.channelId,
+            this.channel.id,
             /!guesses ((?<guessCount>[1-9]\d*)|(?<unlimited>unlimited))/,
             (player, input) =>
                 this.ifAllowed(
@@ -403,12 +403,12 @@ export class Game {
         }
     }
 
-    leave(player: Snowflake): void {
+    async leave(player: Snowflake): Promise<void> {
         const index = this.players.indexOf(player);
         if (-1 !== index) {
             this.players.splice(index, 1);
             if (this.players.length === 0) {
-                this.messages.noPlayersLeft();
+                await this.messages.noPlayersLeft();
                 this.cleanUp();
             } else {
                 if (this.owner === player) {
@@ -462,7 +462,7 @@ export class Game {
             if (undefined !== this.word) {
                 this.logger.debug(
                     "New game has started in channel",
-                    this.channelId,
+                    this.channel.id,
                     ", word to be guessed is",
                     this.word,
                 );
@@ -597,8 +597,8 @@ export class Game {
         );
     }
 
-    private cancelDueToInactivity() {
-        this.messages.timeout();
+    private async cancelDueToInactivity() {
+        await this.messages.timeout();
         this.cleanUp();
     }
 
@@ -613,13 +613,23 @@ export class Game {
         );
     }
 
-    private cleanUp() {
+    private async cleanUp() {
         clearTimeout(this.inactiveTimeout);
         if (this.turnTimeout !== undefined) {
             clearTimeout(this.turnTimeout);
         }
         this.state = State.Ended;
-        this.commandParser.removeAllForChannel(this.channelId);
+        this.commandParser.removeAllForChannel(this.channel.id);
+        if (this.channel.isThread()) {
+            const threadChannel = this.channel as ThreadChannel;
+            try {
+                (
+                    await threadChannel.setName("[ENDED] " + threadChannel.name)
+                ).setArchived();
+            } catch (e) {
+                this.logger.warn("Could not properly close channel", e);
+            }
+        }
     }
 
     private playerTimedOut() {

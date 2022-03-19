@@ -342,8 +342,8 @@ export class Messages {
         }
     }
 
-    timeout() {
-        this.sendMessage(
+    timeout(): Promise<Message> {
+        return this.sendMessage(
             MessageType.warning,
             "Timeout",
             `Session has been cancelled due to inactivity. You may start a new session at any time by invoking ${inlineCode(
