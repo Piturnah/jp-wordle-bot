@@ -28,7 +28,7 @@ export class Options {
     language = "en";
     listIdentifier?: ListIdentifier;
     lengthRange: LengthRange = new LengthRange(4, 6);
-    useThreads = true;
+    useThreads = false;
 }
 
 export class Game {

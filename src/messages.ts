@@ -1,4 +1,5 @@
 import {
+    bold,
     codeBlock,
     inlineCode,
     underscore,
@@ -122,7 +123,7 @@ export class Messages {
     ): Promise<Message> {
         return this.sendMessage(
             MessageType.success,
-            "Changed",
+            "Word Source",
             `Now using words with ${inlineCode(
                 wordsLength.toString(),
             )} characters from ${inlineCode(listIdentifier.getUserString())}.`,
@@ -132,8 +133,12 @@ export class Messages {
     useThreadsChanged(newValue: boolean): Promise<Message> {
         return this.sendMessage(
             MessageType.success,
-            "Changed",
-            `Using threads setting set to \`${newValue}\`.`,
+            "Threads",
+            newValue
+                ? `Attempting to create new threads for each session. ${bold(
+                      "Note:",
+                  )} This change will only take effect when you start the next session. If the bot does not have permissions to create and manage threads, it will fall back to spawning the game in the current channel.`
+                : "Now spawning games in the current channel.",
         );
     }
 
@@ -546,7 +551,7 @@ export class Messages {
                     `Currently, new sessions will be created ${
                         options.useThreads
                             ? "in a new, dedicated thread"
-                            : "in the current channel"
+                            : "in the current channel. The bot can also spawn a channel for each game, preventing clogging"
                     }. This behaviour can be toggled with the command ${inlineCode(
                         "!threads",
                     )}.`,
