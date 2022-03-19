@@ -1,5 +1,6 @@
 {
     "token": "<your bot token>",
     "font": null,
-    "debug": false
+    "debug": false,
+    "statsChannel": null
 }

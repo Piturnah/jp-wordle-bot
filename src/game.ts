@@ -17,6 +17,7 @@ import {
 import { Messages, RevealReason } from "./messages";
 import { Basic as Renderer } from "./renderer";
 import { SettingsDb } from "./settings_db";
+import { StatsTracker } from "./stats_tracker";
 
 const MAX_INACTIVE_TIME = 180000;
 
@@ -34,6 +35,7 @@ export class Options {
     listIdentifier?: ListIdentifier;
     lengthRange: LengthRange = new LengthRange(4, 5);
     useThreads = false;
+    reportStats = true;
 }
 
 export class Game {
@@ -43,6 +45,7 @@ export class Game {
     private readonly logger: Logger;
     private readonly channel: TextBasedChannel;
     private readonly messages: Messages;
+    private readonly tracker: StatsTracker;
 
     private options: Options;
     private originalOwner = true;
@@ -66,6 +69,7 @@ export class Game {
         renderer: Renderer,
         settingsDb: SettingsDb,
         options: Options,
+        tracker: StatsTracker,
         players: Snowflake[] = [player],
     ) {
         this.logger = logger;
@@ -78,6 +82,7 @@ export class Game {
         this.settingsDb = settingsDb;
 
         this.options = options;
+        this.tracker = tracker;
 
         this.listManager = listManager;
         if (undefined === this.options.listIdentifier) {
@@ -230,6 +235,19 @@ export class Game {
 
         commandParser.registerChannelListener(
             this.channel.id,
+            /!toggleUsageStatistics/,
+            (player) =>
+                this.ifAllowed(
+                    //
+                    player,
+                    [State.Setup],
+                    [this.owner],
+                    () => this.toggleUserStatistics(),
+                ),
+        );
+
+        commandParser.registerChannelListener(
+            this.channel.id,
             /!length (?<min>[1-9]\d*)( (?<max>[1-9]\d*))?/,
             (player, input) =>
                 this.ifAllowed(
@@ -279,6 +297,12 @@ export class Game {
                         ),
                 ),
         );
+    }
+
+    toggleUserStatistics(): void {
+        this.options.reportStats = !this.options.reportStats;
+        this.storeSettings();
+        this.messages.userStatisticsToggled(this.options.reportStats);
     }
 
     private setMaxGuesses(guesses?: number) {
@@ -400,6 +424,7 @@ export class Game {
                     this.messages.getRenderer(),
                     this.settingsDb,
                     this.options,
+                    this.tracker,
                     this.players,
                 );
                 await this.messages.spawnedThread(gameTitle);
@@ -516,6 +541,10 @@ export class Game {
                     ", word to be guessed is",
                     this.word,
                 );
+
+                if (this.options.reportStats) {
+                    this.tracker.gameStarted(this.options);
+                }
 
                 this.state = State.Running;
 

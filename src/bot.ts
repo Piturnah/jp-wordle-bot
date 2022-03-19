@@ -8,13 +8,14 @@ import {
 } from "discord.js";
 import { Logger } from "tslog";
 
-import { debug, font, token } from "../config.json";
+import { debug, font, statsChannel, token } from "../config.json";
 import { CommandParser } from "./commands";
 import { Game, Options } from "./game";
 import { State } from "./interfaces";
 import { ListManager } from "./list_manager";
 import { Basic as Renderer } from "./renderer";
 import { SettingsDb } from "./settings_db";
+import { StatsTracker } from "./stats_tracker";
 
 class Bot {
     private readonly client: Client;
@@ -31,6 +32,9 @@ class Bot {
     private readonly renderer: Renderer;
 
     private statusUpdateTimer?: ReturnType<typeof setTimeout> = undefined;
+    private statsTracker: StatsTracker = new StatsTracker(
+        this.logger.getChildLogger(),
+    );
 
     constructor(client: Client, debug = false, font?: string) {
         this.logger.info("Debug mode is ", debug ? "ON" : "OFF", ".");
@@ -123,10 +127,29 @@ class Bot {
         }
     }
 
-    private ready() {
+    private async ready() {
         if (null !== this.client.user) {
             this.logger.info("Sucessfully logged in as", this.client.user.tag);
             this.commandParser.setThisId(this.client.user.id);
+            if (null !== statsChannel) {
+                try {
+                    const reportingChannel = await this.client.channels.fetch(
+                        statsChannel,
+                    );
+                    if (reportingChannel && reportingChannel.isText()) {
+                        this.statsTracker = new StatsTracker(
+                            this.logger.getChildLogger(),
+                            reportingChannel as TextChannel,
+                        );
+                    } else {
+                        this.logger.error(
+                            "Could not fetch stats channel or is not a text channel!",
+                        );
+                    }
+                } catch (e) {
+                    this.logger.error("Could not fetch stats channel!", e);
+                }
+            }
         } else {
             this.logger.error("Error logging in..");
         }
@@ -153,6 +176,7 @@ class Bot {
                     this.renderer,
                     this.globalSettingsDb,
                     options,
+                    this.statsTracker,
                 ),
             );
 

@@ -80,9 +80,19 @@ export class Messages {
         return this.renderer;
     }
 
+    userStatisticsToggled(reportStats: boolean) {
+        this.sendMessage(
+            MessageType.success,
+            `Statistics`,
+            reportStats
+                ? `Thank you for allowing us to use your game statistics to improve the game!`
+                : `Your usage data will no longer be tracked.`,
+        );
+    }
+
     spawnedThread(threadName: string) {
         return this.sendMessage(
-            MessageType.normal,
+            MessageType.success,
             "Thread Created",
             "Please go to the newly created thread " +
                 threadName +
@@ -100,7 +110,7 @@ export class Messages {
 
     maxGuessesChanged(guesses?: number): Promise<Message> {
         return this.sendMessage(
-            MessageType.normal,
+            MessageType.success,
             "Guesses",
             undefined !== guesses
                 ? `Now allowing up to ${inlineCode(
@@ -122,7 +132,7 @@ export class Messages {
         const message = `Game has been switched to ${inlineCode(
             mode,
         )} mode. ${this.modeExplanation(mode)}`;
-        return this.sendMessage(MessageType.normal, "Mode", message);
+        return this.sendMessage(MessageType.success, "Mode", message);
     }
 
     private modeExplanation(mode: Mode) {
@@ -578,6 +588,15 @@ export class Messages {
                     }. This behaviour can be toggled with the command ${inlineCode(
                         "!threads",
                     )}.`,
+                )
+                .addField(
+                    "Usage Statistics",
+                    (options.reportStats
+                        ? `With the current configuration, we collect statistics about your interaction with the bot. Specifically, we track the settings that you use to start a game (list, word length, mode etc.). The data is perfectly anonymous, i.e. we do not track who is creating the game and in which server. `
+                        : `With the current configuration, usage statistics are not being recorded.`) +
+                        `The behavior can be toggled with ${inlineCode(
+                            "!toggleUsageStatistics",
+                        )}.`,
                 )
                 .setFooter({
                     text: `We are happy to hear your thoughts and feedback. Please refer to the bot's profile to learn more. Version: ${version}.`,
