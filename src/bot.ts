@@ -8,8 +8,8 @@ import {
 } from "discord.js";
 import { Logger } from "tslog";
 
-import { debug, font, statsChannel, token } from "../config.json";
 import { CommandParser } from "./commands";
+import { configuration } from "./configuration";
 import { Game, Options } from "./game";
 import { State } from "./interfaces";
 import { ListManager } from "./list_manager";
@@ -36,15 +36,19 @@ class Bot {
         this.logger.getChildLogger(),
     );
 
-    constructor(client: Client, debug = false, font?: string) {
-        this.logger.info("Debug mode is ", debug ? "ON" : "OFF", ".");
-        if (debug) {
+    constructor(client: Client) {
+        this.logger.info(
+            "Debug mode is ",
+            true === configuration.debug ? "ON" : "OFF",
+            ".",
+        );
+        if (true === configuration.debug) {
             this.logger.setSettings({ minLevel: "trace" });
         } else {
             this.logger.setSettings({ minLevel: "info" });
         }
         this.client = client;
-        this.renderer = new Renderer(font);
+        this.renderer = new Renderer(configuration.font);
     }
 
     start(token: string) {
@@ -131,10 +135,10 @@ class Bot {
         if (null !== this.client.user) {
             this.logger.info("Sucessfully logged in as", this.client.user.tag);
             this.commandParser.setThisId(this.client.user.id);
-            if (null !== statsChannel) {
+            if (undefined !== configuration.statsChannel) {
                 try {
                     const reportingChannel = await this.client.channels.fetch(
-                        statsChannel,
+                        configuration.statsChannel,
                     );
                     if (reportingChannel && reportingChannel.isText()) {
                         this.statsTracker = new StatsTracker(
@@ -198,6 +202,6 @@ const client = new Client({
     partials: ["CHANNEL"],
 });
 
-const bot = new Bot(client, debug, font ?? undefined);
+const bot = new Bot(client);
 
-bot.start(token);
+bot.start(configuration.token);
