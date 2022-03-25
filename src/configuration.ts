@@ -7,4 +7,4 @@ export interface Configuration {
     statsChannel?: string;
 }
 
-export const configuration: Configuration = { ...configFile };
+export const configuration: Readonly<Configuration> = { ...configFile };
