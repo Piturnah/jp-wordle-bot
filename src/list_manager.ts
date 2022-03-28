@@ -1,4 +1,3 @@
-import { bold } from "@discordjs/builders";
 import * as fs from "fs";
 import { Logger } from "tslog";
 

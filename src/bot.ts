@@ -20,7 +20,9 @@ import { StatsTracker } from "./stats_tracker";
 class Bot {
     private readonly client: Client;
     private readonly logger = new Logger();
-    private readonly globalSettingsDb = new SettingsDb();
+    private readonly globalSettingsDb = new SettingsDb(
+        this.logger.getChildLogger(),
+    );
 
     private readonly activeGames = new Map<Snowflake, Game>();
     private readonly listManager: ListManager = new ListManager(
@@ -39,10 +41,10 @@ class Bot {
     constructor(client: Client) {
         this.logger.info(
             "Debug mode is ",
-            true === configuration.debug ? "ON" : "OFF",
+            configuration.debug ? "ON" : "OFF",
             ".",
         );
-        if (true === configuration.debug) {
+        if (configuration.debug) {
             this.logger.setSettings({ minLevel: "trace" });
         } else {
             this.logger.setSettings({ minLevel: "info" });
@@ -54,6 +56,8 @@ class Bot {
     start(token: string) {
         this.logger.info("Starting..");
         this.listManager.load();
+        this.globalSettingsDb.restore();
+        this.globalSettingsDb.start();
 
         this.commandParser.registerGlobalListener(/!wordle/, (channel, user) =>
             this.wakeUp(channel, user),
@@ -65,6 +69,15 @@ class Bot {
         );
 
         client.login(token).then(() => this.updateStatus());
+    }
+
+    shutdown() {
+        this.logger.info("Shutting down..");
+        this.client.destroy();
+        if (undefined !== this.statusUpdateTimer) {
+            clearTimeout(this.statusUpdateTimer);
+        }
+        this.globalSettingsDb.shutdown();
     }
 
     private updateStatus() {
@@ -93,7 +106,7 @@ class Bot {
         let loadedOptions = this.globalSettingsDb.load(player);
         if (undefined === loadedOptions) {
             loadedOptions = new Options();
-            this.globalSettingsDb.store(player, loadedOptions);
+            this.globalSettingsDb.update(player, loadedOptions);
         }
 
         if (loadedOptions.useThreads && channel.type === "GUILD_TEXT") {
@@ -205,3 +218,13 @@ const client = new Client({
 const bot = new Bot(client);
 
 bot.start(configuration.token);
+
+process.once("SIGTERM", () => {
+    bot.shutdown();
+    process.exit(0);
+});
+
+process.once("SIGINT", () => {
+    bot.shutdown();
+    process.exit(0);
+});

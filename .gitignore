@@ -6,3 +6,4 @@ src/word_lists/words.json
 .env
 config.json
 fonts
+backup

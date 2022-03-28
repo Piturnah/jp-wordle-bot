@@ -455,7 +455,7 @@ export class Game {
 
     private storeSettings(): void {
         if (this.originalOwner) {
-            this.settingsDb.store(this.owner, this.options);
+            this.settingsDb.update(this.owner, this.options);
         }
     }
 
