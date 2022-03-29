@@ -1,6 +1,7 @@
 ### Regarding the lists provided here
 
-The lists that you find here are based on the [corpora repository](https://github.com/dariusk/corpora/tree/f742381fdcc8ee5f0d187752e2a3e27093881202), whose contents are licensed (resp. non-licensed) as Public Domain. See their repository for details.
+#### General
+The lists that you find here (*except nyt.json*) are based on the [corpora repository](https://github.com/dariusk/corpora/tree/f742381fdcc8ee5f0d187752e2a3e27093881202), whose contents are licensed (resp. non-licensed) as Public Domain. See their repository for details.
 
 You can reproduce these lists by running the following script in the root of a copy of the corpora repository: 
 
@@ -41,3 +42,6 @@ const combined = [...new Set(commonWords.concat(nouns, verbs, adjectives))];
 
 generate(combined, "combined", true);
 ```
+
+#### nyt.json
+This is the list that is used in the official NYT Wordle game. It was taken from its source code. It was converted with to our format with the same method as above.
