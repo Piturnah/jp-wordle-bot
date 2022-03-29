@@ -158,7 +158,7 @@ export class Messages {
             MessageType.success,
             "Word Source",
             `Now using words with ${inlineCode(
-                wordsLength.toString(),
+                LengthRange.toString(wordsLength),
             )} characters from ${inlineCode(
                 ListIdentifier.getUserString(listIdentifier),
             )}.`,
@@ -223,7 +223,7 @@ export class Messages {
             `Sorry, either ${inlineCode(
                 ListIdentifier.getUserString(listIdent),
             )} is not a registered list or it has no words with ${inlineCode(
-                wordsLength.toString(),
+                LengthRange.toString(wordsLength),
             )} characters.`,
         );
     }
@@ -237,7 +237,7 @@ export class Messages {
             undefined === listIdentifier
                 ? "Currently, no specific list is selected."
                 : `Currently, words with ${inlineCode(
-                      wordsLength.toString(),
+                      LengthRange.toString(wordsLength),
                   )} characters are chosen at random from ${inlineCode(
                       ListIdentifier.getUserString(listIdentifier),
                   )}.`;
@@ -562,7 +562,7 @@ export class Messages {
                     `The bot uses different word lists to generate random words for you to play with.${
                         options.listIdentifier
                             ? ` Currently, words with ${inlineCode(
-                                  options.lengthRange.toString(),
+                                  LengthRange.toString(options.lengthRange),
                               )} characters from list ${inlineCode(
                                   ListIdentifier.getUserString(
                                       options.listIdentifier,
