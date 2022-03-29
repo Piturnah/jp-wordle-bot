@@ -159,7 +159,9 @@ export class Messages {
             "Word Source",
             `Now using words with ${inlineCode(
                 wordsLength.toString(),
-            )} characters from ${inlineCode(listIdentifier.getUserString())}.`,
+            )} characters from ${inlineCode(
+                ListIdentifier.getUserString(listIdentifier),
+            )}.`,
         );
     }
 
@@ -219,7 +221,7 @@ export class Messages {
             MessageType.warning,
             "Not found / not applicable",
             `Sorry, either ${inlineCode(
-                listIdent.getUserString(),
+                ListIdentifier.getUserString(listIdent),
             )} is not a registered list or it has no words with ${inlineCode(
                 wordsLength.toString(),
             )} characters.`,
@@ -237,7 +239,7 @@ export class Messages {
                 : `Currently, words with ${inlineCode(
                       wordsLength.toString(),
                   )} characters are chosen at random from ${inlineCode(
-                      listIdentifier.getUserString(),
+                      ListIdentifier.getUserString(listIdentifier),
                   )}.`;
 
         this.sendEmbed(
@@ -562,7 +564,9 @@ export class Messages {
                             ? ` Currently, words with ${inlineCode(
                                   options.lengthRange.toString(),
                               )} characters from list ${inlineCode(
-                                  options.listIdentifier.getUserString(),
+                                  ListIdentifier.getUserString(
+                                      options.listIdentifier,
+                                  ),
                               )} are being used.`
                             : " Currently, no list is selected."
                     } Type ${inlineCode("!list")} to find out more.`,

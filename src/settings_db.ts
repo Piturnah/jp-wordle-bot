@@ -56,8 +56,12 @@ export class SettingsDb {
                         );
                         this.userSettings = new Map(data);
                         this.clearExpiredData();
-                        this.store();
                         this.storesSinceStart = 1;
+                        this.logger.info(
+                            "Sucessfully restored user settings of",
+                            this.userSettings.size,
+                            "users",
+                        );
                     } catch (error) {
                         this.logger.warn(
                             "Could not restore from",
@@ -206,14 +210,6 @@ export class SettingsDb {
         const data = this.userSettings.get(user);
         // the spread operator is here because otherwise you don't get
         // the methods defined on the options class and children
-        return undefined !== data
-            ? {
-                  ...data.options,
-                  listIdentifier: {
-                      language: data.options.listIdentifier.language,
-                      list: data.options.listIdentifier.list,
-                  },
-              }
-            : undefined;
+        return undefined !== data ? data.options : undefined;
     }
 }

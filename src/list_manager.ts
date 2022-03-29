@@ -13,6 +13,7 @@ export class DebugMode extends Settings {
     debug = true;
 }
 
+/// Serialized type, must not have non-static functions!
 export class LengthRange {
     min = 4;
     max = 5;
@@ -22,10 +23,10 @@ export class LengthRange {
         this.max = max;
     }
 
-    toString(): string {
-        return this.min === this.max
-            ? `${this.min}`
-            : `${this.min}-${this.max}`;
+    static toString(range: LengthRange): string {
+        return range.min === range.max
+            ? `${range.min}`
+            : `${range.min}-${range.max}`;
     }
 }
 
@@ -48,6 +49,7 @@ export type List = string;
 export type Word = string;
 export type WordLength = number;
 
+/// Serialized type, must not have non-static functions!
 export class ListIdentifier {
     readonly language: Language;
     readonly list: List;
@@ -57,8 +59,8 @@ export class ListIdentifier {
         this.list = list;
     }
 
-    getUserString(): string {
-        return this.language + "/" + this.list;
+    static getUserString(ident: ListIdentifier): string {
+        return ident.language + "/" + ident.list;
     }
 
     static parse(userString: string): ListIdentifier | undefined {

@@ -26,6 +26,7 @@ export enum Mode {
     Free = "free",
 }
 
+/// Serialized type, must not have non-static functions!
 export class Options {
     mode = Mode.Free;
     checkWords = false;
@@ -567,7 +568,7 @@ export class Game {
                     "Could not get word with length",
                     this.options.lengthRange,
                     "from list",
-                    this.options.listIdentifier.getUserString(),
+                    ListIdentifier.getUserString(this.options.listIdentifier),
                 );
             }
         }
