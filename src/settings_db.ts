@@ -162,7 +162,7 @@ export class SettingsDb {
                     )
                     .filter(
                         // it's actually this backup's turn
-                        (value) => value % iteration === 0,
+                        (value) => iteration % value === 0,
                     )
                     .forEach((value) => {
                         this.storeTo(data, folder, regularFileName(value));
