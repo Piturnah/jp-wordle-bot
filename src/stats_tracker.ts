@@ -4,6 +4,13 @@ import { Logger } from "tslog";
 
 import { Options } from "./game";
 
+export type GameResult =
+    | "revealed"
+    | "left"
+    | number
+    | "timeout"
+    | "guessesExhausted";
+
 export class StatsTracker {
     private readonly channel?: TextBasedChannel;
     private readonly logger: Logger;
@@ -13,12 +20,16 @@ export class StatsTracker {
         this.channel = channel;
     }
 
-    gameStarted(options: Options) {
-        if (undefined !== this.channel) {
+    gameEnded(track: boolean, result: GameResult, options: Options) {
+        if (track && undefined !== this.channel) {
             this.channel
                 .send(
-                    `Game started!${codeBlock(
-                        JSON.stringify(options, null, 4),
+                    `Game ended!${codeBlock(
+                        JSON.stringify(
+                            { result: result, options: options },
+                            null,
+                            4,
+                        ),
                     )}`,
                 )
                 .catch((e) => {

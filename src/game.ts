@@ -445,6 +445,11 @@ export class Game {
     }
 
     private reveal() {
+        this.tracker.gameEnded(
+            this.options.reportStats,
+            "revealed",
+            this.options,
+        );
         if (undefined !== this.word) {
             this.messages.reveal(this.word, RevealReason.Aborted).then(() => {
                 return this.returnToLobby();
@@ -484,6 +489,11 @@ export class Game {
         if (-1 !== index) {
             this.players.splice(index, 1);
             if (this.players.length === 0) {
+                this.tracker.gameEnded(
+                    this.options.reportStats,
+                    "left",
+                    this.options,
+                );
                 await this.messages.noPlayersLeft();
                 this.cleanUp();
             } else {
@@ -543,10 +553,6 @@ export class Game {
                     this.word,
                 );
 
-                if (this.options.reportStats) {
-                    this.tracker.gameStarted(this.options);
-                }
-
                 this.state = State.Running;
 
                 if (Mode.Turns === this.options.mode) {
@@ -595,6 +601,11 @@ export class Game {
                         (charResult) => Result.Correct === charResult.result,
                     )
                 ) {
+                    this.tracker.gameEnded(
+                        this.options.reportStats,
+                        this.guessCount,
+                        this.options,
+                    );
                     this.messages.guessedCorrectly(result, player).then(() => {
                         this.returnToLobby();
                     });
@@ -635,6 +646,11 @@ export class Game {
     }
 
     private outOfGuesses(): void {
+        this.tracker.gameEnded(
+            this.options.reportStats,
+            "guessesExhausted",
+            this.options,
+        );
         if (undefined !== this.word) {
             this.messages
                 .reveal(this.word, RevealReason.GuessesExhausted)
@@ -678,6 +694,11 @@ export class Game {
     }
 
     private async cancelDueToInactivity() {
+        this.tracker.gameEnded(
+            this.options.reportStats,
+            "timeout",
+            this.options,
+        );
         await this.messages.timeout();
         this.cleanUp();
     }
