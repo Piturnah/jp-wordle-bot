@@ -191,7 +191,7 @@ export class Game {
                     Mode.Turns === this.options.mode
                         ? [this.players[this.playerIndex]]
                         : [],
-                    () => this.makeGuess(player, input.guess),
+                    () => this.makeGuess(player, input.guess.toLowerCase()),
                 ),
         );
 
@@ -762,10 +762,11 @@ export class Game {
 }
 
 export function generateResult(word: string, guess: string): CharResult[] {
-    const result: CharResult[] = new Array(word.length);
-    for (let i = 0; i < word.length; i++) {
+    const wordLower = word.toLowerCase();
+    const result: CharResult[] = new Array(wordLower.length);
+    for (let i = 0; i < wordLower.length; i++) {
         const guessedCharacter = guess.charAt(i);
-        if (guessedCharacter === word.charAt(i)) {
+        if (guessedCharacter === wordLower.charAt(i)) {
             result[i] = {
                 character: guessedCharacter,
                 result: Result.Correct,
@@ -778,7 +779,7 @@ export function generateResult(word: string, guess: string): CharResult[] {
             // exceeds the total amount of occurenes in the actual word, and if yes,
             // also treat this occurence as wrong.
             const numberOfOccurencesInWordWithoutExactMatches = indicesWith(
-                word,
+                wordLower,
                 guessedCharacter,
             ).filter(
                 (index) => guessedCharacter !== guess.charAt(index),
