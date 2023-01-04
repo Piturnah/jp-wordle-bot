@@ -694,11 +694,13 @@ export class Game {
     }
 
     private async cancelDueToInactivity() {
-        this.tracker.gameEnded(
-            this.options.reportStats,
-            "timeout",
-            this.options,
-        );
+        if (this.state === State.Running) {
+            this.tracker.gameEnded(
+                this.options.reportStats,
+                "timeout",
+                this.options,
+            );
+        }
         await this.messages.timeout();
         this.cleanUp();
     }
