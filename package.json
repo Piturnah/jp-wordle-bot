@@ -25,6 +25,6 @@
         "discord.js": "^13.6.0",
         "dotenv": "^15.0.0",
         "ultimate-text-to-image": "^1.0.0",
-        "pm2": "5.2.0"
+        "pm2": "5.3.1"
     }
 }
